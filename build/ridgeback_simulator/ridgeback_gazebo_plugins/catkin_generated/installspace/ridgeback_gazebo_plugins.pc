@@ -1,0 +1,8 @@
+prefix=/home/tanujthakkar/ROS/catkin_ws/install
+
+Name: ridgeback_gazebo_plugins
+Description: Description of ridgeback_gazebo_plugins
+Version: 0.1.1
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib 
+Requires: roscpp std_msgs geometry_msgs nav_msgs tf message_runtime

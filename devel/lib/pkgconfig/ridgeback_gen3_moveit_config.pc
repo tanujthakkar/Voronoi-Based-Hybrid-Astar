@@ -1,0 +1,8 @@
+prefix=/home/tanujthakkar/ROS/catkin_ws/devel
+
+Name: ridgeback_gen3_moveit_config
+Description: Description of ridgeback_gen3_moveit_config
+Version: 0.3.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

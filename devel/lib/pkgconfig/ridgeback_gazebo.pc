@@ -1,0 +1,8 @@
+prefix=/home/tanujthakkar/ROS/catkin_ws/devel
+
+Name: ridgeback_gazebo
+Description: Description of ridgeback_gazebo
+Version: 0.1.1
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

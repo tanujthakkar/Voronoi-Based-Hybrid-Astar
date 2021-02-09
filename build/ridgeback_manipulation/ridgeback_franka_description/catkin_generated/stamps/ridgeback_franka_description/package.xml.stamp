@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>ridgeback_franka_description</name>
+  <version>0.0.0</version>
+  <description>The ridgeback_franka_description package</description>
+
+  <maintainer email="dniewinski@clearpathrobotics.com">Dave Niewinski</maintainer>
+
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <exec_depend>franka_description</exec_depend>
+  <exec_depend>ridgeback_description</exec_depend>
+
+  <export>
+  </export>
+</package>

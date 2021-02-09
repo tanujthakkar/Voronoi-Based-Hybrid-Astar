@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>ridgeback_manipulation</name>
+  <version>0.0.0</version>
+  <description>The ridgeback_manipulation package</description>
+
+  <maintainer email="dniewinski@clearpathrobotics.com">Dave Niewinski</maintainer>
+
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <exec_depend>ridgeback_6_axis_kinova_moveit_config</exec_depend>
+  <exec_depend>ridgeback_dual_7_axis_kinova_moveit_config</exec_depend>
+  <exec_depend>ridgeback_iiwa_moveit_config</exec_depend>
+  <exec_depend>ridgeback_ur_description</exec_depend>
+  <exec_depend>ridgeback_7_axis_kinova_moveit_config</exec_depend>
+  <exec_depend>ridgeback_dual_ur_moveit_config</exec_depend>
+  <exec_depend>ridgeback_kinova_bringup</exec_depend>
+  <exec_depend>ridgeback_manipulation_description</exec_depend>
+  <exec_depend>ridgeback_ur_moveit_config</exec_depend>
+  <exec_depend>ridgeback_dual_6_axis_kinova_moveit_config</exec_depend>
+  <exec_depend>ridgeback_iiwa_description</exec_depend>
+  <exec_depend>ridgeback_kinova_description</exec_depend>
+  <exec_depend>ridgeback_ur_bringup</exec_depend>
+
+  <export>
+    <metapackage />
+  </export>
+</package>

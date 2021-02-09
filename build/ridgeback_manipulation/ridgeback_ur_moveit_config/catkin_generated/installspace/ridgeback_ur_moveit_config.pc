@@ -1,0 +1,8 @@
+prefix=/home/tanujthakkar/ROS/catkin_ws/install
+
+Name: ridgeback_ur_moveit_config
+Description: Description of ridgeback_ur_moveit_config
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

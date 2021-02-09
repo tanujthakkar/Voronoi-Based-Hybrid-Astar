@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>ridgeback_ur_bringup</name>
+  <version>0.0.0</version>
+  <description>The ridgeback_ur_bringup package</description>
+
+  <maintainer email="dniewinski@clearpathrobotics.com">Dave Niewinski</maintainer>
+
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <exec_depend>tf2_ros</exec_depend>
+  <exec_depend>ur_modern_driver</exec_depend>
+
+  <test_depend>roslaunch</test_depend>
+</package>

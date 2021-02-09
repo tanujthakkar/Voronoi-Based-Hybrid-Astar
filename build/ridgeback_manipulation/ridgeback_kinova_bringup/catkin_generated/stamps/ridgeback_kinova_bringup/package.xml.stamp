@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>ridgeback_kinova_bringup</name>
+  <version>0.0.0</version>
+  <description>The ridgeback_kinova_bringup package</description>
+
+  <maintainer email="dniewinski@clearpathrobotics.com">Dave Niewinski</maintainer>
+
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <exec_depend>kinova_driver</exec_depend>
+  <exec_depend>topic_tools</exec_depend>
+  <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>ridgeback_manipulation_description</exec_depend>
+  <exec_depend>kortex_driver</exec_depend>
+
+  <test_depend>roslaunch</test_depend>
+</package>

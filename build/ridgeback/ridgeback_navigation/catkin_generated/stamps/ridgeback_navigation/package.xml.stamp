@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>ridgeback_navigation</name>
+  <version>0.3.0</version>
+  <description>Launch files and code for autonomous navigation of the Ridgeback</description>
+  <author email="spourmehr@clearpathrobotics.com">Shokoofeh Pourmehr</author>
+  <maintainer email="tbaltovski@clearpathrobotics.com">Tony Baltovski</maintainer>
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <exec_depend>amcl</exec_depend>
+  <exec_depend>gmapping</exec_depend>
+  <exec_depend>map_server</exec_depend>
+  <exec_depend>move_base</exec_depend>
+  <exec_depend>urdf</exec_depend>
+  <exec_depend>xacro</exec_depend>
+
+  <test_depend>roslaunch</test_depend>
+
+  <export>
+  </export>
+</package>

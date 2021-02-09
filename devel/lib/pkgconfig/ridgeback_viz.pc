@@ -1,0 +1,8 @@
+prefix=/home/tanujthakkar/ROS/catkin_ws/devel
+
+Name: ridgeback_viz
+Description: Description of ridgeback_viz
+Version: 0.1.2
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 
