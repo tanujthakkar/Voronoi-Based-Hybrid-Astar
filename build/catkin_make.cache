@@ -1,2 +1,2 @@
-indoor_nav
+Astar:indoor_nav:ira_laser_tools
 -DCATKIN_DEVEL_PREFIX=/home/tanujthakkar/ROS/catkin_ws/devel -DCMAKE_INSTALL_PREFIX=/home/tanujthakkar/ROS/catkin_ws/install -G Unix Makefiles

@@ -1,0 +1,13 @@
+\subsubsection usage Usage
+\verbatim
+<node name="laserscan_virtualizer" pkg="laserscan_virtualizer" type="laserscan_virtualizer">
+  <param name="angle_min" type="double" value="-2.36" />
+  <param name="angle_max" type="double" value="2.36" />
+  <param name="angle_increment" type="double" value="0.0058" />
+  <param name="time_increment" type="double" value="0.0" />
+  <param name="scan_time" type="double" value="0.033333333" />
+  <param name="range_min" type="double" value="0.45" />
+  <param name="range_max" type="double" value="25.0" />
+</node>
+\endverbatim
+

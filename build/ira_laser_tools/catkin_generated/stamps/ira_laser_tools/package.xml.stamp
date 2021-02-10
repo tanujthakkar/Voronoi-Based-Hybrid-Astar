@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<package>
+  <name>ira_laser_tools</name>
+  <version>1.0.4</version>
+  <description>The ira_laser_tools package. These nodes are meant to provide some utils for lasers, like listen to different laser scan sources and merge them in a single scan or generate virtual laser scans from a pointcloud.</description>
+
+  <url>http://www.ros.org/wiki/ira_laser_tools</url>
+  <maintainer email="augusto.ballardini@unimib.it">Augusto</maintainer>
+  <maintainer email="p.colombo45@campus.unimib.it">Pietro</maintainer>
+
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <build_depend>libpcl-all-dev</build_depend>
+  <build_depend>pcl_ros</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>tf</build_depend>
+  <build_depend>laser_geometry</build_depend>
+  <build_depend>roscpp</build_depend>
+  <run_depend>sensor_msgs</run_depend>
+  <run_depend>libpcl-all-dev</run_depend>
+  <run_depend>pcl_ros</run_depend>
+  <run_depend>std_msgs</run_depend>
+  <run_depend>tf</run_depend>
+  <run_depend>laser_geometry</run_depend>
+  <run_depend>roscpp</run_depend>
+
+  <!-- Needed to work around https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=894656 on Debian Stretch -->
+  <build_depend>libvtk-qt</build_depend>
+  <run_depend>libvtk-qt</run_depend>
+  
+</package>

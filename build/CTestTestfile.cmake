@@ -6,3 +6,5 @@
 # testing this directory and lists subdirectories to be tested as well.
 subdirs("gtest")
 subdirs("indoor_nav")
+subdirs("Astar")
+subdirs("ira_laser_tools")
