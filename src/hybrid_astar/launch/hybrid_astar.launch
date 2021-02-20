@@ -1,0 +1,10 @@
+<launch>
+
+    <node pkg="map_server" name="map_server" type="map_server" args="$(find indoor_nav)/maps/dual_hoyuko_full_map.yaml"/>
+
+    <node pkg="hybrid_astar" type="hybrid_astar" name="hybrid_astar" output="screen"/>
+
+    <arg name="config" default="hybrid_astar" />
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find hybrid_astar)/rviz/$(arg config).rviz" />
+
+</launch>

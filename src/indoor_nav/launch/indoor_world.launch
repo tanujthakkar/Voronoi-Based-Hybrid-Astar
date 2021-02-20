@@ -3,12 +3,12 @@
 <launch>
 
 	<arg name="debug" default="false"/>
-	<arg name="gui" default="false"/>
+	<arg name="gui" default="true"/>
 	<arg name="pause" default="true"/>
-	<arg name="world" value="$(find indoor_nav)/world/indoor_world_01.world"/>
+	<arg name="world" value="$(find indoor_nav)/world/l_passage.world"/>
 
-	<arg name="x" default="-4.5"/>
-	<arg name="y" default="-6"/>
+	<arg name="x" default="-5.0"/>
+	<arg name="y" default="-5.5"/>
 	<arg name="z" default="0.025889"/>
 	<arg name="yaw" default="0"/>
 
@@ -55,7 +55,7 @@
 	<!-- <include file="$(find ira_laser_tools)/launch/laserscan_multi_merger.launch"/> -->
 
 	<!-- AMCL -->
-	<include file="$(find ridgeback_navigation)/launch/amcl_demo.launch"/>
+	<!-- <include file="$(find ridgeback_navigation)/launch/amcl_demo.launch"/> -->
 
 	<!-- GMapping -->
 	<!-- <include file="$(find ridgeback_navigation)/launch/gmapping_demo.launch"/> -->
@@ -67,7 +67,7 @@
 	<!-- <include file="$(find hector_slam_launch)/launch/tutorial.launch"/> -->
 
 	<param name="use_gui" value="true"/>
-  	<arg name="config" default="ridgeback_config" />
+  	<arg name="config" default="navigation" />
   	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find indoor_nav)/rviz_config/$(arg config).rviz" />
   	<!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(find ridgeback_viz)/rviz/navigation.rviz" /> -->
 

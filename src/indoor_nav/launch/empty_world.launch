@@ -7,7 +7,7 @@
 	<arg name="debug" default="false"/>
 	<arg name="gui" default="true"/>
 	<arg name="pause" default="true"/>
-	<arg name="world" default="$(find indoor_nav)/world/empty_world"/>
+	<arg name="world" default="$(find indoor_nav)/world/l_passage_world"/>
 
 	<arg name="x" default="0"/>
 	<arg name="y" default="0"/>
