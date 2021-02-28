@@ -207,6 +207,7 @@ include_directories(
 # catkin_add_nosetests(test)
 
 set(HEADERS
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/hybrid_astar/constants.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/hybrid_astar/helper.h
     )
 

@@ -6,12 +6,20 @@
 
 #IncludeRegexTransform: 
 
+/home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/constants.h
+
 /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/helper.h
 cmath
 -
 
 /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/src/hybrid_astar.cpp
 iostream
+-
+sstream
+-
+cmath
+-
+chrono
 -
 ros/ros.h
 -
@@ -33,10 +41,8 @@ std_msgs/String.h
 /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/src/std_msgs/String.h
 std_msgs/Int32.h
 /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/src/std_msgs/Int32.h
-sstream
--
-cmath
--
+../include/hybrid_astar/constants.h
+/home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/constants.h
 ../include/hybrid_astar/helper.h
 /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/helper.h
 
