@@ -76,6 +76,7 @@ hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o: /opt/ros/melodi
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o: /opt/ros/melodic/include/ros/wall_timer.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o: /opt/ros/melodic/include/ros/wall_timer_options.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o: /opt/ros/melodic/include/rosconsole/macros_generated.h
+hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o: /opt/ros/melodic/include/std_msgs/ColorRGBA.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o: /opt/ros/melodic/include/std_msgs/Header.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o: /opt/ros/melodic/include/std_msgs/Int32.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o: /opt/ros/melodic/include/std_msgs/String.h
@@ -103,6 +104,7 @@ hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o: /opt/ros/melodi
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o: /opt/ros/melodic/include/tf2_msgs/FrameGraphResponse.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o: /opt/ros/melodic/include/tf2_ros/buffer.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o: /opt/ros/melodic/include/tf2_ros/buffer_interface.h
+hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o: /opt/ros/melodic/include/visualization_msgs/Marker.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o: /opt/ros/melodic/include/xmlrpcpp/XmlRpcDecl.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o: /opt/ros/melodic/include/xmlrpcpp/XmlRpcValue.h
 

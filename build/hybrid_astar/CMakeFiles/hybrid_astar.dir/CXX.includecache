@@ -11,6 +11,8 @@ cmath
 -
 
 /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/src/hybrid_astar.cpp
+iostream
+-
 ros/ros.h
 -
 tf/tf.h
@@ -24,6 +26,8 @@ geometry_msgs/PoseWithCovarianceStamped.h
 geometry_msgs/PoseStamped.h
 -
 geometry_msgs/Quaternion.h
+-
+visualization_msgs/Marker.h
 -
 std_msgs/String.h
 /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/src/std_msgs/String.h
@@ -1006,6 +1010,22 @@ ros/forwards.h
 
 /opt/ros/melodic/include/rosconsole/macros_generated.h
 
+/opt/ros/melodic/include/std_msgs/ColorRGBA.h
+string
+-
+vector
+-
+map
+-
+ros/types.h
+-
+ros/serialization.h
+-
+ros/builtin_message_traits.h
+-
+ros/message_operations.h
+-
+
 /opt/ros/melodic/include/std_msgs/Header.h
 string
 -
@@ -1314,6 +1334,34 @@ geometry_msgs/TransformStamped.h
 sstream
 -
 tf2/convert.h
+-
+
+/opt/ros/melodic/include/visualization_msgs/Marker.h
+string
+-
+vector
+-
+map
+-
+ros/types.h
+-
+ros/serialization.h
+-
+ros/builtin_message_traits.h
+-
+ros/message_operations.h
+-
+std_msgs/Header.h
+-
+geometry_msgs/Pose.h
+-
+geometry_msgs/Vector3.h
+-
+std_msgs/ColorRGBA.h
+-
+geometry_msgs/Point.h
+-
+std_msgs/ColorRGBA.h
 -
 
 /opt/ros/melodic/include/xmlrpcpp/XmlRpcDecl.h

@@ -77,6 +77,7 @@ hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o
  /opt/ros/melodic/include/ros/wall_timer.h
  /opt/ros/melodic/include/ros/wall_timer_options.h
  /opt/ros/melodic/include/rosconsole/macros_generated.h
+ /opt/ros/melodic/include/std_msgs/ColorRGBA.h
  /opt/ros/melodic/include/std_msgs/Header.h
  /opt/ros/melodic/include/std_msgs/Int32.h
  /opt/ros/melodic/include/std_msgs/String.h
@@ -104,5 +105,6 @@ hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o
  /opt/ros/melodic/include/tf2_msgs/FrameGraphResponse.h
  /opt/ros/melodic/include/tf2_ros/buffer.h
  /opt/ros/melodic/include/tf2_ros/buffer_interface.h
+ /opt/ros/melodic/include/visualization_msgs/Marker.h
  /opt/ros/melodic/include/xmlrpcpp/XmlRpcDecl.h
  /opt/ros/melodic/include/xmlrpcpp/XmlRpcValue.h

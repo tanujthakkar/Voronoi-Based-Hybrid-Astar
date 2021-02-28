@@ -1,4 +1,4 @@
-// #include <iostream>
+#include <iostream>
 #include <ros/ros.h>
 #include <tf/tf.h>
 #include <nav_msgs/OccupancyGrid.h>
@@ -6,6 +6,7 @@
 #include <geometry_msgs/PoseWithCovarianceStamped.h>
 #include <geometry_msgs/PoseStamped.h>
 #include <geometry_msgs/Quaternion.h>
+#include <visualization_msgs/Marker.h>
 #include "std_msgs/String.h"
 #include "std_msgs/Int32.h"
 #include <sstream>
@@ -22,17 +23,19 @@ const float YAW_RESOLUTION = (15 * (M_PI / 180)); // [rad]
 const float MOVE_STEP = 0.1; // [m] Path interpolate resolution
 
 // Vehicle Configuration
-const float WHEELBASE = 1.0; // [m] Wheelbase of the tractor, i.e., distance from front axle to rear axle
+const float WHEELBASE = 0.8; // [m] Wheelbase of the tractor, i.e., distance from front axle to rear axle
 const float RTR = 0.8; // [m] Distance from the rear axle (hitch position) of the tractor to rear axle of the trailer
 
 
 // Global Publisher Variables
 ros::Publisher pub;
 ros::Publisher path_pub;
+ros::Publisher visualize_nodes_pub;
 
 
 nav_msgs::Path path;
 geometry_msgs::PoseStamped start_pose;
+visualization_msgs::Marker nodes;
 
 float x;
 float y;
@@ -86,7 +89,33 @@ void generate_path(float x, float y, float yaw, float yawt, float nyaw) {
 	}
 
 	path_pub.publish(path);
+}
 
+void visualize_nodes() {
+	
+	nodes.header.stamp = ros::Time::now();
+	nodes.header.frame_id = "/map";
+	nodes.ns = "v_nodes";
+	nodes.action = visualization_msgs::Marker::ADD;
+	nodes.id = 0;
+	nodes.type = visualization_msgs::Marker::LINE_LIST;
+	nodes.scale.x = 0.03;
+	nodes.color.r = 1.0;
+	nodes.color.a = 1.0;
+
+	geometry_msgs::Point p;
+	for(int i=0;i<8;i++) {
+		p.x = path.poses[i].pose.position.x;
+		p.y = path.poses[i].pose.position.y;
+		p.z = 0;
+		nodes.points.push_back(p);
+	}
+	// for(int i=0;i<10;i++) {
+	// 	p.x = i;
+	// 	p.y = i;
+	// 	p.z = 0;
+	// 	nodes.points.push_back(p);
+	// }
 }
 
 void callback_start_pose(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& p) {
@@ -103,8 +132,13 @@ void callback_start_pose(const geometry_msgs::PoseWithCovarianceStamped::ConstPt
 	yaw = tf::getYaw(start_pose.pose.orientation);
 	// start_pose->pose.orientation = p->pose.pose.orientation;
 
-	// ROS_INFO("X: %f \t Y: %f \t YAW: %f", start_pose.pose.position.x, start_pose.pose.position.y, yaw);
+	ROS_INFO("X: %f \t Y: %f \t YAW: %f", start_pose.pose.position.x, start_pose.pose.position.y, yaw);
 	pub.publish(start_pose);
+	generate_path(start_pose.pose.position.x, start_pose.pose.position.y, yaw, 0, 30.0);
+	generate_path(start_pose.pose.position.x, start_pose.pose.position.y, yaw, 0, 0.0);
+	generate_path(start_pose.pose.position.x, start_pose.pose.position.y, yaw, 0, -30.0);
+	visualize_nodes();
+	visualize_nodes_pub.publish(nodes);
 }
 
 // void callback_map(const nav_msgs::OccupancyGrid::Ptr map) {
@@ -119,33 +153,17 @@ int main(int argc, char **argv) {
 	ros::NodeHandle nh;
 
 	// Publishers
-	pub = nh.advertise<geometry_msgs::PoseStamped>("start_pose", 1000);
-	path_pub = nh.advertise<nav_msgs::Path>("path", 1000);
-	
+	pub = nh.advertise<geometry_msgs::PoseStamped>("start_pose", 10);
+	path_pub = nh.advertise<nav_msgs::Path>("path", 10);
+	visualize_nodes_pub = nh.advertise<visualization_msgs::Marker>("nodes", 10);
+
 	// Subscribers
-	ros::Subscriber sub_start_pose = nh.subscribe("initialpose", 1000, callback_start_pose);
+	ros::Subscriber sub_start_pose = nh.subscribe("initialpose", 10, callback_start_pose);
 	// ros::Subscriber sub_map = nh.subscribe('map', 1, callback_map);
 	
 	ros::Rate loop_rate(10);
 
 	while(ros::ok()) {
-
-		// path.header.stamp = ros::Time::now();
-		// path.header.frame_id = "map";
-		// path.poses.clear();
-
-		// for(int i=0;i<(WHEELBASE/MOVE_STEP);i++) {
-		// 	geometry_msgs::PoseStamped pose_stamped;
-		// 	pose_stamped.header.stamp = ros::Time::now();
-		// 	pose_stamped.header.frame_id = "map";
-		// 	pose_stamped.pose.position.x = start_pose.pose.position.x + i;
-		// 	pose_stamped.pose.position.y = pose_stamped.pose.position.x * tan(yaw);
-		// 	pose_stamped.pose.position.z = 0;
-		// 	pose_stamped.pose.orientation.w = yaw;
-		// 	path.poses.push_back(pose_stamped);
-		// }
-		// path_pub.publish(path);
-		generate_path(0, 0, 0, 0, 40.0);
 
 		ros::spinOnce();
 		loop_rate.sleep();
