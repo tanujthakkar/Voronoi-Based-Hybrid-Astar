@@ -3,7 +3,7 @@
 
 // Environment Constants
 static const float XY_RESOLUTION = 0.05; // [m] Grid resolution of the map
-static const float YAW_RESOLUTION = (15 * (M_PI / 180)); // [rad]
+static const float YAW_RESOLUTION = (15 * (M_PI / 180)); // [rad] Yaw resolution
 static const float MOVE_STEP = 0.1; // [m] Path interpolate resolution
 
 // Vehicle Configuration Constants

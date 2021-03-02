@@ -206,11 +206,15 @@ include_directories(
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 
+set(SOURCES
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/node4d.cpp
+    )
+
 set(HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/include/hybrid_astar/constants.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/hybrid_astar/helper.h
     )
 
 # Hybrid A Star Header and Source files
-add_executable(hybrid_astar src/hybrid_astar.cpp ${HEADERS})
+add_executable(hybrid_astar src/hybrid_astar.cpp ${SOURCES} ${HEADERS})
 target_link_libraries(hybrid_astar ${catkin_LIBRARIES})

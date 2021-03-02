@@ -5,6 +5,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
   "/home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/src/hybrid_astar.cpp" "/home/tanujthakkar/ROS/catkin_ws/build/hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o"
+  "/home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/src/node4d.cpp" "/home/tanujthakkar/ROS/catkin_ws/build/hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

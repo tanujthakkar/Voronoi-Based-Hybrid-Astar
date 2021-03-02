@@ -21,26 +21,18 @@
 using namespace std;
 using namespace std::chrono;
 
-// Constants
-
-// const float XY_RESOLUTION = 0.05; // [m] Grid resolution of the map
-// const float YAW_RESOLUTION = (15 * (M_PI / 180)); // [rad]
-// const float MOVE_STEP = 0.1; // [m] Path interpolate resolution
-
-// // Vehicle Configuration
-// const float WHEELBASE = 0.8; // [m] Wheelbase of the tractor, i.e., distance from front axle to rear axle
-// const float RTR = 0.8; // [m] Distance from the rear axle (hitch position) of the tractor to rear axle of the trailer
-
 
 // Global Publisher Variables
 ros::Publisher pub;
 ros::Publisher path_pub;
 ros::Publisher visualize_nodes_pub;
 
-
 nav_msgs::Path path;
 geometry_msgs::PoseStamped start_pose;
 visualization_msgs::Marker nodes;
+
+Node4D* current_node;
+Node4D* new_node;
 
 float x;
 float y;
@@ -150,7 +142,89 @@ void generate_path_vector(float x, float y, float yaw, float yawt, float nyaw) {
 	path_pub.publish(path);
 }
 
-void visualize_nodes() {
+Node4D* create_successor(Node4D* node, float steer,int dir) {
+
+	int nlist = ceil(WHEELBASE/MOVE_STEP);
+	int n = node->get_size();
+
+	std::vector<float> xlist;
+	std::vector<float> ylist;
+	std::vector<float> yawlist;
+	std::vector<float> yawtlist;
+
+	xlist.resize(nlist);
+	ylist.resize(nlist);
+	yawlist.resize(nlist);
+	yawtlist.resize(nlist);
+
+	xlist[0] = node->x + (dir * MOVE_STEP) * cos(node->yaw);
+	ylist[0] = node->y + (dir * MOVE_STEP) * sin(node->yaw);
+	yawlist[0] = pi_2_pi(node->yaw + (dir * MOVE_STEP / WHEELBASE) * tan(to_rad(steer)));
+	yawtlist[0] = pi_2_pi(node->yawt + (dir * MOVE_STEP / RTR) * sin(node->yawt - node->yaw));
+
+	for(int i=1;i<nlist;i++) {
+		xlist[i] = xlist[i-1] + (dir * WHEELBASE * MOVE_STEP) * cos(yawlist[i-1]);
+		ylist[i] = ylist[i-1] + (dir * WHEELBASE * MOVE_STEP) * sin(yawlist[i-1]);
+		yawlist[i] = pi_2_pi(yawlist[i-1] + (dir * MOVE_STEP / WHEELBASE) * tan(to_rad(steer)));
+		yawtlist[i] = pi_2_pi(yawtlist[i-1] + (dir * MOVE_STEP / RTR) * sin(yawlist[i-1] - yawtlist[i-1]));
+	}
+
+	path.header.stamp = ros::Time::now();
+	path.header.frame_id = "map";
+	path.poses.clear();
+
+	geometry_msgs::PoseStamped pose_stamped;
+	// pose_stamped.header.stamp = ros::Time::now();
+	// pose_stamped.header.frame_id = "map";
+	// pose_stamped.pose.position.x = x;
+	// pose_stamped.pose.position.y = y;
+	// pose_stamped.pose.position.z = 0;
+	// pose_stamped.pose.orientation.w = yaw;
+	// path.poses.push_back(pose_stamped);
+
+	for(int i=0;i<nlist;i++) {
+		pose_stamped.header.stamp = ros::Time::now();
+		pose_stamped.header.frame_id = "map";
+		pose_stamped.pose.position.x = xlist[i];
+		pose_stamped.pose.position.y = ylist[i];
+		pose_stamped.pose.position.z = 0;
+		pose_stamped.pose.orientation.w = yawlist[i];
+		path.poses.push_back(pose_stamped);
+	}
+
+	path_pub.publish(path);
+
+	return new Node4D(xlist, ylist, yawlist, yawtlist, steer, dir);
+}
+
+// void visualize_nodes() {
+	
+// 	nodes.header.stamp = ros::Time::now();
+// 	nodes.header.frame_id = "/map";
+// 	nodes.ns = "v_nodes";
+// 	nodes.action = visualization_msgs::Marker::ADD;
+// 	nodes.id = 0;
+// 	nodes.type = visualization_msgs::Marker::LINE_LIST;
+// 	nodes.scale.x = 0.02;
+// 	nodes.color.r = 1.0;
+// 	nodes.color.a = 1.0;
+
+// 	geometry_msgs::Point p;
+// 	for(int i=0;i<8;i++) {
+// 		p.x = path.poses[i].pose.position.x;
+// 		p.y = path.poses[i].pose.position.y;
+// 		p.z = 0;
+// 		nodes.points.push_back(p);
+// 	}
+// 	// for(int i=0;i<10;i++) {
+// 	// 	p.x = i;
+// 	// 	p.y = i;
+// 	// 	p.z = 0;
+// 	// 	nodes.points.push_back(p);
+// 	// }
+// }
+
+void visualize_node(Node4D* n) {
 	
 	nodes.header.stamp = ros::Time::now();
 	nodes.header.frame_id = "/map";
@@ -164,8 +238,9 @@ void visualize_nodes() {
 
 	geometry_msgs::Point p;
 	for(int i=0;i<8;i++) {
-		p.x = path.poses[i].pose.position.x;
-		p.y = path.poses[i].pose.position.y;
+		// cout << "x - " << n->get_x(i) << endl;
+		p.x = n->get_x(i);
+		p.y = n->get_y(i);
 		p.z = 0;
 		nodes.points.push_back(p);
 	}
@@ -193,23 +268,24 @@ void callback_start_pose(const geometry_msgs::PoseWithCovarianceStamped::ConstPt
 
 	ROS_INFO("X: %f \t Y: %f \t YAW: %f", start_pose.pose.position.x, start_pose.pose.position.y, yaw);
 	pub.publish(start_pose);
-	// generate_path(start_pose.pose.position.x, start_pose.pose.position.y, yaw, 0, 30.0);
-	// generate_path(start_pose.pose.position.x, start_pose.pose.position.y, yaw, 0, 0.0);
 	
-	std::vector<float> t;
+	Node4D start_node = Node4D(start_pose.pose.position.x, start_pose.pose.position.y, yaw, 0);
+	current_node = &start_node;
+
 	auto start = high_resolution_clock::now();
-	generate_path_vector(start_pose.pose.position.x, start_pose.pose.position.y, yaw, 0, -30.0);
+	// generate_path_vector(start_pose.pose.position.x, start_pose.pose.position.y, yaw, 0, -30.0);
+	new_node = create_successor(&start_node, 30, 1);
 	auto stop = high_resolution_clock::now();
 	auto duration = duration_cast<microseconds>(stop-start);
-	std::cout << "Execution Time : " << duration.count() << endl;
-	// visualize_nodes();
-	// visualize_nodes_pub.publish(nodes);
+	cout << new_node->get_x(0) << endl;
+	cout << new_node->get_y(0) << endl;
+	cout << new_node->get_steer() << endl;
+	cout << new_node->get_size() << endl;
+	std::cout << "Execution Time : " << duration.count() << " microseconds" << endl;
+	visualize_node(new_node);
+	visualize_nodes_pub.publish(nodes);
 }
 
-// void callback_map(const nav_msgs::OccupancyGrid::Ptr map) {
-
-// 	grid = map;
-// }
 
 int main(int argc, char **argv) {
 

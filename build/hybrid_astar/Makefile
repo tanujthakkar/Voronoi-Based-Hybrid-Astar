@@ -434,6 +434,33 @@ src/hybrid_astar.cpp.s:
 	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/hybrid_astar.dir/build.make hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.s
 .PHONY : src/hybrid_astar.cpp.s
 
+src/node4d.o: src/node4d.cpp.o
+
+.PHONY : src/node4d.o
+
+# target to build an object file
+src/node4d.cpp.o:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/hybrid_astar.dir/build.make hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o
+.PHONY : src/node4d.cpp.o
+
+src/node4d.i: src/node4d.cpp.i
+
+.PHONY : src/node4d.i
+
+# target to preprocess a source file
+src/node4d.cpp.i:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/hybrid_astar.dir/build.make hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.i
+.PHONY : src/node4d.cpp.i
+
+src/node4d.s: src/node4d.cpp.s
+
+.PHONY : src/node4d.s
+
+# target to generate assembly for a file
+src/node4d.cpp.s:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/hybrid_astar.dir/build.make hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.s
+.PHONY : src/node4d.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -466,6 +493,9 @@ help:
 	@echo "... src/hybrid_astar.o"
 	@echo "... src/hybrid_astar.i"
 	@echo "... src/hybrid_astar.s"
+	@echo "... src/node4d.o"
+	@echo "... src/node4d.i"
+	@echo "... src/node4d.s"
 .PHONY : help
 
 
