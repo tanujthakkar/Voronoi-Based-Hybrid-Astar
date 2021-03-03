@@ -21,10 +21,15 @@ public:
 		this->y = y;
 		this->yaw = yaw;
 		this->yawt = yawt;
+		this->parent = nullptr;
+		xlist.push_back(x);
+		ylist.push_back(y);
+		yawlist.push_back(yaw);
+		yawtlist.push_back(yawt);
 	}
 
 	Node4D(std::vector<float> xlist, std::vector<float> ylist, std::vector<float> yawlist, 
-		std::vector<float> yawtlist, float steer, int dir) {
+		std::vector<float> yawtlist, float steer, int dir, Node4D* parent) {
 
 		this->xlist.resize(n);
 		this->ylist.resize(n);
@@ -38,6 +43,7 @@ public:
 		this->yawtlist = yawtlist;
 		this->steer = steer;
 		this->direction = dir;
+		this->parent = parent;
 	}
 
 	// Node4D(int xind, int yind, int yawind, bool direction,
@@ -68,6 +74,8 @@ public:
 
 	float get_steer() const { return steer; }
 
+	Node4D* get_parent() { return parent; }
+
 	int get_size() const { return xlist.capacity(); }
 
 private:
@@ -83,7 +91,7 @@ private:
 	float steer;
 	float cost;
 	int pind;
-	const Node4D* parent;
+	Node4D* parent;
 };
 
 #endif
