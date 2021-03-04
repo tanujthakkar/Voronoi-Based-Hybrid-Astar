@@ -15,21 +15,26 @@ class Node4D {
 
 public:
 
+	// Constructor for start and goal nodes
 	Node4D(float x, float y, float yaw, float yawt) {
 
 		this->x = x;
 		this->y = y;
 		this->yaw = yaw;
 		this->yawt = yawt;
-		this->parent = nullptr;
 		xlist.push_back(x);
 		ylist.push_back(y);
 		yawlist.push_back(yaw);
 		yawtlist.push_back(yawt);
+		this->direction = 1;
+		this->steer = 0.0;
+		this->cost = 0.0;
+		this->parent = nullptr;
 	}
 
+	// Constructor for successor nodes
 	Node4D(std::vector<float> xlist, std::vector<float> ylist, std::vector<float> yawlist, 
-		std::vector<float> yawtlist, float steer, int dir, Node4D* parent) {
+		std::vector<float> yawtlist, int dir, float steer, float cost, Node4D* parent) {
 
 		this->xlist.resize(n);
 		this->ylist.resize(n);
@@ -41,8 +46,9 @@ public:
 		this->ylist = ylist;
 		this->yawlist = yawlist;
 		this->yawtlist = yawtlist;
-		this->steer = steer;
 		this->direction = dir;
+		this->steer = steer;
+		this->cost = cost;
 		this->parent = parent;
 	}
 
@@ -72,7 +78,11 @@ public:
 
 	float get_yawt(int i) const { return yawtlist[i]; }
 
+	int get_dir() const { return direction; }
+
 	float get_steer() const { return steer; }
+
+	float get_cost() const { return cost; }
 
 	Node4D* get_parent() { return parent; }
 

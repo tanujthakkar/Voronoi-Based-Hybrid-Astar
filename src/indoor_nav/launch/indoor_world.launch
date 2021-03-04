@@ -3,15 +3,14 @@
 <launch>
 
 	<arg name="debug" default="false"/>
-	<arg name="gui" default="true"/>
+	<arg name="gui" default="false"/>
 	<arg name="pause" default="true"/>
-	<arg name="world" value="$(find indoor_nav)/world/l_passage.world"/>
+	<arg name="world" value="$(find indoor_nav)/world/indoor_world_01.world"/>
 
-	<arg name="x" default="-5.0"/>
-	<arg name="y" default="-5.5"/>
+	<arg name="x" default="-4.5"/>
+	<arg name="y" default="-6.0"/>
 	<arg name="z" default="0.025889"/>
 	<arg name="yaw" default="0"/>
-
 
   	<include file="$(find gazebo_ros)/launch/empty_world.launch">
   		<arg name="world_name" default="$(arg world)"/>
@@ -21,13 +20,6 @@
 	    <arg name="use_sim_time" value="true"/>
   	</include>
 
-  	<!-- <include file="$(find husky_gazebo)/launch/spawn_husky.launch">
-	  	<arg name="x" value="$(arg x)"/>
-	  	<arg name="y" value="$(arg y)"/>
-	  	<arg name="z" value="$(arg z)"/>
-	  	<arg name="yaw" value="$(arg yaw)"/>
-	</include> -->
-
 	<include file="$(find ridgeback_gazebo)/launch/spawn_ridgeback.launch">
 	  	<arg name="x" value="$(arg x)"/>
 	  	<arg name="y" value="$(arg y)"/>
@@ -35,22 +27,6 @@
 	  	<arg name="yaw" value="$(arg yaw)"/>
 	  	<arg name="config" value="dual_hokuyo_lasers" />
 	</include>
-
-	<!-- <node pkg="ira_laser_tools" name="laserscan_multi_merger" type="laserscan_multi_merger" output="screen">
-        	<param name="destination_frame" value="base_link"/>
-		<param name="cloud_destination_topic" value="/merged_cloud"/>
-		<param name="scan_destination_topic" value="/scan_multi"/>
-                <param name="laserscan_topics" value ="/front/scan /rear/scan" /> 
-                LIST OF THE LASER SCAN TOPICS TO SUBSCRIBE
-
-                <param name="angle_min" value="-3.14"/>
-                <param name="angle_max" value="3.14"/>
-                <param name="angle_increment" value="0.0058"/>
-                <param name="scan_time" value="0.0333333"/>
-                <param name="range_min" value="0.30"/>
-                <param name="range_max" value="50.0"/>
-
-	</node> -->
 
 	<!-- <include file="$(find ira_laser_tools)/launch/laserscan_multi_merger.launch"/> -->
 
@@ -69,6 +45,5 @@
 	<param name="use_gui" value="true"/>
   	<arg name="config" default="navigation" />
   	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find indoor_nav)/rviz_config/$(arg config).rviz" />
-  	<!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(find ridgeback_viz)/rviz/navigation.rviz" /> -->
 
 </launch>

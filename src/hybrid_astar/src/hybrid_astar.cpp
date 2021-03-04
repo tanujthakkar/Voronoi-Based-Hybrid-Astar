@@ -40,6 +40,15 @@ float yaw;
 
 std::vector<int> steer = {30, 0, -30};
 
+/*
+	Function to create a successor node
+
+	node: input node to create successor for
+	steer: steering input of the new node
+	dir: direction of the new node
+
+	Returns a pointer to the new node
+*/
 Node4D* create_successor(Node4D* node, float steer,int dir) {
 
 	int nlist = ceil(WHEELBASE/MOVE_STEP);
@@ -55,23 +64,44 @@ Node4D* create_successor(Node4D* node, float steer,int dir) {
 	yawlist.resize(nlist);
 	yawtlist.resize(nlist);
 
-	xlist[0] = node->get_x(nlist-1) + (dir * MOVE_STEP) * cos(node->get_yaw(nlist-1));
-	ylist[0] = node->get_y(nlist-1) + (dir * MOVE_STEP) * sin(node->get_yaw(nlist-1));
-	yawlist[0] = pi_2_pi(node->get_yaw(nlist-1) + (dir * MOVE_STEP / WHEELBASE) * tan(to_rad(steer)));
-	yawtlist[0] = pi_2_pi(node->get_yawt(nlist-1) + (dir * MOVE_STEP / RTR) * sin(node->get_yawt(nlist-1) - node->get_yaw(nlist-1)));
+	xlist[0] = node->get_x(n-1) + (dir * MOVE_STEP) * cos(node->get_yaw(n-1));
+	ylist[0] = node->get_y(n-1) + (dir * MOVE_STEP) * sin(node->get_yaw(n-1));
+	yawlist[0] = pi_2_pi(node->get_yaw(n-1) + (dir * MOVE_STEP / WHEELBASE) * tan(to_rad(steer)));
+	yawtlist[0] = pi_2_pi(node->get_yawt(n-1) + (dir * MOVE_STEP / RTR) * sin(node->get_yawt(n-1) - node->get_yaw(n-1)));
 
 	for(int i=1;i<nlist;i++) {
-		xlist[i] = xlist[i-1] + (dir * WHEELBASE * MOVE_STEP) * cos(yawlist[i-1]);
-		ylist[i] = ylist[i-1] + (dir * WHEELBASE * MOVE_STEP) * sin(yawlist[i-1]);
+		xlist[i] = xlist[i-1] + (dir * MOVE_STEP) * cos(yawlist[i-1]);
+		ylist[i] = ylist[i-1] + (dir * MOVE_STEP) * sin(yawlist[i-1]);
 		yawlist[i] = pi_2_pi(yawlist[i-1] + (dir * MOVE_STEP / WHEELBASE) * tan(to_rad(steer)));
 		yawtlist[i] = pi_2_pi(yawtlist[i-1] + (dir * MOVE_STEP / RTR) * sin(yawlist[i-1] - yawtlist[i-1]));
 	}
 
-	return new Node4D(xlist, ylist, yawlist, yawtlist, steer, dir, node);
+	float cost = 0.0;
+
+	// Calculating g(n) cost
+	if (dir > 0) {
+		cost = nlist * MOVE_STEP;
+		cout << "Cost : " << cost << endl;
+	} else {
+		cost = nlist * MOVE_STEP + BACKWARD_COST;
+		cout << "Cost : " << cost << endl;
+	}
+
+	cost = cost + abs(steer) * STEER_ANGLE_COST;
+	cout << "Cost : " << cost << endl;
+	cost = cost + abs(node->get_steer() - steer) * STEER_CHANGE_COST;
+	cout << "Cost : " << cost << endl;
+
+	cost = cost + node->get_cost();
+	cout << "Cost : " << cost << endl;
+
+	return new Node4D(xlist, ylist, yawlist, yawtlist, dir, steer, cost, node);
 }
 
-
-void visualize_node() {
+/*
+	Publishes the final path using the current_node pointer as a marker array
+*/
+void visualize_final_path() {
 
 	nodes.header.stamp = ros::Time::now();
 	nodes.header.frame_id = "/map";
@@ -81,12 +111,12 @@ void visualize_node() {
 	nodes.type = visualization_msgs::Marker::LINE_LIST;
 	nodes.scale.x = 0.02;
 	nodes.color.r = 1.0;
-	nodes.color.b = 1.0;
+	nodes.color.a = 1.0;
 
 	geometry_msgs::Point p;
 	cout << " Current Node : " << current_node << endl;
 	while(current_node->get_parent() != nullptr) {
-		cout << " Node : " << current_node << endl;
+		cout << "Node : " << current_node << " Next Node : " << current_node->get_parent() << endl;
 		for(int i=0;i<ceil(WHEELBASE/MOVE_STEP);i++) {
 			p.x = current_node->get_x(i);
 			p.y = current_node->get_y(i);
@@ -109,26 +139,24 @@ void callback_start_pose(const geometry_msgs::PoseWithCovarianceStamped::ConstPt
 	ROS_INFO("X: %f \t Y: %f \t YAW: %f", start_pose.pose.position.x, start_pose.pose.position.y, yaw);
 	pub.publish(start_pose);
 	
-	Node4D start_node = Node4D(0, 0, 0, 0);
+	Node4D start_node = Node4D(start_pose.pose.position.x, start_pose.pose.position.y, yaw, 0);
 	current_node = &start_node;
 
 	auto start = high_resolution_clock::now();
-	// new_node = create_successor(current_node, 30, 1);
-	// current_node = new_node;
-	// cout << "New : " << new_node << " Current : " << current_node << endl;
-
-	for (int j = 0; j < 5; ++j)
-	{
-		for (int i = 0; i < 3; ++i)
-		{
-			cout << "Current : " << current_node << endl;
-			new_node = create_successor(current_node, steer[i], 1);
-			cout << "New : " << new_node << endl;
-		}
-		current_node = new_node;
-	}
+	new_node = create_successor(current_node, 30, 1);
+	current_node = new_node;
+	// for (int j = 0; j < 5; ++j)
+	// {
+	// 	for (int i = 0; i < 3; ++i)
+	// 	{
+	// 		cout << "Current : " << current_node << endl;
+	// 		new_node = create_successor(current_node, steer[i], 1);
+	// 		cout << "New : " << new_node << endl;
+	// 	}
+	// 	current_node = new_node;
+	// }
 	
-	visualize_node();
+	visualize_final_path();
 
 	auto stop = high_resolution_clock::now();
 	auto duration = duration_cast<microseconds>(stop-start);
