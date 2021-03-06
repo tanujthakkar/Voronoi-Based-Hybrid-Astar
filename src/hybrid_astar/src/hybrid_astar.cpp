@@ -13,6 +13,7 @@ ros::Publisher poly_pub;
 nav_msgs::Path path;
 nav_msgs::OccupancyGrid::Ptr grid;
 bool** bin_map;
+int** acc_obs_map;
 geometry_msgs::PoseStamped start_pose;
 visualization_msgs::Marker nodes;
 geometry_msgs::PolygonStamped robot_polygon;
@@ -25,6 +26,7 @@ float y;
 float yaw;
 
 std::vector<int> steer = {30, 0, -30};
+
 
 /*
 	Function to create a successor node
@@ -120,11 +122,11 @@ void create_robot_polygon() {
 	robot_polygon.polygon.points.clear();
 
 	float deltal = (RF - RB) / 2.0;
-	float length = RF + RB;
-	float width = WIDTH;
+	float length = RL + MIN_SAFE_DIST;
+	float width = RW + MIN_SAFE_DIST;
 
-	float cx = start_pose.pose.position.x + deltal * cos(yaw);
-	float cy = start_pose.pose.position.y + deltal * sin(yaw);
+	float cx = start_pose.pose.position.x;
+	float cy = start_pose.pose.position.y;
 
 	geometry_msgs::Point32 p;
 
@@ -166,8 +168,12 @@ void callback_start_pose(const geometry_msgs::PoseWithCovarianceStamped::ConstPt
 	yaw = tf::getYaw(start_pose.pose.orientation);
 
 	ROS_INFO("X: %f \t Y: %f \t YAW: %f", start_pose.pose.position.x, start_pose.pose.position.y, yaw);
-	pub.publish(start_pose);
-	create_robot_polygon();
+	if (grid->info.height >= start_pose.pose.position.y && start_pose.pose.position.y >= 0 && 
+		grid->info.width >= start_pose.pose.position.x && start_pose.pose.position.x >= 0) {
+		ROS_INFO("VALID START!");
+    } else  {
+    	ROS_INFO("INVALID START!");
+    }
 
 	Node4D start_node = Node4D(start_pose.pose.position.x, start_pose.pose.position.y, yaw, 0);
 	current_node = &start_node;
@@ -176,8 +182,15 @@ void callback_start_pose(const geometry_msgs::PoseWithCovarianceStamped::ConstPt
 	new_node = create_successor(current_node, 30, 1);
 	current_node = new_node;
 
-	current_node->check_path_collision(bin_map);
+	auto stop = high_resolution_clock::now();
+	// current_node->check_path_collision(bin_map);
+	current_node->check_collision(grid, bin_map, acc_obs_map);
+	auto duration = duration_cast<microseconds>(stop-start);
+	std::cout << "Execution Time : " << duration.count() << " microseconds" << endl;
 
+    pub.publish(start_pose);
+	create_robot_polygon();
+	
 	// for (int j = 0; j < 5; ++j)
 	// {
 	// 	for (int i = 0; i < 3; ++i)
@@ -191,9 +204,6 @@ void callback_start_pose(const geometry_msgs::PoseWithCovarianceStamped::ConstPt
 	
 	visualize_final_path();
 
-	auto stop = high_resolution_clock::now();
-	auto duration = duration_cast<microseconds>(stop-start);
-	std::cout << "Execution Time : " << duration.count() << " microseconds" << endl;
 	visualize_nodes_pub.publish(nodes);
 }
 
@@ -207,7 +217,7 @@ void callback_map(const nav_msgs::OccupancyGrid::Ptr map) {
 	int width = map->info.width;
 	bin_map = new bool*[width];
 
-	for (int x = 0; x < width; x++) { bin_map[x] = new bool[height]; }
+	for (int x = 0; x < width; ++x) { bin_map[x] = new bool[height]; }
 
 	for (int x = 0; x < width; ++x) {
 		for (int y = 0; y < height; ++y) {
@@ -215,12 +225,26 @@ void callback_map(const nav_msgs::OccupancyGrid::Ptr map) {
 		}
 	}
 
-	if (grid->info.height >= start_pose.pose.position.y && start_pose.pose.position.y >= 0 && 
-		grid->info.width >= start_pose.pose.position.x && start_pose.pose.position.x >= 0) {
-		ROS_INFO("VALID START!");
-    } else  {
-    	ROS_INFO("INVALID START!");
-    }
+	// acc_obs_map = new int* [width];
+
+	// for (int x = 0; x < width; ++x) {
+	// 	acc_obs_map[x] = new int[height];
+	// 	for (int y = 0; y < height; ++y) {
+	// 		acc_obs_map[x][y] = (bin_map[x][y] > 0);
+	// 	}
+	// }
+
+	// for (int x = 0; x < width; ++x) {
+	// 	for (int y = 1; y < height; ++y) {
+	// 		acc_obs_map[x][y] = acc_obs_map[x][y-1] + acc_obs_map[x][y];
+	// 	}
+	// }
+
+	// for (int y = 0; y < width; ++y) {
+	// 	for (int x = 1; x < height; ++x) {
+	// 		acc_obs_map[x][y] = acc_obs_map[x-1][y] + acc_obs_map[x][y];
+	// 	}
+	// }
 }
 
 int main(int argc, char **argv) {

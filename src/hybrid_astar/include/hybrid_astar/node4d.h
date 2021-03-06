@@ -19,6 +19,7 @@
 
 #include "constants.h"
 #include "helper.h"
+#include "hybrid_astar.h"
 
 using namespace std;
 
@@ -94,7 +95,7 @@ public:
 	bool check_path_collision(bool** bin_map);
 
 	// Function to check tractor-trailer collision
-	bool check_collision(bool** bin_map);
+	bool check_collision(nav_msgs::OccupancyGrid::Ptr grid, bool** bin_map,  int** acc_obs_map);
 
 private:
 	int xind;

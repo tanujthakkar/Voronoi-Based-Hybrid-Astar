@@ -90,7 +90,7 @@ Visualization Manager:
       Axes Radius: 0.10000000149011612
       Class: rviz/Pose
       Color: 255; 25; 0
-      Enabled: false
+      Enabled: true
       Head Length: 0.30000001192092896
       Head Radius: 0.10000000149011612
       Name: Pose
@@ -99,13 +99,13 @@ Visualization Manager:
       Shape: Arrow
       Topic: /start_pose
       Unreliable: false
-      Value: false
+      Value: true
     - Class: rviz/Marker
       Enabled: true
       Marker Topic: /nodes
       Name: Marker
       Namespaces:
-        v_nodes: true
+        {}
       Queue Size: 100
       Value: true
     - Alpha: 1
@@ -257,16 +257,16 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 14.268247604370117
+      Distance: 15.523513793945312
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 5.626185417175293
-        Y: 5.59578275680542
-        Z: 1.1830118894577026
+        X: 6.399467945098877
+        Y: 6.532168865203857
+        Z: 1.1837875843048096
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false

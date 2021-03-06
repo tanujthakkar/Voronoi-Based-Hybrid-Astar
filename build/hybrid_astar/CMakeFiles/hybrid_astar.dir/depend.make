@@ -116,10 +116,14 @@ hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o: /opt/ros/melodi
 
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o: /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/constants.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o: /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/helper.h
+hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o: /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/hybrid_astar.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o: /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/node4d.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o: /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/src/node4d.cpp
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o: /opt/ros/melodic/include/geometry_msgs/Point.h
+hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o: /opt/ros/melodic/include/geometry_msgs/Point32.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o: /opt/ros/melodic/include/geometry_msgs/PointStamped.h
+hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o: /opt/ros/melodic/include/geometry_msgs/Polygon.h
+hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o: /opt/ros/melodic/include/geometry_msgs/PolygonStamped.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o: /opt/ros/melodic/include/geometry_msgs/Pose.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o: /opt/ros/melodic/include/geometry_msgs/PoseStamped.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o: /opt/ros/melodic/include/geometry_msgs/PoseWithCovariance.h

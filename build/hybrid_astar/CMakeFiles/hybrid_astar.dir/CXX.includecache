@@ -83,6 +83,8 @@ constants.h
 /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/constants.h
 helper.h
 /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/helper.h
+hybrid_astar.h
+/home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/hybrid_astar.h
 
 /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/src/hybrid_astar.cpp
 ../include/hybrid_astar/hybrid_astar.h

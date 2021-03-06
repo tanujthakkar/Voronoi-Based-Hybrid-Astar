@@ -11,7 +11,8 @@ static const float MIN_SAFE_DIST = 0.3; // [m] Minimum safe distance between veh
 // Tractor/Robot Configuration
 static const float PATH_LENGTH = 0.8; // [m] Length of the path create by each node
 static const float WHEELBASE = 0.638; // [m] Wheelbase of the tractor, i.e., distance from front axle to rear axle
-static const float WIDTH = 0.793; // [m] Width of the tractor
+static const float RW = 0.793; // [m] Width of the tractor
+static const float RL = 0.960; // [m] Length of the robot/tractor
 static const float RF = 0.799; // [m] Distance from rear axle to front end
 static const float RB = 0.161; // [m] Distance from rear axle to back end
 
