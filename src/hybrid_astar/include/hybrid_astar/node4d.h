@@ -1,15 +1,28 @@
 #ifndef NODE4D
 #define NODE4D
 
-#include<cmath>
-#include "constants.h"
+#include <iostream>
+#include <sstream>
+#include <cmath>
+#include <chrono>
 
+#include <ros/ros.h>
+#include <tf/tf.h>
+#include <nav_msgs/OccupancyGrid.h>
 #include <nav_msgs/Path.h>
+#include <geometry_msgs/PoseWithCovarianceStamped.h>
 #include <geometry_msgs/PoseStamped.h>
+#include <geometry_msgs/Quaternion.h>
+#include <visualization_msgs/Marker.h>
+#include "std_msgs/String.h"
+#include "std_msgs/Int32.h"
+
+#include "constants.h"
+#include "helper.h"
 
 using namespace std;
 
-const int n = ceil(WHEELBASE/MOVE_STEP);
+const int n = ceil(PATH_LENGTH/MOVE_STEP);
 
 class Node4D {
 
@@ -52,24 +65,12 @@ public:
 		this->parent = parent;
 	}
 
-	// Node4D(int xind, int yind, int yawind, bool direction,
-	// 	   float steer, float cost, int pind, const Node4D* parent) {
-
-	// 	this->xind = xind;
-	// 	this->yind = yind;
-	// 	this-> yawind = yawind;
-	// 	this-> direction = direction;
-	// 	this-> steer = steer;
-	// 	this-> cost = cost;
-	// 	this-> pind = pind;
-	// 	this-> parent = parent;
-	// }
-
 	float x;
 	float y;
 	float yaw;
 	float yawt;
 
+	// Get functions to retrieve class data
 	float get_x(int i) const { return xlist[i]; }
 
 	float get_y(int i) const { return ylist[i]; }
@@ -87,6 +88,13 @@ public:
 	Node4D* get_parent() { return parent; }
 
 	int get_size() const { return xlist.capacity(); }
+
+
+	// Fucntion to check path collision
+	bool check_path_collision(bool** bin_map);
+
+	// Function to check tractor-trailer collision
+	bool check_collision(bool** bin_map);
 
 private:
 	int xind;

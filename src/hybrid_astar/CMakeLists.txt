@@ -213,6 +213,7 @@ set(SOURCES
 set(HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/include/hybrid_astar/constants.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/hybrid_astar/helper.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/hybrid_astar/node4d.h
     )
 
 # Hybrid A Star Header and Source files

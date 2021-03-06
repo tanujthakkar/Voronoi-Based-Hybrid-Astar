@@ -4,13 +4,8 @@
 
 	<arg name="debug" default="false"/>
 	<arg name="gui" default="false"/>
-	<arg name="pause" default="true"/>
+	<arg name="pause" default="false"/>
 	<arg name="world" value="$(find indoor_nav)/world/indoor_world_01.world"/>
-
-	<arg name="x" default="-4.5"/>
-	<arg name="y" default="-6.0"/>
-	<arg name="z" default="0.025889"/>
-	<arg name="yaw" default="0"/>
 
   	<include file="$(find gazebo_ros)/launch/empty_world.launch">
   		<arg name="world_name" default="$(arg world)"/>
@@ -21,17 +16,17 @@
   	</include>
 
 	<include file="$(find ridgeback_gazebo)/launch/spawn_ridgeback.launch">
-	  	<arg name="x" value="$(arg x)"/>
-	  	<arg name="y" value="$(arg y)"/>
-	  	<arg name="z" value="$(arg z)"/>
-	  	<arg name="yaw" value="$(arg yaw)"/>
-	  	<arg name="config" value="dual_hokuyo_lasers" />
+		<arg name="config" default="dual_hokuyo_lasers" />
+	    <arg name="x" default="-4.5"/>
+	    <arg name="y" default="-6.0"/>
+	    <arg name="z" default="0.025889"/>
+	    <arg name="yaw" default="0"/>
 	</include>
 
 	<!-- <include file="$(find ira_laser_tools)/launch/laserscan_multi_merger.launch"/> -->
 
 	<!-- AMCL -->
-	<!-- <include file="$(find ridgeback_navigation)/launch/amcl_demo.launch"/> -->
+	<include file="$(find ridgeback_navigation)/launch/amcl_demo.launch"/>
 
 	<!-- GMapping -->
 	<!-- <include file="$(find ridgeback_navigation)/launch/gmapping_demo.launch"/> -->
