@@ -40,12 +40,16 @@ bool Node4D::check_collision(nav_msgs::OccupancyGrid::Ptr grid, bool** bin_map, 
 	int max_y;
 	int min_y;
 
-	float deltal;
+	float deltar;
+	float deltat;
+
+	int s;
+	int t;
 
 	visualization_msgs::Marker robot_collision_check_points;
 	visualization_msgs::Marker trailer_collision_check_points;
 
-	// Robot/Tractor Collision Check
+	// Robot/Tractor Collision Check Variables
 	robot_collision_check_points.header.stamp = ros::Time::now();
 	robot_collision_check_points.header.frame_id = "/map";
 	robot_collision_check_points.ns = "robot_collision_check_points";
@@ -61,12 +65,31 @@ bool Node4D::check_collision(nav_msgs::OccupancyGrid::Ptr grid, bool** bin_map, 
 	float cx; // Center x of the robot
 	float cy; // Center y of the robot
 
-	deltal = (RF - RB) / 2.0;
+	deltar = (RF - RB) / 2.0;
+
+	// Trailer Collision Check Variables
+	trailer_collision_check_points.header.stamp = ros::Time::now();
+	trailer_collision_check_points.header.frame_id = "/map";
+	trailer_collision_check_points.ns = "trailer_collision_check_points";
+	trailer_collision_check_points.action = visualization_msgs::Marker::ADD;
+	trailer_collision_check_points.id = 0;
+	trailer_collision_check_points.type = visualization_msgs::Marker::POINTS;
+	trailer_collision_check_points.scale.x = 0.05;
+	trailer_collision_check_points.scale.y = 0.05;
+	trailer_collision_check_points.color.b = 1.0;
+	trailer_collision_check_points.color.a = 1.0;
+	geometry_msgs::Point trailer_collision_check_point;
+
+	float ctx; // Center x of the trailer
+	float cty; // Center y of the trailer
+
+	deltat = (RTF - RTB) / 2.0;
+
 	for (int i = 0; i < xlist.capacity(); ++i) {
 
-		// ROS_INFO("Collision check for X : %f || Y : %f ", xlist[i], ylist[i]);
-		cx = xlist[i] + deltal * cos(yawlist[i]);
-		cy = ylist[i] + deltal * sin(yawlist[i]);
+		ROS_INFO("Collision check for X : %f || Y : %f ", xlist[i], ylist[i]);
+		cx = xlist[i] + deltar * cos(yawlist[i]);
+		cy = ylist[i] + deltar * sin(yawlist[i]);
 
 		geometry_msgs::PointStamped robot_center;
 		robot_center.header.stamp = ros::Time::now();
@@ -104,11 +127,8 @@ bool Node4D::check_collision(nav_msgs::OccupancyGrid::Ptr grid, bool** bin_map, 
 		// }
 
 		// Checking the robot polygon/rectangle
-		int s;
-		int t;
-
-		for(float k = -RL/2 + MIN_SAFE_DIST; k <= RL/2 + MIN_SAFE_DIST; k += 0.25) {
-			for(float j = -RW/2 + MIN_SAFE_DIST; j <= RW/2 + MIN_SAFE_DIST; j += 0.25) {
+		for(float k = -RL/2; k <= RL/2 + MIN_SAFE_DIST; k += 0.25) {
+			for(float j = -RW/2; j <= RW/2 + MIN_SAFE_DIST; j += 0.25) {
 
 				s = (cx + k * cos(yawlist[i]) + j * sin(yawlist[i]))/XY_RESOLUTION + 0.001;
 				t = (cy + k * sin(yawlist[i]) + j * cos(yawlist[i]))/XY_RESOLUTION + 0.001;
@@ -124,32 +144,10 @@ bool Node4D::check_collision(nav_msgs::OccupancyGrid::Ptr grid, bool** bin_map, 
 	     		}
 			}
 		}
-	}
 
-	robot_collision_check_pub.publish(robot_collision_check_points);
-
-	// Trailer Collision Check
-	trailer_collision_check_points.header.stamp = ros::Time::now();
-	trailer_collision_check_points.header.frame_id = "/map";
-	trailer_collision_check_points.ns = "trailer_collision_check_points";
-	trailer_collision_check_points.action = visualization_msgs::Marker::ADD;
-	trailer_collision_check_points.id = 0;
-	trailer_collision_check_points.type = visualization_msgs::Marker::POINTS;
-	trailer_collision_check_points.scale.x = 0.05;
-	trailer_collision_check_points.scale.y = 0.05;
-	trailer_collision_check_points.color.b = 1.0;
-	trailer_collision_check_points.color.a = 1.0;
-	geometry_msgs::Point trailer_collision_check_point;
-
-	float ctx; // Center x of the trailer
-	float cty; // Center y of the trailer
-
-	deltal = (RTF - RTB) / 2.0;
-	for (int i = 0; i < xlist.capacity(); ++i) {
-
-		ROS_INFO("Trailer Collision check for X : %f || Y : %f ", xlist[i], ylist[i]);
-		ctx = xlist[i] + deltal * cos(yawt[i]);
-		cty = ylist[i] + deltal * sin(yawt[i]);
+		// ROS_INFO("Trailer Collision check for X : %f || Y : %f ", xlist[i], ylist[i]);
+		ctx = xlist[i] + deltat * cos(yawt[i]);
+		cty = ylist[i] + deltat * sin(yawt[i]);
 
 		geometry_msgs::PointStamped trailer_center;
 		trailer_center.header.stamp = ros::Time::now();
@@ -182,11 +180,8 @@ bool Node4D::check_collision(nav_msgs::OccupancyGrid::Ptr grid, bool** bin_map, 
 		// }
 
 		// Checking the robot polygon/rectangle
-		int s;
-		int t;
-
-		for(float k = -TL/2 + MIN_SAFE_DIST; k <= TL/2 + MIN_SAFE_DIST; k += 0.1) {
-			for(float j = -TW/2 + MIN_SAFE_DIST; j <= TW/2 + MIN_SAFE_DIST; j += 0.1) {
+		for(float k = -TL/2; k <= TL/2 + MIN_SAFE_DIST; k += 0.25) {
+			for(float j = -TW/2; j <= TW/2 + MIN_SAFE_DIST; j += 0.25) {
 
 				s = (ctx + k * cos(yawt[i]) + j * sin(yawt[i]))/XY_RESOLUTION + 0.001;
 				t = (cty + k * sin(yawt[i]) + j * cos(yawt[i]))/XY_RESOLUTION + 0.001;
@@ -204,6 +199,7 @@ bool Node4D::check_collision(nav_msgs::OccupancyGrid::Ptr grid, bool** bin_map, 
 		}
 	}
 
+	robot_collision_check_pub.publish(robot_collision_check_points);
 	trailer_collision_check_pub.publish(trailer_collision_check_points);
 
 	ROS_INFO("NO COLLISION - SAFE");
@@ -218,8 +214,8 @@ geometry_msgs::PolygonStamped Node4D::create_polygon(float l, float w, float cx,
 	polygon.header.frame_id = "/map";
 	polygon.polygon.points.clear();
 
-	float length = l + MIN_SAFE_DIST;
-	float width = w + MIN_SAFE_DIST;
+	float length = l;
+	float width = w;
 
 	geometry_msgs::Point32 p;
 	// Top Right

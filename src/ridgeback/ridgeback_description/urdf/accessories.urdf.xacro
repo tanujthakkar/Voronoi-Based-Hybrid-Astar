@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <!--
+    As you add to this URDF, please be aware that both the robot and
+    simulation include it. You must retain compatibility with all of
+    the following launch files:
+
+    ridgeback_viz/launch/view_model.launch
+    ridgeback_gazebo/launch/ridgeback_world.launch
+    ridgeback_base/launch/base.launch
+  -->
+
+  <xacro:include filename="$(find ridgeback_description)/urdf/accessories/sick_lms1xx_mount.urdf.xacro" />
+  <xacro:include filename="$(find ridgeback_description)/urdf/accessories/sick_s300_mount.urdf.xacro" />
+  <xacro:include filename="$(find ridgeback_description)/urdf/accessories/hokuyo_ust-10lx_mount.urdf.xacro" />
+
+  <!-- If enabled, generate the front HOKUYO UST-10LX LASER payload. -->
+  <xacro:if value="$(optenv RIDGEBACK_FRONT_HOKUYO_LASER 0)">
+    <xacro:hokuyo_ust-10lx_mount prefix="front"
+                                 topic="front/scan"
+                                 location="1" />
+  </xacro:if>
+
+  <!-- If enabled, generate the rear HOKUYO UST-10LX LASER payload. -->
+  <xacro:if value="$(optenv RIDGEBACK_REAR_HOKUYO_LASER 0)">
+    <xacro:hokuyo_ust-10lx_mount prefix="rear"
+                                 topic="rear/scan"
+                                 location="-1" />
+  </xacro:if>
+
+  <!-- If enabled, generate the front SICK LMS111 LASER payload. -->
+  <xacro:if value="$(optenv RIDGEBACK_FRONT_SICK_LASER 0)">
+    <xacro:sick_lms1xx_mount prefix="front"
+                             topic="front/scan"
+                             location="1" />
+  </xacro:if>
+
+  <!-- If enabled, generate the rear SICK LMS111 LASER payload. -->
+  <xacro:if value="$(optenv RIDGEBACK_REAR_SICK_LASER 0)">
+    <xacro:sick_lms1xx_mount prefix="rear"
+                             topic="rear/scan"
+                             location="-1" />
+  </xacro:if>
+
+
+  <!-- If enabled, generate the front SICK S300 LASER payload.
+       This uses the same mesh as the lms1xx since they are the footprint
+       and the simulation parameters can be variable. -->
+  <xacro:if value="$(optenv RIDGEBACK_FRONT_S300_LASER 0)">
+    <xacro:sick_s300_mount prefix="front"
+                             topic="front/scan"
+                             location="1" />
+  </xacro:if>
+
+  <!-- If enabled, generate the rear SICK S300 LASER payload. -->
+  <xacro:if value="$(optenv RIDGEBACK_REAR_S300_LASER 0)">
+    <xacro:sick_s300_mount prefix="rear"
+                             topic="rear/scan"
+                             location="-1" />
+  </xacro:if>
+
+  <!-- If enabled, generate the optional Microstrain 3DM-GX2/3 IMU payload. -->
+  <xacro:include filename="$(find ridgeback_description)/urdf/accessories/microstrain_imu.urdf.xacro" />
+  <xacro:if value="$(optenv RIDGEBACK_MICROSTRAIN_IMU 0)">
+    <xacro:microstrain_imu prefix="$(optenv RIDGEBACK_MICROSTRAIN_IMU_PREFIX upgraded)"
+                           mount_link="$(optenv RIDGEBACK_MICROSTRAIN_IMU_MOUNT mid)_mount" >
+      <origin xyz="$(optenv RIDGEBACK_MICROSTRAIN_IMU_OFFSET 0 0 0)"
+              rpy="$(optenv RIDGEBACK_MICROSTRAIN_IMU_RPY 0 0 0)" />
+    </xacro:microstrain_imu>
+  </xacro:if>
+
+</robot>

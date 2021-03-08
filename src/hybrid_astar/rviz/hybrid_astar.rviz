@@ -104,7 +104,7 @@ Visualization Manager:
       Marker Topic: /nodes
       Name: Marker
       Namespaces:
-        v_nodes: true
+        {}
       Queue Size: 100
       Value: true
     - Alpha: 1
@@ -126,6 +126,21 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
+        cargo_cart_bed_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        cargo_cart_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        cargo_cart_mid_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         chassis_link:
           Alpha: 1
           Show Axes: false
@@ -141,12 +156,42 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        front_left_cart_wheel_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        front_left_wheel_holder_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        front_left_wheel_holder_mid_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         front_left_wheel_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
         front_lights_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        front_right_cart_wheel_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        front_right_wheel_holder_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        front_right_wheel_holder_mid_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -184,12 +229,42 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        rear_left_cart_wheel_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rear_left_wheel_holder_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rear_left_wheel_holder_mid_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         rear_left_wheel_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
         rear_lights_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rear_right_cart_wheel_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rear_right_wheel_holder_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rear_right_wheel_holder_mid_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -210,6 +285,11 @@ Visualization Manager:
           Show Trail: false
           Value: true
         top_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        tow_hitch_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -243,7 +323,7 @@ Visualization Manager:
       Marker Topic: /robot_collision_check
       Name: Robot Collision Check
       Namespaces:
-        robot_collision_check_points: true
+        {}
       Queue Size: 100
       Value: true
     - Alpha: 1

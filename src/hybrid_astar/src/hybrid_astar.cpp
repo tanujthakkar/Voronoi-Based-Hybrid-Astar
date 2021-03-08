@@ -26,9 +26,9 @@ geometry_msgs::PolygonStamped robot_polygon;
 Node4D* current_node;
 Node4D* new_node;
 
-float x;
-float y;
-float yaw;
+float sx;
+float sy;
+float syaw;
 
 std::vector<int> steer = {30, 0, -30};
 
@@ -63,7 +63,7 @@ Node4D* create_successor(Node4D* node, float steer,int dir) {
 	ylist[0] = node->get_y(n-1) + (dir * MOVE_STEP) * sin(node->get_yaw(n-1));
 	yawlist[0] = pi_2_pi(node->get_yaw(n-1) + (dir * MOVE_STEP / WHEELBASE) * tan(to_rad(steer)));
 	yawtlist[0] = pi_2_pi(node->get_yawt(n-1) + (dir * MOVE_STEP / RTR) * sin(node->get_yawt(n-1) - node->get_yaw(n-1)));
-	yawt[0] = pi_2_pi(node->get_yawt(0));
+	yawt[0] = pi_2_pi(node->get_yaw_t(0));
 
 	for(int i=1;i<nlist;i++) {
 		xlist[i] = xlist[i-1] + (dir * MOVE_STEP) * cos(yawlist[i-1]);
@@ -138,9 +138,13 @@ void callback_start_pose(const geometry_msgs::PoseWithCovarianceStamped::ConstPt
 	start_pose.header.frame_id = "map";
 	start_pose.pose.position = pose->pose.pose.position;
 	start_pose.pose.orientation = pose->pose.pose.orientation;
-	yaw = tf::getYaw(start_pose.pose.orientation);
 
-	ROS_INFO("X: %f \t Y: %f \t YAW: %f", start_pose.pose.position.x, start_pose.pose.position.y, yaw);
+	float deltar = (RF - RB) / 2.0;
+	sx = start_pose.pose.position.x - deltar * cos(syaw);
+	sy = start_pose.pose.position.y - deltar * sin(syaw);
+	syaw = tf::getYaw(start_pose.pose.orientation);
+
+	ROS_INFO("X: %f \t Y: %f \t YAW: %f", start_pose.pose.position.x, start_pose.pose.position.y, syaw);
 	if (grid->info.height >= start_pose.pose.position.y && start_pose.pose.position.y >= 0 && 
 		grid->info.width >= start_pose.pose.position.x && start_pose.pose.position.x >= 0) {
 		ROS_INFO("VALID START!");
@@ -148,15 +152,15 @@ void callback_start_pose(const geometry_msgs::PoseWithCovarianceStamped::ConstPt
     	ROS_INFO("INVALID START!");
     }
 
-	Node4D start_node = Node4D(start_pose.pose.position.x, start_pose.pose.position.y, yaw, 0);
+	Node4D start_node = Node4D(sx, sy, syaw, 0);
 	current_node = &start_node;
 
 	auto start = high_resolution_clock::now();
 	new_node = create_successor(current_node, 30, 1);
 	current_node = new_node;
 
-	auto stop = high_resolution_clock::now();
 	// current_node->check_path_collision(bin_map);
+	auto stop = high_resolution_clock::now();
 	current_node->check_collision(grid, bin_map, acc_obs_map);
 	auto duration = duration_cast<microseconds>(stop-start);
 	std::cout << "Execution Time : " << duration.count() << " microseconds" << endl;
@@ -203,10 +207,8 @@ void callback_map(const nav_msgs::OccupancyGrid::Ptr map) {
 		}
 	}
 
-	cout << "Crash Test 1" << endl;
 	acc_obs_map = new int* [width];
 
-	cout << "Crash Test 2" << endl;
 	for (int x = 0; x < width; x++) {
 		acc_obs_map[x] = new int[height];
 		for (int y = 0; y < height; y++) {
@@ -214,20 +216,17 @@ void callback_map(const nav_msgs::OccupancyGrid::Ptr map) {
 		}
 	}
 
-	cout << "Crash Test 3" << endl;
 	for (int x = 0; x < width; x++) {
 		for (int y = 1; y < height; y++) {
 			acc_obs_map[x][y] = acc_obs_map[x][y-1] + acc_obs_map[x][y];
 		}
 	}
 
-	cout << "Crash Test 4" << endl;
 	for (int y = 0; y < height; y++) {
 		for (int x = 1; x < width; x++) {
 			acc_obs_map[x][y] = acc_obs_map[x-1][y] + acc_obs_map[x][y];
 		}
 	}
-	cout << "Crash Test 5" << endl;
 }
 
 

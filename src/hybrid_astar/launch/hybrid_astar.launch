@@ -17,7 +17,7 @@
 		<arg name="config" default="dual_hokuyo_lasers" />
 	    <arg name="x" default="-4.5"/>
 	    <arg name="y" default="-6.0"/>
-	    <arg name="z" default="0.025889"/>
+	    <arg name="z" default="0.025893"/>
 	    <arg name="yaw" default="0"/>
 	</include>
 

@@ -37,6 +37,7 @@ public:
 		ylist.push_back(y);
 		yawlist.push_back(yaw);
 		yawtlist.push_back(yawt);
+		this->yawt.push_back(yaw);
 		this->direction = 1;
 		this->steer = 0.0;
 		this->cost = 0.0;

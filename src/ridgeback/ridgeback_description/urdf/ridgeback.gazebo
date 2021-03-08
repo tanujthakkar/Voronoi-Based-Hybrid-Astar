@@ -1,0 +1,133 @@
+<?xml version="1.0"?>
+<robot>
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/</robotNamespace>
+    </plugin>
+
+    <plugin name="ridgeback_ros_force_based_move" filename="libridgeback_ros_force_based_move.so">
+      <robotNamespace>/</robotNamespace>
+      <commandTopic>cmd_vel</commandTopic>
+      <odometryTopic>odom</odometryTopic>
+      <odometryFrame>odom</odometryFrame>
+      <odometryRate>25.0</odometryRate>
+      <robotBaseFrame>base_link</robotBaseFrame>
+      <cmdVelTimeOut>0.25</cmdVelTimeOut>
+      <!-- Don't publish a transform: the controller does it. -->
+      <publishOdometryTf>0</publishOdometryTf>
+      <yaw_velocity_p_gain>500.0</yaw_velocity_p_gain>
+      <x_velocity_p_gain>10000.0</x_velocity_p_gain>
+      <y_velocity_p_gain>10000.0</y_velocity_p_gain>
+    </plugin>
+
+    <plugin name="imu_controller" filename="libhector_gazebo_ros_imu.so">
+      <robotNamespace>/</robotNamespace>
+      <updateRate>50.0</updateRate>
+      <bodyName>imu_link</bodyName>
+      <topicName>imu/data</topicName>
+      <frameId>base_link</frameId>
+      <accelDrift>0.005 0.005 0.005</accelDrift>
+      <accelGaussianNoise>0.005 0.005 0.005</accelGaussianNoise>
+      <rateDrift>0.00005 0.00005 0.00005</rateDrift>
+      <rateGaussianNoise>0.00005 0.00005 0.00005</rateGaussianNoise>
+      <headingDrift>0.005</headingDrift>
+      <headingGaussianNoise>0.005</headingGaussianNoise>
+    </plugin>
+
+    <plugin name="gazebo_ros_joint_state_publisher" filename="libgazebo_ros_joint_state_publisher.so">
+      <jointName>front_rocker</jointName>
+      <robotNamespace>/</robotNamespace>
+      <updateRate>50.0</updateRate>
+    </plugin>
+  </gazebo>
+
+  <!-- All static links get collapsed down to base_link in Gazebo, so that's
+       the one to apply the colour to (in Gazebo 5+). -->
+  <gazebo reference="base_link">
+    <material>Gazebo/DarkGrey</material>
+    <gravity>true</gravity>
+  </gazebo>
+
+  <!-- Individual link colouring still needed in Gazebo 2.x -->
+  <gazebo reference="chassis_link"><material>Gazebo/DarkGrey</material></gazebo>
+  <gazebo reference="top_link"><material>Gazebo/DarkGrey</material></gazebo>
+  <gazebo reference="left_side_cover_link"><material>Gazebo/Yellow</material></gazebo>
+  <gazebo reference="right_side_cover_link"><material>Gazebo/Yellow</material></gazebo>
+  <gazebo reference="front_cover_link"><material>Gazebo/DarkGrey</material></gazebo>
+  <gazebo reference="rear_cover_link"><material>Gazebo/DarkGrey</material></gazebo>
+  <gazebo reference="front_lights_link"><material>Gazebo/White</material></gazebo>
+  <gazebo reference="rear_lights_link"><material>Gazebo/Red</material></gazebo>
+  <gazebo reference="front_rocker_link"><material>Gazebo/DarkGrey</material></gazebo>
+  <gazebo reference="rear_rocker_link"><material>Gazebo/DarkGrey</material></gazebo>
+  <gazebo reference="axle_link"><material>Gazebo/DarkGrey</material></gazebo>
+
+  <!-- Cart Links -->
+  <gazebo reference="tow_hitch_link"><material>Gazebo/Yellow</material></gazebo>
+  <gazebo reference="cargo_cart_link"><material>Gazebo/Grey</material></gazebo>
+  <gazebo reference="cargo_cart_mid_link"><material>Gazebo/Grey</material></gazebo>
+  <gazebo reference="cargo_cart_bed_link"><material>Gazebo/Grey</material></gazebo>
+
+
+  <!-- Wheel friction to zero, as movement is handled by applying forces at
+       the body level. -->
+  <gazebo reference="front_left_wheel_link">
+    <material>Gazebo/DarkGrey</material>
+    <mu1>0.0</mu1>
+    <mu2>0.0</mu2>
+  </gazebo>
+
+  <gazebo reference="front_right_wheel_link">
+    <material>Gazebo/DarkGrey</material>
+    <mu1>0.0</mu1>
+    <mu2>0.0</mu2>
+  </gazebo>
+
+  <gazebo reference="rear_left_wheel_link">
+    <material>Gazebo/DarkGrey</material>
+    <mu1>0.0</mu1>
+    <mu2>0.0</mu2>
+  </gazebo>
+
+  <gazebo reference="rear_right_wheel_link">
+    <material>Gazebo/DarkGrey</material>
+    <mu1>0.0</mu1>
+    <mu2>0.0</mu2>
+  </gazebo>
+
+  <!-- Cart Wheels -->
+  <gazebo reference="front_left_cart_wheel_link">
+    <material>Gazebo/DarkGrey</material>
+  </gazebo>
+
+  <gazebo reference="front_right_cart_wheel_link">
+    <material>Gazebo/DarkGrey</material>
+  </gazebo>
+
+  <gazebo reference="rear_left_cart_wheel_link">
+    <material>Gazebo/DarkGrey</material>
+  </gazebo>
+
+  <gazebo reference="rear_right_cart_wheel_link">
+    <material>Gazebo/DarkGrey</material>
+  </gazebo>
+
+  <!-- This is an wheel-level solution to possibly revisit at a future date. -->
+  <!--<gazebo>
+    <plugin name="mecanum_gazebo" filename="libmecanum_force_plugin.so">
+      <wheelJointName>front_left_wheel</wheelJointName>
+      <forceScaleFactor>1</forceScaleFactor>
+    </plugin>
+    <plugin name="mecanum_gazebo" filename="libmecanum_force_plugin.so">
+      <wheelJointName>front_right_wheel</wheelJointName>
+      <forceScaleFactor>-1</forceScaleFactor>
+    </plugin>
+    <plugin name="mecanum_gazebo" filename="libmecanum_force_plugin.so">
+      <wheelJointName>rear_left_wheel</wheelJointName>
+      <forceScaleFactor>-1</forceScaleFactor>
+    </plugin>
+    <plugin name="mecanum_gazebo" filename="libmecanum_force_plugin.so">
+      <wheelJointName>rear_right_wheel</wheelJointName>
+      <forceScaleFactor>1</forceScaleFactor>
+    </plugin>
+  </gazebo> -->
+</robot>

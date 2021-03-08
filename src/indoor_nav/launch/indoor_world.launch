@@ -40,7 +40,7 @@
 	<!-- <include file="$(find hector_slam_launch)/launch/tutorial.launch"/> -->
 
 	<param name="use_gui" value="true"/>
-  	<arg name="config" default="navigation" />
+  	<arg name="config" default="ridgeback_config" />
   	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find indoor_nav)/rviz_config/$(arg config).rviz" />
 
 </launch>
