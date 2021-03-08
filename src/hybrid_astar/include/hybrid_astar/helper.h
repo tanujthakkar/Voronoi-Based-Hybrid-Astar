@@ -41,8 +41,7 @@ static inline float to_rad(float t) {
 static inline float path_length(std::vector<float> x, std::vector<float> y) {
 	float cost = 0.0;
 
-	for (int i = 1; i < x.capacity(); ++i)
-	{
+	for (int i = 1; i < x.capacity(); ++i) {
 		cost = cost + sqrt(pow(x[i] - x[i-1], 2) + pow(y[i] - y[i-1], 2) * 1.0);
 	}
 

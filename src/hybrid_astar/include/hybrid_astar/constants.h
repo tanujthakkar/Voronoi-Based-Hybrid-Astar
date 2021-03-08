@@ -17,7 +17,9 @@ static const float RF = 0.799; // [m] Distance from rear axle to front end
 static const float RB = 0.161; // [m] Distance from rear axle to back end
 
 // Trailer Configuration
-static const float RTR = 0.8; // [m] Distance from the rear axle (hitch position) of the tractor to rear axle of the trailer
+static const float TW = 0.793; // [m] Width of the trailer
+static const float TL = 0.8; // [m] Length of the trailer
+static const float RTR = 0.4; // [m] Distance from the rear axle (hitch position) of the tractor to rear axle of the trailer
 static const float RTF = 0.2; // [m] Distance from rear axle of tractor to trailer front end
 static const float RTB = 0.6; // [m] Distance from rear axle of tractor to trailer back end
 

@@ -5,10 +5,15 @@ using namespace std::chrono;
 
 
 // Global Variables
-ros::Publisher pub;
+ros::Publisher start_pose_pub;
 ros::Publisher path_pub;
 ros::Publisher visualize_nodes_pub;
-ros::Publisher poly_pub;
+ros::Publisher robot_polygon_pub;
+ros::Publisher trailer_polygon_pub;
+ros::Publisher robot_center_pub;
+ros::Publisher trailer_center_pub;
+ros::Publisher robot_collision_check_pub;
+ros::Publisher trailer_collision_check_pub;
 
 nav_msgs::Path path;
 nav_msgs::OccupancyGrid::Ptr grid;
@@ -46,22 +51,26 @@ Node4D* create_successor(Node4D* node, float steer,int dir) {
 	std::vector<float> ylist;
 	std::vector<float> yawlist;
 	std::vector<float> yawtlist;
+	std::vector<float > yawt;
 
 	xlist.resize(nlist);
 	ylist.resize(nlist);
 	yawlist.resize(nlist);
 	yawtlist.resize(nlist);
+	yawt.resize(nlist);
 
 	xlist[0] = node->get_x(n-1) + (dir * MOVE_STEP) * cos(node->get_yaw(n-1));
 	ylist[0] = node->get_y(n-1) + (dir * MOVE_STEP) * sin(node->get_yaw(n-1));
 	yawlist[0] = pi_2_pi(node->get_yaw(n-1) + (dir * MOVE_STEP / WHEELBASE) * tan(to_rad(steer)));
 	yawtlist[0] = pi_2_pi(node->get_yawt(n-1) + (dir * MOVE_STEP / RTR) * sin(node->get_yawt(n-1) - node->get_yaw(n-1)));
+	yawt[0] = pi_2_pi(node->get_yawt(0));
 
 	for(int i=1;i<nlist;i++) {
 		xlist[i] = xlist[i-1] + (dir * MOVE_STEP) * cos(yawlist[i-1]);
 		ylist[i] = ylist[i-1] + (dir * MOVE_STEP) * sin(yawlist[i-1]);
 		yawlist[i] = pi_2_pi(yawlist[i-1] + (dir * MOVE_STEP / WHEELBASE) * tan(to_rad(steer)));
 		yawtlist[i] = pi_2_pi(yawtlist[i-1] + (dir * MOVE_STEP / RTR) * sin(yawlist[i-1] - yawtlist[i-1]));
+		yawt[i] = pi_2_pi(yawt[i-1] + (dir * MOVE_STEP / RTR) * sin(yawlist[i-1] - yawtlist[i-1]));
 	}
 
 	float cost = 0.0;
@@ -83,8 +92,9 @@ Node4D* create_successor(Node4D* node, float steer,int dir) {
 	cost = cost + node->get_cost();
 	// cout << "Cost : " << cost << endl;
 
-	return new Node4D(xlist, ylist, yawlist, yawtlist, dir, steer, cost, node);
+	return new Node4D(xlist, ylist, yawlist, yawtlist, yawt, dir, steer, cost, node);
 }
+
 
 /*
 	Publishes the final path using the current_node pointer as a marker array
@@ -115,43 +125,6 @@ void visualize_final_path() {
 	}
 }
 
-void create_robot_polygon() {
-
-	robot_polygon.header.stamp = ros::Time::now();
-	robot_polygon.header.frame_id = "/map";
-	robot_polygon.polygon.points.clear();
-
-	float deltal = (RF - RB) / 2.0;
-	float length = RL + MIN_SAFE_DIST;
-	float width = RW + MIN_SAFE_DIST;
-
-	float cx = start_pose.pose.position.x;
-	float cy = start_pose.pose.position.y;
-
-	geometry_msgs::Point32 p;
-
-	// Top Right
-	p.x = cx + ((length/2) * cos(yaw)) - ((width/2) * sin(yaw));
-	p.y = cy + ((length/2) * sin(yaw)) + ((width/2) * cos(yaw));
-	robot_polygon.polygon.points.push_back(p);
-
-	// Top Left
-	p.x = cx - ((length/2) * cos(yaw)) - ((width/2) * sin(yaw));
-	p.y = cy - ((length/2) * sin(yaw)) + ((width/2) * cos(yaw));
-	robot_polygon.polygon.points.push_back(p);
-
-	// Bottom Left
-	p.x = cx - ((length/2) * cos(yaw)) + ((width/2) * sin(yaw));
-	p.y = cy - ((length/2) * sin(yaw)) - ((width/2) * cos(yaw));
-	robot_polygon.polygon.points.push_back(p);
-
-	// Bottom Right
-	p.x = cx + ((length/2) * cos(yaw)) + ((width/2) * sin(yaw));
-	p.y = cy + ((length/2) * sin(yaw)) - ((width/2) * cos(yaw));
-	robot_polygon.polygon.points.push_back(p);
-
-	poly_pub.publish(robot_polygon);
-}
 
 /*
 	Subcribes/callback: /initial_pose
@@ -188,9 +161,8 @@ void callback_start_pose(const geometry_msgs::PoseWithCovarianceStamped::ConstPt
 	auto duration = duration_cast<microseconds>(stop-start);
 	std::cout << "Execution Time : " << duration.count() << " microseconds" << endl;
 
-    pub.publish(start_pose);
-	create_robot_polygon();
-	
+    start_pose_pub.publish(start_pose);
+
 	// for (int j = 0; j < 5; ++j)
 	// {
 	// 	for (int i = 0; i < 3; ++i)
@@ -208,6 +180,12 @@ void callback_start_pose(const geometry_msgs::PoseWithCovarianceStamped::ConstPt
 }
 
 
+/*
+	Subscribes/Callback: /map
+	Publishes: None
+
+	Callback function to retrieve the occupancy grid and construct a 2D binary obstacle map 
+*/
 void callback_map(const nav_msgs::OccupancyGrid::Ptr map) {
 
 	grid = map;
@@ -225,27 +203,33 @@ void callback_map(const nav_msgs::OccupancyGrid::Ptr map) {
 		}
 	}
 
-	// acc_obs_map = new int* [width];
+	cout << "Crash Test 1" << endl;
+	acc_obs_map = new int* [width];
 
-	// for (int x = 0; x < width; ++x) {
-	// 	acc_obs_map[x] = new int[height];
-	// 	for (int y = 0; y < height; ++y) {
-	// 		acc_obs_map[x][y] = (bin_map[x][y] > 0);
-	// 	}
-	// }
+	cout << "Crash Test 2" << endl;
+	for (int x = 0; x < width; x++) {
+		acc_obs_map[x] = new int[height];
+		for (int y = 0; y < height; y++) {
+			acc_obs_map[x][y] = (bin_map[x][y] > 0);
+		}
+	}
 
-	// for (int x = 0; x < width; ++x) {
-	// 	for (int y = 1; y < height; ++y) {
-	// 		acc_obs_map[x][y] = acc_obs_map[x][y-1] + acc_obs_map[x][y];
-	// 	}
-	// }
+	cout << "Crash Test 3" << endl;
+	for (int x = 0; x < width; x++) {
+		for (int y = 1; y < height; y++) {
+			acc_obs_map[x][y] = acc_obs_map[x][y-1] + acc_obs_map[x][y];
+		}
+	}
 
-	// for (int y = 0; y < width; ++y) {
-	// 	for (int x = 1; x < height; ++x) {
-	// 		acc_obs_map[x][y] = acc_obs_map[x-1][y] + acc_obs_map[x][y];
-	// 	}
-	// }
+	cout << "Crash Test 4" << endl;
+	for (int y = 0; y < height; y++) {
+		for (int x = 1; x < width; x++) {
+			acc_obs_map[x][y] = acc_obs_map[x-1][y] + acc_obs_map[x][y];
+		}
+	}
+	cout << "Crash Test 5" << endl;
 }
+
 
 int main(int argc, char **argv) {
 
@@ -254,10 +238,16 @@ int main(int argc, char **argv) {
 	ros::NodeHandle nh;
 
 	// Publishers
-	pub = nh.advertise<geometry_msgs::PoseStamped>("start_pose", 10);
+	start_pose_pub = nh.advertise<geometry_msgs::PoseStamped>("start_pose", 10);
 	path_pub = nh.advertise<nav_msgs::Path>("path", 10);
 	visualize_nodes_pub = nh.advertise<visualization_msgs::Marker>("nodes", 10);
-	poly_pub = nh.advertise<geometry_msgs::PolygonStamped>("polygon_test", 10);
+	robot_polygon_pub = nh.advertise<geometry_msgs::PolygonStamped>("robot_polygon", 10);
+	trailer_polygon_pub = nh.advertise<geometry_msgs::PolygonStamped>("trailer_polygon", 10);
+	robot_center_pub = nh.advertise<geometry_msgs::PointStamped>("robot_center", 10);
+	trailer_center_pub = nh.advertise<geometry_msgs::PointStamped>("trailer_center", 10);
+	robot_collision_check_pub = nh.advertise<visualization_msgs::Marker>("robot_collision_check", 10);
+	trailer_collision_check_pub = nh.advertise<visualization_msgs::Marker>("trailer_collision_check", 10);
+
 
 	// Subscribers
 	ros::Subscriber sub_start_pose = nh.subscribe("initialpose", 10, callback_start_pose);

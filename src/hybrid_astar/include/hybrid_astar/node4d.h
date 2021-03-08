@@ -13,6 +13,7 @@
 #include <geometry_msgs/PoseWithCovarianceStamped.h>
 #include <geometry_msgs/PoseStamped.h>
 #include <geometry_msgs/Quaternion.h>
+#include <geometry_msgs/PolygonStamped.h>
 #include <visualization_msgs/Marker.h>
 #include "std_msgs/String.h"
 #include "std_msgs/Int32.h"
@@ -32,10 +33,6 @@ public:
 	// Constructor for start and goal nodes
 	Node4D(float x, float y, float yaw, float yawt) {
 
-		this->x = x;
-		this->y = y;
-		this->yaw = yaw;
-		this->yawt = yawt;
 		xlist.push_back(x);
 		ylist.push_back(y);
 		yawlist.push_back(yaw);
@@ -48,28 +45,26 @@ public:
 
 	// Constructor for successor nodes
 	Node4D(std::vector<float> xlist, std::vector<float> ylist, std::vector<float> yawlist, 
-		std::vector<float> yawtlist, int dir, float steer, float cost, Node4D* parent) {
+		std::vector<float> yawtlist, std::vector<float> yawt,int dir, float steer, float cost, Node4D* parent) {
 
 		this->xlist.resize(n);
 		this->ylist.resize(n);
 		this->yawlist.resize(n);
 		this->yawtlist.resize(n);
+		this->yawt.resize(n);
 		this->directions.resize(n);
 
 		this->xlist = xlist;
 		this->ylist = ylist;
 		this->yawlist = yawlist;
 		this->yawtlist = yawtlist;
+		this->yawt = yawt;
 		this->direction = dir;
 		this->steer = steer;
 		this->cost = cost;
 		this->parent = parent;
 	}
-
-	float x;
-	float y;
-	float yaw;
-	float yawt;
+	
 
 	// Get functions to retrieve class data
 	float get_x(int i) const { return xlist[i]; }
@@ -79,6 +74,8 @@ public:
 	float get_yaw(int i) const { return yawlist[i]; }
 
 	float get_yawt(int i) const { return yawtlist[i]; }
+
+	float get_yaw_t(int i) const { return yawt[i]; }
 
 	int get_dir() const { return direction; }
 
@@ -97,20 +94,30 @@ public:
 	// Function to check tractor-trailer collision
 	bool check_collision(nav_msgs::OccupancyGrid::Ptr grid, bool** bin_map,  int** acc_obs_map);
 
+	// Function to create a polygon for the robot and the trailer
+	geometry_msgs::PolygonStamped create_polygon(float l, float w, float cx, float cy, float yaw);
+	
 private:
+	// Private node variables
 	int xind;
 	int yind;
 	int yawind;
 	int direction;
-	std::vector<float> xlist;
-	std::vector<float> ylist;
-	std::vector<float> yawlist;
-	std::vector<float> yawtlist;
+	std::vector<float> xlist; // x coords of path points
+	std::vector<float> ylist; // y coords of path points
+	std::vector<float> yawlist; // yaw of path points
+	std::vector<float> yawtlist; // yawt of path points
+	std::vector<float> yawt; // Trailer yaw for collision check
 	std::vector<bool> directions;
-	float steer;
-	float cost;
+	float steer; // Node steering angle
+	float cost; // Node cost
 	int pind;
-	Node4D* parent;
+	Node4D* parent; // Pointer to the parent node
+
+	// Private ROS Variables
+	// static ros::NodeHandle nh;
+	// static ros::Publisher polygon_pub = nh.advertise<geometry_msgs::PolygonStamped>("robot_polygon", 1);
+	// static ros::Publisher collision_check_pub;
 };
 
 #endif

@@ -73,6 +73,8 @@ geometry_msgs/PoseStamped.h
 -
 geometry_msgs/Quaternion.h
 -
+geometry_msgs/PolygonStamped.h
+-
 visualization_msgs/Marker.h
 -
 std_msgs/String.h

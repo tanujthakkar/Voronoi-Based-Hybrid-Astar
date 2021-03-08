@@ -3,7 +3,7 @@
 <launch>
 
 	<arg name="debug" default="false"/>
-	<arg name="gui" default="false"/>
+	<arg name="gui" default="true"/>
 	<arg name="pause" default="false"/>
 	<arg name="world" value="$(find indoor_nav)/world/indoor_world_01.world"/>
 
@@ -25,6 +25,8 @@
 
 	<!-- <include file="$(find ira_laser_tools)/launch/laserscan_multi_merger.launch"/> -->
 
+	<node pkg="map_server" name="map_server" type="map_server" args="$(find indoor_nav)/maps/dual_hoyuko_full_map.yaml"/>
+	
 	<!-- AMCL -->
 	<include file="$(find ridgeback_navigation)/launch/amcl_demo.launch"/>
 

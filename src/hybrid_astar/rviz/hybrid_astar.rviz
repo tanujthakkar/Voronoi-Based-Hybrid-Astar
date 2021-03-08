@@ -5,7 +5,6 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Global Options1
-        - /Path1
       Splitter Ratio: 0.5
     Tree Height: 719
   - Class: rviz/Selection
@@ -105,16 +104,8 @@ Visualization Manager:
       Marker Topic: /nodes
       Name: Marker
       Namespaces:
-        {}
+        v_nodes: true
       Queue Size: 100
-      Value: true
-    - Alpha: 1
-      Class: rviz/Polygon
-      Color: 25; 255; 0
-      Enabled: true
-      Name: Polygon
-      Topic: /polygon_test
-      Unreliable: false
       Value: true
     - Alpha: 1
       Class: rviz/RobotModel
@@ -229,6 +220,58 @@ Visualization Manager:
       Update Interval: 0
       Value: true
       Visual Enabled: true
+    - Alpha: 1
+      Class: rviz/PointStamped
+      Color: 0; 255; 0
+      Enabled: true
+      History Length: 1
+      Name: Robot Center
+      Radius: 0.20000000298023224
+      Topic: /robot_center
+      Unreliable: false
+      Value: true
+    - Alpha: 1
+      Class: rviz/Polygon
+      Color: 25; 255; 0
+      Enabled: true
+      Name: Robot Polygon
+      Topic: /robot_polygon
+      Unreliable: false
+      Value: true
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: /robot_collision_check
+      Name: Robot Collision Check
+      Namespaces:
+        robot_collision_check_points: true
+      Queue Size: 100
+      Value: true
+    - Alpha: 1
+      Class: rviz/PointStamped
+      Color: 114; 159; 207
+      Enabled: true
+      History Length: 1
+      Name: Trailer Center
+      Radius: 0.20000000298023224
+      Topic: /trailer_center
+      Unreliable: false
+      Value: true
+    - Alpha: 1
+      Class: rviz/Polygon
+      Color: 114; 159; 207
+      Enabled: true
+      Name: Trailer Polygon
+      Topic: /trailer_polygon
+      Unreliable: false
+      Value: true
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: /trailer_collision_check
+      Name: Trailer Collision Check
+      Namespaces:
+        {}
+      Queue Size: 100
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -257,16 +300,16 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 15.523513793945312
+      Distance: 12.85579776763916
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 6.399467945098877
-        Y: 6.532168865203857
-        Z: 1.1837875843048096
+        X: 5.518377780914307
+        Y: 5.913717269897461
+        Z: 1.1829063892364502
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
