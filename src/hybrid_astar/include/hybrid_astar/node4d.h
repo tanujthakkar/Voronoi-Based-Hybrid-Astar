@@ -24,8 +24,6 @@
 
 using namespace std;
 
-const int n = ceil(PATH_LENGTH/MOVE_STEP);
-
 class Node4D {
 
 public:
@@ -48,12 +46,12 @@ public:
 	Node4D(std::vector<float> xlist, std::vector<float> ylist, std::vector<float> yawlist, 
 		std::vector<float> yawtlist, std::vector<float> yawt,int dir, float steer, float cost, Node4D* parent) {
 
-		this->xlist.resize(n);
-		this->ylist.resize(n);
-		this->yawlist.resize(n);
-		this->yawtlist.resize(n);
-		this->yawt.resize(n);
-		this->directions.resize(n);
+		this->xlist.resize(VECTOR_SIZE);
+		this->ylist.resize(VECTOR_SIZE);
+		this->yawlist.resize(VECTOR_SIZE);
+		this->yawtlist.resize(VECTOR_SIZE);
+		this->yawt.resize(VECTOR_SIZE);
+		this->directions.resize(VECTOR_SIZE);
 
 		this->xlist = xlist;
 		this->ylist = ylist;

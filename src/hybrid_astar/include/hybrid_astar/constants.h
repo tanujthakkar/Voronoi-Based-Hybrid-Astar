@@ -30,4 +30,6 @@ static const float STEER_CHANGE_COST = 5.0;
 static const float STEER_ANGLE_COST = 1.0;
 static const float H_COST = 10.0;
 
+static const int VECTOR_SIZE = ceil(PATH_LENGTH/MOVE_STEP); // Size of all the node vectors
+
 #endif

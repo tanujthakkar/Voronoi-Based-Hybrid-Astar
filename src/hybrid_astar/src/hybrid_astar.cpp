@@ -70,7 +70,7 @@ Node4D* create_successor(Node4D* node, float steer,int dir) {
 		ylist[i] = ylist[i-1] + (dir * MOVE_STEP) * sin(yawlist[i-1]);
 		yawlist[i] = pi_2_pi(yawlist[i-1] + (dir * MOVE_STEP / WHEELBASE) * tan(to_rad(steer)));
 		yawtlist[i] = pi_2_pi(yawtlist[i-1] + (dir * MOVE_STEP / RTR) * sin(yawlist[i-1] - yawtlist[i-1]));
-		yawt[i] = pi_2_pi(yawt[i-1] + (dir * MOVE_STEP / RTR) * sin(yawlist[i-1] - yawtlist[i-1]));
+		yawt[i] = pi_2_pi(yawt[i-1] + (dir * MOVE_STEP / RTR) * sin(yawlist[i-1] - yawt[i-1]));
 	}
 
 	float cost = 0.0;
@@ -142,6 +142,7 @@ void callback_start_pose(const geometry_msgs::PoseWithCovarianceStamped::ConstPt
 	float deltar = (RF - RB) / 2.0;
 	sx = start_pose.pose.position.x - deltar * cos(syaw);
 	sy = start_pose.pose.position.y - deltar * sin(syaw);
+	cout << "SX : " << sx << " SY : " << sy << endl;
 	syaw = tf::getYaw(start_pose.pose.orientation);
 
 	ROS_INFO("X: %f \t Y: %f \t YAW: %f", start_pose.pose.position.x, start_pose.pose.position.y, syaw);

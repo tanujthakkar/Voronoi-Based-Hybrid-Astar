@@ -102,7 +102,7 @@ Visualization Manager:
     - Class: rviz/Marker
       Enabled: true
       Marker Topic: /nodes
-      Name: Marker
+      Name: Nodes
       Namespaces:
         {}
       Queue Size: 100
@@ -380,16 +380,16 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 12.85579776763916
+      Distance: 10.989629745483398
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 5.518377780914307
-        Y: 5.913717269897461
-        Z: 1.1829063892364502
+        X: 6.221857070922852
+        Y: 6.832059383392334
+        Z: 1.1836110353469849
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
