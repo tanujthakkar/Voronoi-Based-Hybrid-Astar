@@ -92,11 +92,26 @@ Visualization Manager:
       Enabled: true
       Head Length: 0.30000001192092896
       Head Radius: 0.10000000149011612
-      Name: Pose
+      Name: Start Pose
       Shaft Length: 1
       Shaft Radius: 0.05000000074505806
       Shape: Arrow
       Topic: /start_pose
+      Unreliable: false
+      Value: true
+    - Alpha: 1
+      Axes Length: 1
+      Axes Radius: 0.10000000149011612
+      Class: rviz/Pose
+      Color: 0; 255; 0
+      Enabled: true
+      Head Length: 0.30000001192092896
+      Head Radius: 0.10000000149011612
+      Name: Goal Pose
+      Shaft Length: 1
+      Shaft Radius: 0.05000000074505806
+      Shape: Arrow
+      Topic: /goal_pose
       Unreliable: false
       Value: true
     - Class: rviz/Marker
@@ -104,7 +119,7 @@ Visualization Manager:
       Marker Topic: /nodes
       Name: Nodes
       Namespaces:
-        {}
+        v_nodes: true
       Queue Size: 100
       Value: true
     - Alpha: 1
@@ -323,7 +338,7 @@ Visualization Manager:
       Marker Topic: /robot_collision_check
       Name: Robot Collision Check
       Namespaces:
-        {}
+        robot_collision_check_points: true
       Queue Size: 100
       Value: true
     - Alpha: 1
@@ -349,7 +364,7 @@ Visualization Manager:
       Marker Topic: /trailer_collision_check
       Name: Trailer Collision Check
       Namespaces:
-        {}
+        trailer_collision_check_points: true
       Queue Size: 100
       Value: true
   Enabled: true
@@ -380,16 +395,16 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 10.989629745483398
+      Distance: 13.785391807556152
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 6.221857070922852
-        Y: 6.832059383392334
-        Z: 1.1836110353469849
+        X: 6.014239311218262
+        Y: 6.381019592285156
+        Z: 1.1834022998809814
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false

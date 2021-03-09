@@ -6,6 +6,7 @@ using namespace std::chrono;
 
 // Global Variables
 ros::Publisher start_pose_pub;
+ros::Publisher goal_pose_pub;
 ros::Publisher path_pub;
 ros::Publisher visualize_nodes_pub;
 ros::Publisher robot_polygon_pub;
@@ -15,22 +16,30 @@ ros::Publisher trailer_center_pub;
 ros::Publisher robot_collision_check_pub;
 ros::Publisher trailer_collision_check_pub;
 
-nav_msgs::Path path;
+geometry_msgs::PoseStamped start_pose; // Start pose msg
+bool valid_start; // Start pose validity check
+geometry_msgs::PoseStamped goal_pose; // Goal pose msg
+bool valid_goal; // Goal pose validity check
+
 nav_msgs::OccupancyGrid::Ptr grid;
 bool** bin_map;
 int** acc_obs_map;
-geometry_msgs::PoseStamped start_pose;
+
+nav_msgs::Path path;
 visualization_msgs::Marker nodes;
-geometry_msgs::PolygonStamped robot_polygon;
 
-Node4D* current_node;
-Node4D* new_node;
+Node4D* current_node; // Pointer to the current node
+Node4D* new_node; // Pointer to the next node
 
-float sx;
-float sy;
-float syaw;
+float sx; // x coordinate of start pose of the rear axle/hitch point of the vehicle
+float sy; // y coordinate of start pose of the rear axle/hitch point of the vehicle
+float syaw; // yaw coordinate of start pose of the rear axle/hitch point of the vehicle
 
-std::vector<int> steer = {30, 0, -30};
+float gx; // x coordinate of goal pose of the rear axle/hitch point of the vehicle
+float gy; // y coordinate of goal pose of the rear axle/hitch point of the vehicle
+float gyaw; // yaw coordinate of goal pose of the rear axle/hitch point of the vehicle
+
+std::vector<int> steer = {30, 0, -30}; // Steering inputs for which the nodes have to be created
 
 
 /*
@@ -125,12 +134,19 @@ void visualize_final_path() {
 	}
 }
 
+void hybrid_astar() {
+
+	if(valid_start && valid_goal) {
+		
+	}
+}
+
 
 /*
 	Subcribes/callback: /initial_pose
 	Publishes: /start_pose
 
-	Callback function to retrieve the initial_pose and display it as a pose in rviz
+	Callback function to retrieve the initial pose and display it in rviz
 */
 void callback_start_pose(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& pose) {
 
@@ -140,16 +156,17 @@ void callback_start_pose(const geometry_msgs::PoseWithCovarianceStamped::ConstPt
 	start_pose.pose.orientation = pose->pose.pose.orientation;
 
 	float deltar = (RF - RB) / 2.0;
+	syaw = tf::getYaw(start_pose.pose.orientation);
 	sx = start_pose.pose.position.x - deltar * cos(syaw);
 	sy = start_pose.pose.position.y - deltar * sin(syaw);
-	cout << "SX : " << sx << " SY : " << sy << endl;
-	syaw = tf::getYaw(start_pose.pose.orientation);
 
-	ROS_INFO("X: %f \t Y: %f \t YAW: %f", start_pose.pose.position.x, start_pose.pose.position.y, syaw);
+	ROS_INFO("X: %f \t Y: %f \t YAW: %f SX: %f SY: %f", start_pose.pose.position.x, start_pose.pose.position.y, syaw, sx, sy);
 	if (grid->info.height >= start_pose.pose.position.y && start_pose.pose.position.y >= 0 && 
-		grid->info.width >= start_pose.pose.position.x && start_pose.pose.position.x >= 0) {
+		grid->info.width >= start_pose.pose.position.x && start_pose.pose.position.x >= 0 && bin_map[(int)round(start_pose.pose.position.x/XY_RESOLUTION)][(int)round(start_pose.pose.position.y/XY_RESOLUTION)] == 0) {
+		valid_start = true;
 		ROS_INFO("VALID START!");
     } else  {
+    	valid_start = false;
     	ROS_INFO("INVALID START!");
     }
 
@@ -182,6 +199,38 @@ void callback_start_pose(const geometry_msgs::PoseWithCovarianceStamped::ConstPt
 	visualize_final_path();
 
 	visualize_nodes_pub.publish(nodes);
+}
+
+
+/*
+	Subcribes/callback: /move_base_simple/goal
+	Publishes: /goal_pose
+
+	Callback function to retrieve the final pose and display it in rviz
+*/
+void callback_goal_pose(const geometry_msgs::PoseStamped::ConstPtr& pose) {
+
+	goal_pose.header.stamp = ros::Time::now();
+	goal_pose.header.frame_id = "map";
+	goal_pose.pose.position = pose->pose.position;
+	goal_pose.pose.orientation = pose->pose.orientation;
+
+	float deltar = (RF - RB) / 2.0;
+	gyaw = tf::getYaw(goal_pose.pose.orientation);
+	gx = goal_pose.pose.position.x - deltar * cos(gyaw);
+	gy = goal_pose.pose.position.y - deltar * sin(gyaw);
+
+	ROS_INFO("X: %f \t Y: %f \t YAW: %f GX: %f GY: %f", goal_pose.pose.position.x, goal_pose.pose.position.y, gyaw, gx, gy);
+	if (grid->info.height >= goal_pose.pose.position.y && goal_pose.pose.position.y >= 0 && 
+		grid->info.width >= goal_pose.pose.position.x && goal_pose.pose.position.x >= 0 && bin_map[(int)round(goal_pose.pose.position.x/XY_RESOLUTION)][(int)round(goal_pose.pose.position.y/XY_RESOLUTION)] == 0) {
+		valid_goal = true;
+		ROS_INFO("VALID GOAL!");
+    } else  {
+    	valid_goal = false;
+    	ROS_INFO("INVALID GOAL!");
+    }
+
+    goal_pose_pub.publish(goal_pose);
 }
 
 
@@ -239,6 +288,7 @@ int main(int argc, char **argv) {
 
 	// Publishers
 	start_pose_pub = nh.advertise<geometry_msgs::PoseStamped>("start_pose", 10);
+	goal_pose_pub = nh.advertise<geometry_msgs::PoseStamped>("goal_pose", 10);
 	path_pub = nh.advertise<nav_msgs::Path>("path", 10);
 	visualize_nodes_pub = nh.advertise<visualization_msgs::Marker>("nodes", 10);
 	robot_polygon_pub = nh.advertise<geometry_msgs::PolygonStamped>("robot_polygon", 10);
@@ -250,9 +300,10 @@ int main(int argc, char **argv) {
 
 
 	// Subscribers
-	ros::Subscriber sub_start_pose = nh.subscribe("initialpose", 10, callback_start_pose);
-	ros::Subscriber sub_map = nh.subscribe("map", 1, callback_map);
-	
+	ros::Subscriber start_pose_sub = nh.subscribe("initialpose", 10, callback_start_pose);
+	ros::Subscriber goal_pose_sub = nh.subscribe("move_base_simple/goal", 10, callback_goal_pose);
+	ros::Subscriber map_sub = nh.subscribe("map", 1, callback_map);
+
 	ros::Rate loop_rate(10);
 
 	while(ros::ok()) {
