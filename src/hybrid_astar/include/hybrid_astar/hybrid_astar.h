@@ -5,6 +5,7 @@
 #include <sstream>
 #include <cmath>
 #include <chrono>
+#include <queue>
 
 #include <ros/ros.h>
 #include <tf/tf.h>

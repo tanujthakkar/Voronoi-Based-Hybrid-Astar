@@ -51,7 +51,6 @@ public:
 		this->yawlist.resize(VECTOR_SIZE);
 		this->yawtlist.resize(VECTOR_SIZE);
 		this->yawt.resize(VECTOR_SIZE);
-		this->directions.resize(VECTOR_SIZE);
 
 		this->xlist = xlist;
 		this->ylist = ylist;
@@ -101,22 +100,16 @@ private:
 	int xind;
 	int yind;
 	int yawind;
-	int direction;
 	std::vector<float> xlist; // x coords of path points
 	std::vector<float> ylist; // y coords of path points
 	std::vector<float> yawlist; // yaw of path points
 	std::vector<float> yawtlist; // yawt of path points
 	std::vector<float> yawt; // Trailer yaw for collision check
-	std::vector<bool> directions;
+	int direction; // Direction of motion
 	float steer; // Node steering angle
 	float cost; // Node cost
 	int pind;
 	Node4D* parent; // Pointer to the parent node
-
-	// Private ROS Variables
-	// static ros::NodeHandle nh;
-	// static ros::Publisher polygon_pub = nh.advertise<geometry_msgs::PolygonStamped>("robot_polygon", 1);
-	// static ros::Publisher collision_check_pub;
 };
 
 #endif

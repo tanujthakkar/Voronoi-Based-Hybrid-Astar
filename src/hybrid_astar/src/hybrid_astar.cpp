@@ -21,11 +21,15 @@ bool valid_start; // Start pose validity check
 geometry_msgs::PoseStamped goal_pose; // Goal pose msg
 bool valid_goal; // Goal pose validity check
 
-nav_msgs::OccupancyGrid::Ptr grid;
-bool** bin_map;
+nav_msgs::OccupancyGrid::Ptr grid; // Pointer to the occupancy grid msg
+int grid_height;
+int grid_width;
+bool** bin_map; // 2D Binary map of the grid 
 int** acc_obs_map;
 
-nav_msgs::Path path;
+typedef pair<float, int> pi;
+
+nav_msgs::Path path; // Final Hybrid A* path
 visualization_msgs::Marker nodes;
 
 Node4D* current_node; // Pointer to the current node
@@ -89,13 +93,13 @@ Node4D* create_successor(Node4D* node, float steer,int dir) {
 		cost = nlist * MOVE_STEP;
 		// cout << "Cost : " << cost << endl;
 	} else {
-		cost = nlist * MOVE_STEP + BACKWARD_COST;
+		cost = nlist * MOVE_STEP + BACKWARD_COST; // Penalizing backward motion
 		// cout << "Cost : " << cost << endl;
 	}
 
-	cost = cost + abs(steer) * STEER_ANGLE_COST;
+	cost = cost + abs(steer) * STEER_ANGLE_COST; // Penalizing steering angle
 	// cout << "Cost : " << cost << endl;
-	cost = cost + abs(node->get_steer() - steer) * STEER_CHANGE_COST;
+	cost = cost + abs(node->get_steer() - steer) * STEER_CHANGE_COST; // Penalizing change in steering angle
 	// cout << "Cost : " << cost << endl;
 
 	cost = cost + node->get_cost();
@@ -106,9 +110,77 @@ Node4D* create_successor(Node4D* node, float steer,int dir) {
 
 
 /*
+	Function to calculate the index of the node to check for redundant nodes in open and close lists
+
+	n: Pointer to the node
+
+	Returns the index (int)
+*/
+int calc_index(Node4D* n) {
+
+	int size = n->get_size();
+	return (int)(round(n->get_yaw(size-1)/YAW_RESOLUTION) * grid_width * grid_height + round(n->get_y(size-1)/XY_RESOLUTION) * grid_width + round(n->get_x(size-1)/XY_RESOLUTION));
+}
+
+
+/*
+	Function to calculate the heuristic cost of the node
+
+	n: pointer to the node
+
+	Returns the total cost (g(n) + h(n))
+*/
+float calc_heuristic_cost(Node4D* n) {
+	int size = n->get_size();
+	return (n->get_cost() + sqrt(pow((n->get_x(size-1) - gx),2) + pow((n->get_y(size-1) - gy), 2) + pow((n->get_yaw(size-1) - gyaw), 2)));
+}
+
+
+bool is_goal(Node4D* n) {
+	int size = n->get_size();
+	float x_error = abs(n->get_x(size-1) - gx);
+	float y_error = abs(n->get_y(size-1) - gy);
+	float yaw_error = abs(n->get_yaw(size-1) - gyaw);
+
+	if(x_error <= XY_TOLERANCE && y_error <= XY_TOLERANCE && yaw_error <= YAW_TOLERANCE) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+
+/*
 	Publishes the final path using the current_node pointer as a marker array
 */
 void visualize_final_path() {
+
+	path.header.stamp = ros::Time::now();
+	path.header.frame_id = "/map";
+	path.poses.clear();
+
+	geometry_msgs::PoseStamped pose_stamped;
+	while(current_node->get_parent() != nullptr) {
+		for (int i = 0; i < current_node->get_size(); ++i) {
+			pose_stamped.header.stamp = ros::Time::now();
+			pose_stamped.header.frame_id = "map";
+			pose_stamped.pose.position.x = current_node->get_x(i);
+			pose_stamped.pose.position.y = current_node->get_y(i);
+			pose_stamped.pose.position.z = 0;
+			pose_stamped.pose.orientation.w = current_node->get_yaw(i);
+			path.poses.push_back(pose_stamped);
+		}
+		current_node = current_node->get_parent();
+	}
+
+	path_pub.publish(path);
+}
+
+
+/*
+	Publishes all the nodes from open and closed lists
+*/
+void visualize_all_nodes(std::map<int, Node4D*> open, std::map<int, Node4D*> closed) {
 
 	nodes.header.stamp = ros::Time::now();
 	nodes.header.frame_id = "/map";
@@ -134,10 +206,106 @@ void visualize_final_path() {
 	}
 }
 
+
 void hybrid_astar() {
 
 	if(valid_start && valid_goal) {
+		ROS_INFO("Planning Hybrid A* path...");
+
+		int iterations = 0;
+		int total_nodes = 0;
+
+		// Computing rear-axle/hitch-point pose for start node
+		float deltar = (RF - RB) / 2.0;
+		syaw = tf::getYaw(start_pose.pose.orientation);
+		sx = start_pose.pose.position.x - deltar * cos(syaw);
+		sy = start_pose.pose.position.y - deltar * sin(syaw);
+		ROS_INFO("sx: %f sy: %f syaw: %f", sx, sy, syaw);
 		
+		Node4D start_node = Node4D(6.40, 5.20, 0, 0);
+		current_node = &start_node;
+
+		// Computing rear-axle/hitch-point pose for goal node
+		// deltar = (RF - RB) / 2.0;
+		// gyaw = tf::getYaw(goal_pose.pose.orientation);
+		// gx = goal_pose.pose.position.x - deltar * cos(gyaw);
+		// gy = goal_pose.pose.position.y - deltar * sin(gyaw);
+		
+		gyaw = 0;
+		gx = 6.87;
+		gy = 5.20;
+		ROS_INFO("gx: %f gy: %f gyaw: %f", gx, gy, gyaw);
+		Node4D goal_node = Node4D(6.87, 5.20, 0, 0);
+
+		std::map<int, Node4D*> open_list; // Creating the open_list using a map
+		std::map<int, Node4D*> closed_list; // Creating the closed_list using a map
+
+		open_list.insert(pair<int, Node4D*>(calc_index(current_node), current_node)); // Adding the start node to the open list
+
+		priority_queue<pi, vector<pi>, greater<pi>> pq; // Creating a min priority queue to manage nodes with respect to highest priority (lowest cost)
+		pq.push(make_pair(calc_heuristic_cost(current_node), calc_index(current_node))); // Adding the start node to the priority queue
+
+		pair<float, int> ind;
+		int new_ind;
+
+		while(true) {
+
+			ROS_INFO("iterations: %d", iterations);
+			iterations++;
+
+			if(open_list.empty()) {
+				ROS_INFO("NO NODES FOUND IN OPEN LIST");
+				break;
+			}
+
+			ind = pq.top(); // Retrieve the pair with the highest priority (lowest cost)
+			pq.pop(); // Pop the pair with highest priority
+			current_node = open_list[ind.second];
+			closed_list[ind.second] = current_node;
+			open_list.erase(ind.second);
+
+			if(is_goal(current_node)) {
+				ROS_INFO("SOLUTION FOUND");
+				break;
+			}
+
+			for(int i = 0; i < steer.capacity(); ++i) {
+				
+				new_node = create_successor(current_node, steer[i], 1);
+
+				if(new_node->check_collision(grid, bin_map, acc_obs_map)) {
+					// ROS_INFO("NODE IN COLLISION");
+					continue;
+				}
+
+				total_nodes++;
+				ROS_INFO("Total Nodes: %d", total_nodes);
+
+				new_ind = calc_index(new_node);
+
+				if(closed_list.count(new_ind)) {
+					continue;
+				}
+
+				if(!open_list.count(new_ind)) {
+					open_list[new_ind] = new_node;
+					pq.push(make_pair(calc_heuristic_cost(new_node), calc_index(new_node)));
+				} else {
+					if(open_list[new_ind]->get_cost() > new_node->get_cost()) {
+						open_list[new_ind] = new_node;
+					}
+				}
+			}
+		}
+
+		// new_node = create_successor(current_node, 0, 1);
+		// current_node = new_node;
+
+		// current_node->check_collision(grid, bin_map, acc_obs_map);
+
+		visualize_final_path();
+
+		// visualize_nodes_pub.publish(nodes);
 	}
 }
 
@@ -155,50 +323,25 @@ void callback_start_pose(const geometry_msgs::PoseWithCovarianceStamped::ConstPt
 	start_pose.pose.position = pose->pose.pose.position;
 	start_pose.pose.orientation = pose->pose.pose.orientation;
 
-	float deltar = (RF - RB) / 2.0;
-	syaw = tf::getYaw(start_pose.pose.orientation);
-	sx = start_pose.pose.position.x - deltar * cos(syaw);
-	sy = start_pose.pose.position.y - deltar * sin(syaw);
-
-	ROS_INFO("X: %f \t Y: %f \t YAW: %f SX: %f SY: %f", start_pose.pose.position.x, start_pose.pose.position.y, syaw, sx, sy);
-	if (grid->info.height >= start_pose.pose.position.y && start_pose.pose.position.y >= 0 && 
+	ROS_INFO("X: %f \t Y: %f \t YAW: %f", start_pose.pose.position.x, start_pose.pose.position.y, syaw);
+	if(grid->info.height >= start_pose.pose.position.y && start_pose.pose.position.y >= 0 && 
 		grid->info.width >= start_pose.pose.position.x && start_pose.pose.position.x >= 0 && bin_map[(int)round(start_pose.pose.position.x/XY_RESOLUTION)][(int)round(start_pose.pose.position.y/XY_RESOLUTION)] == 0) {
 		valid_start = true;
 		ROS_INFO("VALID START!");
-    } else  {
-    	valid_start = false;
-    	ROS_INFO("INVALID START!");
-    }
-
-	Node4D start_node = Node4D(sx, sy, syaw, 0);
-	current_node = &start_node;
-
-	auto start = high_resolution_clock::now();
-	new_node = create_successor(current_node, 30, 1);
-	current_node = new_node;
-
-	// current_node->check_path_collision(bin_map);
-	auto stop = high_resolution_clock::now();
-	current_node->check_collision(grid, bin_map, acc_obs_map);
-	auto duration = duration_cast<microseconds>(stop-start);
-	std::cout << "Execution Time : " << duration.count() << " microseconds" << endl;
-
-    start_pose_pub.publish(start_pose);
-
-	// for (int j = 0; j < 5; ++j)
-	// {
-	// 	for (int i = 0; i < 3; ++i)
-	// 	{
-	// 		cout << "Current : " << current_node << endl;
-	// 		new_node = create_successor(current_node, steer[i], 1);
-	// 		cout << "New : " << new_node << endl;
-	// 	}
-	// 	current_node = new_node;
-	// }
-	
-	visualize_final_path();
-
-	visualize_nodes_pub.publish(nodes);
+		start_pose_pub.publish(start_pose);
+		if(valid_goal) {
+			auto start = high_resolution_clock::now(); // Reading start time of planning
+			hybrid_astar();
+			auto stop = high_resolution_clock::now(); // Reading end time of planning
+			auto duration = duration_cast<microseconds>(stop-start);
+			std::cout << "Execution Time : " << duration.count() << " microseconds" << endl;
+		} else {
+			ROS_INFO("NO VALID GOAL FOUND!");
+		}
+	} else {
+		valid_start = false;
+		ROS_INFO("INVALID START!");
+	}
 }
 
 
@@ -215,22 +358,21 @@ void callback_goal_pose(const geometry_msgs::PoseStamped::ConstPtr& pose) {
 	goal_pose.pose.position = pose->pose.position;
 	goal_pose.pose.orientation = pose->pose.orientation;
 
-	float deltar = (RF - RB) / 2.0;
-	gyaw = tf::getYaw(goal_pose.pose.orientation);
-	gx = goal_pose.pose.position.x - deltar * cos(gyaw);
-	gy = goal_pose.pose.position.y - deltar * sin(gyaw);
-
-	ROS_INFO("X: %f \t Y: %f \t YAW: %f GX: %f GY: %f", goal_pose.pose.position.x, goal_pose.pose.position.y, gyaw, gx, gy);
+	ROS_INFO("X: %f \t Y: %f \t YAW: %f", goal_pose.pose.position.x, goal_pose.pose.position.y, gyaw);
 	if (grid->info.height >= goal_pose.pose.position.y && goal_pose.pose.position.y >= 0 && 
 		grid->info.width >= goal_pose.pose.position.x && goal_pose.pose.position.x >= 0 && bin_map[(int)round(goal_pose.pose.position.x/XY_RESOLUTION)][(int)round(goal_pose.pose.position.y/XY_RESOLUTION)] == 0) {
 		valid_goal = true;
 		ROS_INFO("VALID GOAL!");
-    } else  {
-    	valid_goal = false;
-    	ROS_INFO("INVALID GOAL!");
-    }
-
-    goal_pose_pub.publish(goal_pose);
+		goal_pose_pub.publish(goal_pose);
+		if(valid_start) {
+			hybrid_astar();
+		} else {
+			ROS_INFO("NO VALID START FOUND!");
+		}
+	} else  {
+		valid_goal = false;
+		ROS_INFO("INVALID GOAL!");
+	}
 }
 
 
@@ -245,35 +387,35 @@ void callback_map(const nav_msgs::OccupancyGrid::Ptr map) {
 	grid = map;
 	ROS_INFO("Recieved the occupancy grid map");
 
-	int height = map->info.height;
-	int width = map->info.width;
-	bin_map = new bool*[width];
+	grid_height = map->info.height;
+	grid_width = map->info.width;
+	bin_map = new bool*[grid_width];
 
-	for (int x = 0; x < width; ++x) { bin_map[x] = new bool[height]; }
+	for (int x = 0; x < grid_width; ++x) { bin_map[x] = new bool[grid_height]; }
 
-	for (int x = 0; x < width; ++x) {
-		for (int y = 0; y < height; ++y) {
-			bin_map[x][y] = map->data[y * width + x] ? true : false;
+	for (int x = 0; x < grid_width; ++x) {
+		for (int y = 0; y < grid_height; ++y) {
+			bin_map[x][y] = map->data[y * grid_width + x] ? true : false;
 		}
 	}
 
-	acc_obs_map = new int* [width];
+	acc_obs_map = new int* [grid_width];
 
-	for (int x = 0; x < width; x++) {
-		acc_obs_map[x] = new int[height];
-		for (int y = 0; y < height; y++) {
+	for (int x = 0; x < grid_width; x++) {
+		acc_obs_map[x] = new int[grid_height];
+		for (int y = 0; y < grid_height; y++) {
 			acc_obs_map[x][y] = (bin_map[x][y] > 0);
 		}
 	}
 
-	for (int x = 0; x < width; x++) {
-		for (int y = 1; y < height; y++) {
+	for (int x = 0; x < grid_width; x++) {
+		for (int y = 1; y < grid_height; y++) {
 			acc_obs_map[x][y] = acc_obs_map[x][y-1] + acc_obs_map[x][y];
 		}
 	}
 
-	for (int y = 0; y < height; y++) {
-		for (int x = 1; x < width; x++) {
+	for (int y = 0; y < grid_height; y++) {
+		for (int x = 1; x < grid_width; x++) {
 			acc_obs_map[x][y] = acc_obs_map[x-1][y] + acc_obs_map[x][y];
 		}
 	}
