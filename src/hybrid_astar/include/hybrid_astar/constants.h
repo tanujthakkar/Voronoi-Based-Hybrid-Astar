@@ -6,10 +6,10 @@ static const float XY_RESOLUTION = 0.05; // [m] Grid resolution of the map
 static const float YAW_RESOLUTION = (15 * (M_PI / 180)); // [rad] Yaw resolution
 static const float MOVE_STEP = 0.1; // [m] Path interpolate resolution
 static const float MIN_SAFE_DIST = 0.25; // [m] Minimum safe distance between vehicle and obstacles
-
+static const int STEER_STEP = 3;
 // Path accuracy
 static const float XY_TOLERANCE = 0.3; // [m] Tolerance of error in goal position
-static const float YAW_TOLERANCE = (10 * (M_PI / 180));
+static const float YAW_TOLERANCE = (5 * (M_PI / 180));
 
 // Vehicle Configuration Constants
 // Tractor/Robot Configuration

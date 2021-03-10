@@ -43,7 +43,7 @@ float gx; // x coordinate of goal pose of the rear axle/hitch point of the vehic
 float gy; // y coordinate of goal pose of the rear axle/hitch point of the vehicle
 float gyaw; // yaw coordinate of goal pose of the rear axle/hitch point of the vehicle
 
-std::vector<int> steer = {30, 0, -30}; // Steering inputs for which the nodes have to be created
+std::vector<int> steer; // Steering inputs for which the nodes have to be created
 
 
 /*
@@ -109,6 +109,16 @@ Node4D* create_successor(Node4D* node, float steer,int dir) {
 }
 
 
+void create_steer_inputs(float max_steer) {
+
+	steer.resize(STEER_STEP);
+	for (int i = 0; i < STEER_STEP + 1; ++i)
+	{
+		steer[i] = max_steer - i * (2 * max_steer / STEER_STEP);
+	}
+}
+
+
 /*
 	Function to calculate the index of the node to check for redundant nodes in open and close lists
 
@@ -142,11 +152,41 @@ bool is_goal(Node4D* n) {
 	float y_error = abs(n->get_y(size-1) - gy);
 	float yaw_error = abs(n->get_yaw(size-1) - gyaw);
 
+	cout << "x_error: " << x_error << " y_error: " << y_error << " yaw_error: " << yaw_error << endl;
 	if(x_error <= XY_TOLERANCE && y_error <= XY_TOLERANCE && yaw_error <= YAW_TOLERANCE) {
 		return true;
 	} else {
 		return false;
 	}
+}
+
+
+void display_map(map<int, Node4D*> m) {
+
+	map<int, Node4D*>::iterator itr;
+	if(m.empty()) {
+		cout << "List EMPTY" << endl;
+	}
+	for (itr = m.begin(); itr != m.end(); ++itr) {
+		cout << "\tIndex: " << itr->first << " Node*: " << itr->second << endl;
+	}
+	cout << endl;
+}
+
+
+void display_pq(priority_queue<pi, vector<pi>, greater<pi>> gq)
+{ 
+    priority_queue<pi, vector<pi>, greater<pi>> g = gq;
+
+    cout << "Priority Queue - " << endl;
+    if(g.empty()) {
+    	cout << "Priority Queue EMPTY" << endl;
+    }
+    while (!g.empty()) {
+        cout << "\tCost: " << g.top().first << " Index: " << g.top().second << endl;
+        g.pop();
+    }
+    cout << endl;
 }
 
 
@@ -212,6 +252,18 @@ void hybrid_astar() {
 	if(valid_start && valid_goal) {
 		ROS_INFO("Planning Hybrid A* path...");
 
+		nodes.header.stamp = ros::Time::now();
+		nodes.header.frame_id = "/map";
+		nodes.ns = "v_nodes";
+		nodes.action = visualization_msgs::Marker::ADD;
+		nodes.id = 0;
+		nodes.type = visualization_msgs::Marker::LINE_LIST;
+		nodes.scale.x = 0.02;
+		nodes.color.r = 1.0;
+		nodes.color.a = 1.0;
+
+		geometry_msgs::Point p;
+
 		int iterations = 0;
 		int total_nodes = 0;
 
@@ -222,36 +274,45 @@ void hybrid_astar() {
 		sy = start_pose.pose.position.y - deltar * sin(syaw);
 		ROS_INFO("sx: %f sy: %f syaw: %f", sx, sy, syaw);
 		
-		Node4D start_node = Node4D(6.40, 5.20, 0, 0);
+		Node4D start_node = Node4D(sx, sy, syaw, 0);
 		current_node = &start_node;
 
 		// Computing rear-axle/hitch-point pose for goal node
-		// deltar = (RF - RB) / 2.0;
-		// gyaw = tf::getYaw(goal_pose.pose.orientation);
-		// gx = goal_pose.pose.position.x - deltar * cos(gyaw);
-		// gy = goal_pose.pose.position.y - deltar * sin(gyaw);
-		
-		gyaw = 0;
-		gx = 6.87;
-		gy = 5.20;
+		deltar = (RF - RB) / 2.0;
+		gyaw = tf::getYaw(goal_pose.pose.orientation);
+		gx = goal_pose.pose.position.x - deltar * cos(gyaw);
+		gy = goal_pose.pose.position.y - deltar * sin(gyaw);
+
+		// gyaw = 0;
+		// gx = 12.72;
+		// gy = 4.94;
 		ROS_INFO("gx: %f gy: %f gyaw: %f", gx, gy, gyaw);
-		Node4D goal_node = Node4D(6.87, 5.20, 0, 0);
+		Node4D goal_node = Node4D(gx, gy, gyaw, 0);
+
+		create_steer_inputs(30);
 
 		std::map<int, Node4D*> open_list; // Creating the open_list using a map
 		std::map<int, Node4D*> closed_list; // Creating the closed_list using a map
 
 		open_list.insert(pair<int, Node4D*>(calc_index(current_node), current_node)); // Adding the start node to the open list
+		// cout << "Open List: " << open_list.begin()->first << " " << open_list.begin()->second << endl;
+		cout << "Open List (Added start node) - " << endl;
+		display_map(open_list);
 
 		priority_queue<pi, vector<pi>, greater<pi>> pq; // Creating a min priority queue to manage nodes with respect to highest priority (lowest cost)
 		pq.push(make_pair(calc_heuristic_cost(current_node), calc_index(current_node))); // Adding the start node to the priority queue
+		display_pq(pq);
 
 		pair<float, int> ind;
 		int new_ind;
 
 		while(true) {
 
-			ROS_INFO("iterations: %d", iterations);
+			cout << "Press ENTER for next iteration";
+			cin.get();
+
 			iterations++;
+			cout << "Iteration: " << iterations << endl;
 
 			if(open_list.empty()) {
 				ROS_INFO("NO NODES FOUND IN OPEN LIST");
@@ -259,10 +320,20 @@ void hybrid_astar() {
 			}
 
 			ind = pq.top(); // Retrieve the pair with the highest priority (lowest cost)
+			cout << "Ind - " << endl;
+			cout << "\tCost: " << ind.first << " Index: " << ind.second << endl;
+
 			pq.pop(); // Pop the pair with highest priority
+			display_pq(pq);
+
 			current_node = open_list[ind.second];
+			cout << "Current Node: " << current_node << endl;
 			closed_list[ind.second] = current_node;
+			cout << "Closed List (Added current node)- " << endl;
+			display_map(closed_list);
 			open_list.erase(ind.second);
+			cout << "Open List - (Removed current node)" << endl;
+			display_map(open_list);
 
 			if(is_goal(current_node)) {
 				ROS_INFO("SOLUTION FOUND");
@@ -271,17 +342,30 @@ void hybrid_astar() {
 
 			for(int i = 0; i < steer.capacity(); ++i) {
 				
+				cout << "Press ENTER for next node";
+				cin.get();
+
 				new_node = create_successor(current_node, steer[i], 1);
+				cout << "New Node: " << new_node << " Parent: " << new_node->get_parent() << endl;
 
 				if(new_node->check_collision(grid, bin_map, acc_obs_map)) {
 					// ROS_INFO("NODE IN COLLISION");
 					continue;
 				}
 
+				for(int j=0;j<ceil(PATH_LENGTH/MOVE_STEP);j++) {
+					p.x = new_node->get_x(j);
+					p.y = new_node->get_y(j);
+					p.z = 0;
+					nodes.points.push_back(p);
+				}
+				visualize_nodes_pub.publish(nodes);
+
 				total_nodes++;
 				ROS_INFO("Total Nodes: %d", total_nodes);
 
 				new_ind = calc_index(new_node);
+				cout << "New Index: " << new_ind << endl;
 
 				if(closed_list.count(new_ind)) {
 					continue;
@@ -289,10 +373,15 @@ void hybrid_astar() {
 
 				if(!open_list.count(new_ind)) {
 					open_list[new_ind] = new_node;
+					cout << "Open List (Added new node) - " << endl;
+					display_map(open_list);
 					pq.push(make_pair(calc_heuristic_cost(new_node), calc_index(new_node)));
+					display_pq(pq);
 				} else {
 					if(open_list[new_ind]->get_cost() > new_node->get_cost()) {
 						open_list[new_ind] = new_node;
+						cout << "Open List (Updated node cost) - " << endl;
+						display_map(open_list);
 					}
 				}
 			}
