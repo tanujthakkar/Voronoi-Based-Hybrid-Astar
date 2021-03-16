@@ -27,12 +27,14 @@ find_package(catkin REQUIRED COMPONENTS
 
 set(SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/node4d.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/dubins.cpp
     )
 
 set(HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/include/hybrid_astar/constants.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/hybrid_astar/helper.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/hybrid_astar/node4d.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/hybrid_astar/dubins.h
     )
 
 # Declare a catkin package

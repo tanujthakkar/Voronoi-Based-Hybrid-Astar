@@ -43,7 +43,7 @@ float gx; // x coordinate of goal pose of the rear axle/hitch point of the vehic
 float gy; // y coordinate of goal pose of the rear axle/hitch point of the vehicle
 float gyaw; // yaw coordinate of goal pose of the rear axle/hitch point of the vehicle
 
-std::vector<int> steer; // Steering inputs for which the nodes have to be created
+std::vector<int> steer = {30, 0, -30}; // Steering inputs for which the nodes have to be created
 
 
 /*
@@ -59,6 +59,7 @@ Node4D* create_successor(Node4D* node, float steer,int dir) {
 
 	int nlist = ceil(PATH_LENGTH/MOVE_STEP);
 	int n = node->get_size();
+	int jacknife_sum = 0;
 
 	std::vector<float> xlist;
 	std::vector<float> ylist;
@@ -77,6 +78,7 @@ Node4D* create_successor(Node4D* node, float steer,int dir) {
 	yawlist[0] = pi_2_pi(node->get_yaw(n-1) + (dir * MOVE_STEP / WHEELBASE) * tan(to_rad(steer)));
 	yawtlist[0] = pi_2_pi(node->get_yawt(n-1) + (dir * MOVE_STEP / RTR) * sin(node->get_yawt(n-1) - node->get_yaw(n-1)));
 	yawt[0] = pi_2_pi(node->get_yaw_t(0));
+	jacknife_sum = jacknife_sum + abs(pi_2_pi(yawlist[0] - yawtlist[0]));
 
 	for(int i=1;i<nlist;i++) {
 		xlist[i] = xlist[i-1] + (dir * MOVE_STEP) * cos(yawlist[i-1]);
@@ -84,6 +86,7 @@ Node4D* create_successor(Node4D* node, float steer,int dir) {
 		yawlist[i] = pi_2_pi(yawlist[i-1] + (dir * MOVE_STEP / WHEELBASE) * tan(to_rad(steer)));
 		yawtlist[i] = pi_2_pi(yawtlist[i-1] + (dir * MOVE_STEP / RTR) * sin(yawlist[i-1] - yawtlist[i-1]));
 		yawt[i] = pi_2_pi(yawt[i-1] + (dir * MOVE_STEP / RTR) * sin(yawlist[i-1] - yawt[i-1]));
+		jacknife_sum = jacknife_sum + abs(pi_2_pi(yawlist[i] - yawtlist[i]));
 	}
 
 	float cost = 0.0;
@@ -101,6 +104,7 @@ Node4D* create_successor(Node4D* node, float steer,int dir) {
 	// cout << "Cost : " << cost << endl;
 	cost = cost + abs(node->get_steer() - steer) * STEER_CHANGE_COST; // Penalizing change in steering angle
 	// cout << "Cost : " << cost << endl;
+	cost = cost + jacknife_sum * JACKNIFE_COST; // Penalizing jacknifing
 
 	cost = cost + node->get_cost();
 	// cout << "Cost : " << cost << endl;
@@ -199,15 +203,19 @@ void visualize_final_path() {
 	path.header.frame_id = "/map";
 	path.poses.clear();
 
+	int n;
 	geometry_msgs::PoseStamped pose_stamped;
+	cout << "Current Node - " << current_node << endl;
 	while(current_node->get_parent() != nullptr) {
-		for (int i = 0; i < current_node->get_size(); ++i) {
+		cout << "Current Node - " << current_node << endl;
+		n = current_node->get_size();
+		for (int i = 0; i < n; i++) {
 			pose_stamped.header.stamp = ros::Time::now();
 			pose_stamped.header.frame_id = "map";
-			pose_stamped.pose.position.x = current_node->get_x(i);
-			pose_stamped.pose.position.y = current_node->get_y(i);
+			pose_stamped.pose.position.x = current_node->get_x(n-i-1);
+			pose_stamped.pose.position.y = current_node->get_y(n-i-1);
 			pose_stamped.pose.position.z = 0;
-			pose_stamped.pose.orientation.w = current_node->get_yaw(i);
+			pose_stamped.pose.orientation.w = current_node->get_yaw(n-i-1);
 			path.poses.push_back(pose_stamped);
 		}
 		current_node = current_node->get_parent();
@@ -273,8 +281,9 @@ void hybrid_astar() {
 		sx = start_pose.pose.position.x - deltar * cos(syaw);
 		sy = start_pose.pose.position.y - deltar * sin(syaw);
 		ROS_INFO("sx: %f sy: %f syaw: %f", sx, sy, syaw);
-		
-		Node4D start_node = Node4D(sx, sy, syaw, 0);
+
+		Node4D start_node = Node4D(10.29, 12.29, 0, 0);
+		// Node4D start_node = Node4D(sx, sy, syaw, 0);
 		current_node = &start_node;
 
 		// Computing rear-axle/hitch-point pose for goal node
@@ -283,13 +292,17 @@ void hybrid_astar() {
 		gx = goal_pose.pose.position.x - deltar * cos(gyaw);
 		gy = goal_pose.pose.position.y - deltar * sin(gyaw);
 
-		// gyaw = 0;
-		// gx = 12.72;
-		// gy = 4.94;
+		// 3rd Left 12.61, 12.52,
+
+		// 3rd Straight 12.67, 12.28
+
+		gx = 12.61;
+		gy = 12.52;
+		gyaw = 0.72;
 		ROS_INFO("gx: %f gy: %f gyaw: %f", gx, gy, gyaw);
 		Node4D goal_node = Node4D(gx, gy, gyaw, 0);
 
-		create_steer_inputs(30);
+		// create_steer_inputs(30);
 
 		std::map<int, Node4D*> open_list; // Creating the open_list using a map
 		std::map<int, Node4D*> closed_list; // Creating the closed_list using a map
@@ -299,7 +312,7 @@ void hybrid_astar() {
 		cout << "Open List (Added start node) - " << endl;
 		display_map(open_list);
 
-		priority_queue<pi, vector<pi>, greater<pi>> pq; // Creating a min priority queue to manage nodes with respect to highest priority (lowest cost)
+		priority_queue<pi, vector<pi>, greater<pi>> pq; // Creating a min priority queue to sort nodes with respect to highest priority (lowest cost)
 		pq.push(make_pair(calc_heuristic_cost(current_node), calc_index(current_node))); // Adding the start node to the priority queue
 		display_pq(pq);
 
@@ -337,6 +350,7 @@ void hybrid_astar() {
 
 			if(is_goal(current_node)) {
 				ROS_INFO("SOLUTION FOUND");
+				visualize_final_path();
 				break;
 			}
 
@@ -360,6 +374,13 @@ void hybrid_astar() {
 					nodes.points.push_back(p);
 				}
 				visualize_nodes_pub.publish(nodes);
+
+				if(is_goal(new_node)) {
+					ROS_INFO("SOLUTION FOUND - NEW NODE");
+					current_node = new_node;
+					visualize_final_path();
+					return;
+				}
 
 				total_nodes++;
 				ROS_INFO("Total Nodes: %d", total_nodes);
@@ -387,14 +408,33 @@ void hybrid_astar() {
 			}
 		}
 
-		// new_node = create_successor(current_node, 0, 1);
-		// current_node = new_node;
+		// Node4D* test;
+		// for (int i = 0; i < 1; ++i) {
 
+		// 	cout << "Test 1" << endl;
+		// 	new_node = create_successor(current_node, steer[i], 1);
+		// 	for(int j=0;j<ceil(PATH_LENGTH/MOVE_STEP);j++) {
+		// 		p.x = new_node->get_x(j);
+		// 		p.y = new_node->get_y(j);
+		// 		p.z = 0;
+		// 		nodes.points.push_back(p);
+		// 	}
+		// 	visualize_nodes_pub.publish(nodes);
+
+		// 	test = new_node;
+		// 	for (int j = 0; j < 3; ++j) {
+		// 		new_node = create_successor(test, steer[j], 1);
+		// 		for(int j=0;j<ceil(PATH_LENGTH/MOVE_STEP);j++) {
+		// 			p.x = new_node->get_x(j);
+		// 			p.y = new_node->get_y(j);
+		// 			p.z = 0;
+		// 			nodes.points.push_back(p);
+		// 		}
+		// 		visualize_nodes_pub.publish(nodes);
+		// 	}
+		// }
+		
 		// current_node->check_collision(grid, bin_map, acc_obs_map);
-
-		visualize_final_path();
-
-		// visualize_nodes_pub.publish(nodes);
 	}
 }
 

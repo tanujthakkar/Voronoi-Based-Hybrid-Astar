@@ -332,6 +332,33 @@ rosgraph_msgs_generate_messages_eus/fast:
 	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/build.make hybrid_astar/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/build
 .PHONY : rosgraph_msgs_generate_messages_eus/fast
 
+src/dubins.o: src/dubins.cpp.o
+
+.PHONY : src/dubins.o
+
+# target to build an object file
+src/dubins.cpp.o:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/hybrid_astar.dir/build.make hybrid_astar/CMakeFiles/hybrid_astar.dir/src/dubins.cpp.o
+.PHONY : src/dubins.cpp.o
+
+src/dubins.i: src/dubins.cpp.i
+
+.PHONY : src/dubins.i
+
+# target to preprocess a source file
+src/dubins.cpp.i:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/hybrid_astar.dir/build.make hybrid_astar/CMakeFiles/hybrid_astar.dir/src/dubins.cpp.i
+.PHONY : src/dubins.cpp.i
+
+src/dubins.s: src/dubins.cpp.s
+
+.PHONY : src/dubins.s
+
+# target to generate assembly for a file
+src/dubins.cpp.s:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/hybrid_astar.dir/build.make hybrid_astar/CMakeFiles/hybrid_astar.dir/src/dubins.cpp.s
+.PHONY : src/dubins.cpp.s
+
 src/hybrid_astar.o: src/hybrid_astar.cpp.o
 
 .PHONY : src/hybrid_astar.o
@@ -410,6 +437,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... rosgraph_msgs_generate_messages_eus"
 	@echo "... install"
+	@echo "... src/dubins.o"
+	@echo "... src/dubins.i"
+	@echo "... src/dubins.s"
 	@echo "... src/hybrid_astar.o"
 	@echo "... src/hybrid_astar.i"
 	@echo "... src/hybrid_astar.s"

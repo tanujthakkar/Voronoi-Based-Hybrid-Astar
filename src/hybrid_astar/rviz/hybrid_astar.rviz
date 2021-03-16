@@ -119,7 +119,7 @@ Visualization Manager:
       Marker Topic: /nodes
       Name: Nodes
       Namespaces:
-        {}
+        v_nodes: true
       Queue Size: 100
       Value: true
     - Alpha: 1
@@ -141,55 +141,55 @@ Visualization Manager:
     - Alpha: 1
       Class: rviz/PointStamped
       Color: 0; 255; 0
-      Enabled: true
+      Enabled: false
       History Length: 1
       Name: Robot Center
       Radius: 0.20000000298023224
       Topic: /robot_center
       Unreliable: false
-      Value: true
+      Value: false
     - Alpha: 1
       Class: rviz/Polygon
       Color: 25; 255; 0
-      Enabled: true
+      Enabled: false
       Name: Robot Polygon
       Topic: /robot_polygon
       Unreliable: false
-      Value: true
+      Value: false
     - Class: rviz/Marker
-      Enabled: true
+      Enabled: false
       Marker Topic: /robot_collision_check
       Name: Robot Collision Check
       Namespaces:
         {}
       Queue Size: 100
-      Value: true
+      Value: false
     - Alpha: 1
       Class: rviz/PointStamped
       Color: 114; 159; 207
-      Enabled: true
+      Enabled: false
       History Length: 1
       Name: Trailer Center
       Radius: 0.20000000298023224
       Topic: /trailer_center
       Unreliable: false
-      Value: true
+      Value: false
     - Alpha: 1
       Class: rviz/Polygon
       Color: 114; 159; 207
-      Enabled: true
+      Enabled: false
       Name: Trailer Polygon
       Topic: /trailer_polygon
       Unreliable: false
-      Value: true
+      Value: false
     - Class: rviz/Marker
-      Enabled: true
+      Enabled: false
       Marker Topic: /trailer_collision_check
       Name: Trailer Collision Check
       Namespaces:
         {}
       Queue Size: 100
-      Value: true
+      Value: false
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -218,16 +218,16 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 11.28249740600586
+      Distance: 10.046406745910645
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 6.082592964172363
-        Y: 6.261137962341309
-        Z: 1.1834704875946045
+        X: 12.520862579345703
+        Y: 12.439812660217285
+        Z: 1.18992018699646
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false

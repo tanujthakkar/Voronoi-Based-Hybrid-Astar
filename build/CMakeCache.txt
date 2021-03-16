@@ -659,6 +659,15 @@ OGRE_Volume_LIBRARY_FWK:STRING=NOTFOUND
 //x
 OGRE_Volume_LIBRARY_REL:FILEPATH=/usr/lib/x86_64-linux-gnu/libOgreVolume.so
 
+//Path to a library.
+OMPLAPPBASE_LIBRARY:FILEPATH=OMPLAPPBASE_LIBRARY-NOTFOUND
+
+//Path to a library.
+OMPLAPP_LIBRARY:FILEPATH=OMPLAPP_LIBRARY-NOTFOUND
+
+//Path to a library.
+OMPL_LIBRARIES:FILEPATH=/opt/ros/melodic/lib/libompl.so
+
 //Path to a file.
 OPENNI2_INCLUDE_DIRS:PATH=/usr/include/openni2
 
@@ -1193,6 +1202,9 @@ nodelet_DIR:PATH=/opt/ros/melodic/share/nodelet/cmake
 
 //The directory containing a CMake configuration file for nodelet_topic_tools.
 nodelet_topic_tools_DIR:PATH=/opt/ros/melodic/share/nodelet_topic_tools/cmake
+
+//The directory containing a CMake configuration file for ompl.
+ompl_DIR:PATH=/opt/ros/melodic/share/ompl/cmake
 
 //Path to a library.
 onelib:FILEPATH=/usr/lib/x86_64-linux-gnu/libsdformat.so
@@ -1939,6 +1951,8 @@ FIND_PACKAGE_MESSAGE_DETAILS_ZeroMQ:INTERNAL=[true][v(4)]
 FIND_PACKAGE_MESSAGE_DETAILS_eigen:INTERNAL=[/usr/include/eigen3][v()]
 //Details about finding libusb-1.0
 FIND_PACKAGE_MESSAGE_DETAILS_libusb-1.0:INTERNAL=[/usr/include][v()]
+//Details about finding ompl
+FIND_PACKAGE_MESSAGE_DETAILS_ompl:INTERNAL=[/opt/ros/melodic/include/ompl-1.4][/opt/ros/melodic/lib/libompl.so][v()]
 //Details about finding openni
 FIND_PACKAGE_MESSAGE_DETAILS_openni:INTERNAL=[/usr/lib/libOpenNI.so][/usr/include/ni][v()]
 //Details about finding qhull
