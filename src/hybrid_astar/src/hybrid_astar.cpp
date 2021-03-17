@@ -392,100 +392,100 @@ void hybrid_astar() {
 		pair<float, int> ind;
 		int new_ind;
 
-		// while(true) {
+		while(true) {
 
-		// 	cout << "Press ENTER for next iteration";
-		// 	cin.get();
+			// cout << "Press ENTER for next iteration";
+			// cin.get();
 
-		// 	iterations++;
-		// 	cout << "Iteration: " << iterations << endl;
+			iterations++;
+			cout << "Iteration: " << iterations << endl;
 
-		// 	if(open_list.empty()) {
-		// 		ROS_INFO("NO NODES FOUND IN OPEN LIST");
-		// 		break;
-		// 	}
+			if(open_list.empty()) {
+				ROS_INFO("NO NODES FOUND IN OPEN LIST");
+				break;
+			}
 
-		// 	ind = pq.top(); // Retrieve the pair with the highest priority (lowest cost)
-		// 	cout << "Ind - " << endl;
-		// 	cout << "\tCost: " << ind.first << " Index: " << ind.second << endl;
+			ind = pq.top(); // Retrieve the pair with the highest priority (lowest cost)
+			cout << "Ind - " << endl;
+			cout << "\tCost: " << ind.first << " Index: " << ind.second << endl;
 
-		// 	pq.pop(); // Pop the pair with highest priority
-		// 	display_pq(pq);
+			pq.pop(); // Pop the pair with highest priority
+			display_pq(pq);
 
-		// 	current_node = open_list[ind.second];
-		// 	cout << "Current Node: " << current_node << endl;
-		// 	closed_list[ind.second] = current_node;
-		// 	cout << "Closed List (Added current node)- " << endl;
-		// 	display_map(closed_list);
-		// 	open_list.erase(ind.second);
-		// 	cout << "Open List - (Removed current node)" << endl;
-		// 	display_map(open_list);
+			current_node = open_list[ind.second];
+			cout << "Current Node: " << current_node << endl;
+			closed_list[ind.second] = current_node;
+			cout << "Closed List (Added current node)- " << endl;
+			display_map(closed_list);
+			open_list.erase(ind.second);
+			cout << "Open List - (Removed current node)" << endl;
+			display_map(open_list);
 
-		// 	if(is_goal(current_node)) {
-		// 		ROS_INFO("SOLUTION FOUND");
-		// 		visualize_final_path();
-		// 		break;
-		// 	}
+			new_node = create_dubins_node(current_node, goal_node);
+			if(!new_node->check_collision(grid, bin_map, acc_obs_map)) {
+				cout << "SOLUTION FOUND - DUBINS NODE" << endl;
+				current_node = new_node;
+				visualize_final_path();
+				break;
+			}
+			// if(is_goal(current_node)) {
+			// 	ROS_INFO("SOLUTION FOUND");
+			// 	visualize_final_path();
+			// 	break;
+			// }
 
-		// 	for(int i = 0; i < steer.capacity(); ++i) {
+			for(int i = 0; i < steer.capacity(); ++i) {
 				
-		// 		cout << "Press ENTER for next node";
-		// 		cin.get();
+				// cout << "Press ENTER for next node";
+				// cin.get();
 
-		// 		new_node = create_successor(current_node, steer[i], 1);
-		// 		cout << "New Node: " << new_node << " Parent: " << new_node->get_parent() << endl;
+				new_node = create_successor(current_node, steer[i], 1);
+				cout << "New Node: " << new_node << " Parent: " << new_node->get_parent() << endl;
 
-		// 		if(new_node->check_collision(grid, bin_map, acc_obs_map)) {
-		// 			// ROS_INFO("NODE IN COLLISION");
-		// 			continue;
-		// 		}
+				if(new_node->check_collision(grid, bin_map, acc_obs_map)) {
+					// ROS_INFO("NODE IN COLLISION");
+					continue;
+				}
 
-		// 		for(int j=0;j<ceil(PATH_LENGTH/MOVE_STEP);j++) {
-		// 			p.x = new_node->get_x(j);
-		// 			p.y = new_node->get_y(j);
-		// 			p.z = 0;
-		// 			nodes.points.push_back(p);
-		// 		}
-		// 		visualize_nodes_pub.publish(nodes);
+				for(int j=0;j<ceil(PATH_LENGTH/MOVE_STEP);j++) {
+					p.x = new_node->get_x(j);
+					p.y = new_node->get_y(j);
+					p.z = 0;
+					nodes.points.push_back(p);
+				}
+				visualize_nodes_pub.publish(nodes);
 
-		// 		if(is_goal(new_node)) {
-		// 			ROS_INFO("SOLUTION FOUND - NEW NODE");
-		// 			current_node = new_node;
-		// 			visualize_final_path();
-		// 			return;
-		// 		}
+				// if(is_goal(new_node)) {
+				// 	ROS_INFO("SOLUTION FOUND - NEW NODE");
+				// 	current_node = new_node;
+				// 	visualize_final_path();
+				// 	return;
+				// }
 
-		// 		total_nodes++;
-		// 		ROS_INFO("Total Nodes: %d", total_nodes);
+				total_nodes++;
+				ROS_INFO("Total Nodes: %d", total_nodes);
 
-		// 		new_ind = calc_index(new_node);
-		// 		cout << "New Index: " << new_ind << endl;
+				new_ind = calc_index(new_node);
+				cout << "New Index: " << new_ind << endl;
 
-		// 		if(closed_list.count(new_ind)) {
-		// 			continue;
-		// 		}
+				if(closed_list.count(new_ind)) {
+					continue;
+				}
 
-		// 		if(!open_list.count(new_ind)) {
-		// 			open_list[new_ind] = new_node;
-		// 			cout << "Open List (Added new node) - " << endl;
-		// 			display_map(open_list);
-		// 			pq.push(make_pair(calc_heuristic_cost(new_node), calc_index(new_node)));
-		// 			display_pq(pq);
-		// 		} else {
-		// 			if(open_list[new_ind]->get_cost() > new_node->get_cost()) {
-		// 				open_list[new_ind] = new_node;
-		// 				cout << "Open List (Updated node cost) - " << endl;
-		// 				display_map(open_list);
-		// 			}
-		// 		}
-		// 	}
-		// }
-
-		new_node = create_dubins_node(current_node, goal_node);
-		if(new_node->check_collision(grid, bin_map, acc_obs_map)) {
-			cout << "Collision" << endl;
-		} else {
-			cout << "SAFE" << endl;
+				if(!open_list.count(new_ind)) {
+					open_list[new_ind] = new_node;
+					cout << "Open List (Added new node) - " << endl;
+					display_map(open_list);
+					pq.push(make_pair(calc_heuristic_cost(new_node), calc_index(new_node)));
+					display_pq(pq);
+				} else {
+					if(open_list[new_ind]->get_cost() > new_node->get_cost()) {
+						open_list[new_ind] = new_node;
+						cout << "Open List (Updated node cost) - " << endl;
+						display_map(open_list);
+					}
+				}
+			}
 		}
 
 		// Node4D* test;
