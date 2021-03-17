@@ -105,6 +105,8 @@ helper.h
 /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/helper.h
 node4d.h
 /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/node4d.h
+dubins.h
+/home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/dubins.h
 
 /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/node4d.h
 iostream
@@ -147,6 +149,10 @@ hybrid_astar.h
 /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/src/dubins.cpp
 ../include/hybrid_astar/dubins.h
 /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/dubins.h
+math.h
+-
+assert.h
+-
 
 /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/src/hybrid_astar.cpp
 ../include/hybrid_astar/hybrid_astar.h

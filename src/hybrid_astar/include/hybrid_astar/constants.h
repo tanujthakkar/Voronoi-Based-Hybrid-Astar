@@ -6,7 +6,7 @@ static const float XY_RESOLUTION = 0.05; // [m] Grid resolution of the map
 static const float YAW_RESOLUTION = (15 * (M_PI / 180)); // [rad] Yaw resolution
 static const float MOVE_STEP = 0.1; // [m] Path interpolate resolution
 static const float PATH_LENGTH = 0.8; // [m] Length of the path create by each node
-static const int N_LIST = ceil(PATH_LENGTH/MOVE_STEP);
+static const int VECTOR_SIZE = ceil(PATH_LENGTH/MOVE_STEP);
 static const float MIN_SAFE_DIST = 0.25; // [m] Minimum safe distance between vehicle and obstacles
 static const int STEER_STEP = 3;
 
@@ -36,7 +36,5 @@ static const float STEER_CHANGE_COST = 5.0;
 static const float STEER_ANGLE_COST = 1.0;
 static const float JACKNIFE_COST = 200.0;
 static const float H_COST = 10.0;
-
-static const int VECTOR_SIZE = ceil(PATH_LENGTH/MOVE_STEP); // Size of all the node vectors
 
 #endif

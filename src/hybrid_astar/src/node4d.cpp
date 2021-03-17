@@ -87,6 +87,10 @@ bool Node4D::check_collision(nav_msgs::OccupancyGrid::Ptr grid, bool** bin_map, 
 
 	for (int i = 0; i < xlist.capacity(); ++i) {
 
+		cout << "Press ENTER for iteration " << i << endl;
+		printf("xlist: %f ylist: %f yaw: %f yawt: %f yaw_t: %f \n", xlist[i], ylist[i], yawlist[i], yawtlist[i], yawt[i]);
+		cin.get();
+
 		// ROS_INFO("Collision check for X : %f || Y : %f ", xlist[i], ylist[i]);
 		cx = xlist[i] + deltar * cos(yawlist[i]);
 		cy = ylist[i] + deltar * sin(yawlist[i]);
