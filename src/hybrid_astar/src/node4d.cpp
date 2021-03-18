@@ -92,6 +92,12 @@ bool Node4D::check_collision(nav_msgs::OccupancyGrid::Ptr grid, bool** bin_map, 
 		// cin.get();
 
 		// ROS_INFO("Collision check for X : %f || Y : %f ", xlist[i], ylist[i]);
+
+		if(abs(yawlist[i]) - abs(yawt[i]) >= 1.395) {
+			// ROS_INFO("SELF-COLLISION - JACKNIFE");
+			return true;
+		}
+		
 		cx = xlist[i] + deltar * cos(yawlist[i]);
 		cy = ylist[i] + deltar * sin(yawlist[i]);
 
@@ -136,7 +142,7 @@ bool Node4D::check_collision(nav_msgs::OccupancyGrid::Ptr grid, bool** bin_map, 
 
 				s = (cx + k * cos(yawlist[i]) + j * sin(yawlist[i]))/XY_RESOLUTION + 0.001;
 				t = (cy + k * sin(yawlist[i]) + j * cos(yawlist[i]))/XY_RESOLUTION + 0.001;
-				
+
 	     		// robot_collision_check_point.x = s * XY_RESOLUTION;
 	     		// robot_collision_check_point.y = t * XY_RESOLUTION;
 	     		// robot_collision_check_points.points.push_back(robot_collision_check_point);

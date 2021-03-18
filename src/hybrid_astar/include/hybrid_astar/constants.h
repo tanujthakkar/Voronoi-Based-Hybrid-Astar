@@ -8,7 +8,7 @@ static const float MOVE_STEP = 0.1; // [m] Path interpolate resolution
 static const float PATH_LENGTH = 0.8; // [m] Length of the path create by each node
 static const int VECTOR_SIZE = ceil(PATH_LENGTH/MOVE_STEP);
 static const float MIN_SAFE_DIST = 0.25; // [m] Minimum safe distance between vehicle and obstacles
-static const int STEER_STEP = 3;
+static const int STEER_STEP = 2;
 
 // Path accuracy
 static const float XY_TOLERANCE = 0.8; // [m] Tolerance of error in goal position

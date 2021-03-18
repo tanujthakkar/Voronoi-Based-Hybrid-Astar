@@ -45,7 +45,7 @@ float gx; // x coordinate of goal pose of the rear axle/hitch point of the vehic
 float gy; // y coordinate of goal pose of the rear axle/hitch point of the vehicle
 float gyaw; // yaw coordinate of goal pose of the rear axle/hitch point of the vehicle
 
-std::vector<int> steer = {30, 0, -30}; // Steering inputs for which the nodes have to be created
+std::vector<int> steer = {-30, 0, 30}; // Steering inputs for which the nodes have to be created
 
 
 /*
@@ -192,6 +192,7 @@ void create_steer_inputs(float max_steer) {
 	for (int i = 0; i < STEER_STEP + 1; ++i)
 	{
 		steer[i] = max_steer - i * (2 * max_steer / STEER_STEP);
+		cout << steer[i] << " ";
 	}
 }
 
@@ -310,7 +311,9 @@ void visualize_all_nodes(std::map<int, Node4D*> open, std::map<int, Node4D*> clo
 	nodes.id = 0;
 	nodes.type = visualization_msgs::Marker::LINE_LIST;
 	nodes.scale.x = 0.02;
-	nodes.color.r = 1.0;
+	nodes.color.r = 0.8;
+	nodes.color.g = 0.59;
+	nodes.color.b = 0.91;
 	nodes.color.a = 1.0;
 
 	geometry_msgs::Point p;
@@ -341,6 +344,8 @@ void hybrid_astar() {
 		nodes.type = visualization_msgs::Marker::LINE_LIST;
 		nodes.scale.x = 0.02;
 		nodes.color.r = 1.0;
+		nodes.color.g = 0.26;
+		nodes.color.b = 0.20;
 		nodes.color.a = 1.0;
 		nodes.points.clear();
 
@@ -365,15 +370,8 @@ void hybrid_astar() {
 		gyaw = tf::getYaw(goal_pose.pose.orientation);
 		gx = goal_pose.pose.position.x - deltar * cos(gyaw);
 		gy = goal_pose.pose.position.y - deltar * sin(gyaw);
-
-		// 3rd Left 12.61, 12.52,
-
-		// 3rd Straight 12.67, 12.28
-
-		// gx = 12.61;
-		// gy = 12.52;
-		// gyaw = 0.72;
 		ROS_INFO("gx: %f gy: %f gyaw: %f", gx, gy, gyaw);
+
 		Node4D goal_node = Node4D(gx, gy, gyaw, 0);
 
 		// create_steer_inputs(30);
