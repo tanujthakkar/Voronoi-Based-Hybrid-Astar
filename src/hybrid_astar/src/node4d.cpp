@@ -104,7 +104,7 @@ bool Node4D::check_collision(nav_msgs::OccupancyGrid::Ptr grid, bool** bin_map, 
 		robot_polygon_pub.publish(this->create_polygon(RL, RW, cx, cy, yawlist[i]));
 
 		if(xlist[i] >= grid->info.width || xlist[i]<0 || ylist[i] >= grid->info.height || ylist[i] < 0) {
-			ROS_INFO("ROBOT OUT OF BOUNDS");
+			// ROS_INFO("ROBOT OUT OF BOUNDS");
 			return true; // OUT OF BOUNDS
 		}
 		
@@ -115,7 +115,7 @@ bool Node4D::check_collision(nav_msgs::OccupancyGrid::Ptr grid, bool** bin_map, 
 		min_y =  (cy - RL * abs(sin(yawlist[i]))/2 - RW * abs(cos(yawlist[i]))/2) - MIN_SAFE_DIST;
 		
 		if(max_x >= grid->info.width || min_x < 0 || max_y >= grid->info.height || min_y < 0) {
-			ROS_INFO("ROBOT OUT OF BOUNDS");
+			// ROS_INFO("ROBOT OUT OF BOUNDS");
 			return true; // OUT OF BOUNDS
 		}
 
@@ -136,14 +136,15 @@ bool Node4D::check_collision(nav_msgs::OccupancyGrid::Ptr grid, bool** bin_map, 
 
 				s = (cx + k * cos(yawlist[i]) + j * sin(yawlist[i]))/XY_RESOLUTION + 0.001;
 				t = (cy + k * sin(yawlist[i]) + j * cos(yawlist[i]))/XY_RESOLUTION + 0.001;
-	     		robot_collision_check_point.x = s * XY_RESOLUTION;
-	     		robot_collision_check_point.y = t * XY_RESOLUTION;
-	     		robot_collision_check_points.points.push_back(robot_collision_check_point);
+				
+	     		// robot_collision_check_point.x = s * XY_RESOLUTION;
+	     		// robot_collision_check_point.y = t * XY_RESOLUTION;
+	     		// robot_collision_check_points.points.push_back(robot_collision_check_point);
 
 	     		if(bin_map[s][t] != 0) {
 					// cout << "X : " << s << " Y : "<< t << " BIN_MAP : " << bin_map[s][t] << endl;
-	     			robot_collision_check_pub.publish(robot_collision_check_points);
-	     			ROS_INFO("ROBOT POLYGON COLLISION");
+	     			// robot_collision_check_pub.publish(robot_collision_check_points);
+	     			// ROS_INFO("ROBOT POLYGON COLLISION");
 					return true; // IN COLLISION
 	     		}
 			}
@@ -168,7 +169,7 @@ bool Node4D::check_collision(nav_msgs::OccupancyGrid::Ptr grid, bool** bin_map, 
 		min_y =  (cty - TL * (sin(yawt[i]))/2 - TW * (cos(yawt[i]))/2) - MIN_SAFE_DIST;
 		
 		if(max_x >= grid->info.width || min_x < 0 || max_y >= grid->info.height || min_y < 0) {
-			ROS_INFO("TRAILER OUT OF BOUNDS");
+			// ROS_INFO("TRAILER OUT OF BOUNDS");
 			return true; // OUT OF BOUNDS
 		}
 
@@ -190,23 +191,23 @@ bool Node4D::check_collision(nav_msgs::OccupancyGrid::Ptr grid, bool** bin_map, 
 				s = (ctx + k * cos(yawt[i]) + j * sin(yawt[i]))/XY_RESOLUTION + 0.001;
 				t = (cty + k * sin(yawt[i]) + j * cos(yawt[i]))/XY_RESOLUTION + 0.001;
 	     		
-	     		trailer_collision_check_point.x = s * XY_RESOLUTION;
-	     		trailer_collision_check_point.y = t * XY_RESOLUTION;
-	     		trailer_collision_check_points.points.push_back(trailer_collision_check_point);
+	     		// trailer_collision_check_point.x = s * XY_RESOLUTION;
+	     		// trailer_collision_check_point.y = t * XY_RESOLUTION;
+	     		// trailer_collision_check_points.points.push_back(trailer_collision_check_point);
 
 	     		if(bin_map[s][t] != 0) {
 					// cout << "X : " << s << " Y : "<< t << " BIN_MAP : " << bin_map[s][t] << endl;
-	     			ROS_INFO("TRAILER POLYGON COLLISION");
+	     			// ROS_INFO("TRAILER POLYGON COLLISION");
 					return true; // IN COLLISION
 	     		}
 			}
 		}
 	}
 
-	robot_collision_check_pub.publish(robot_collision_check_points);
-	trailer_collision_check_pub.publish(trailer_collision_check_points);
+	// robot_collision_check_pub.publish(robot_collision_check_points);
+	// trailer_collision_check_pub.publish(trailer_collision_check_points);
 
-	ROS_INFO("NO COLLISION - SAFE");
+	// ROS_INFO("NO COLLISION - SAFE");
 	return false; // NO COLLISION
 }
 

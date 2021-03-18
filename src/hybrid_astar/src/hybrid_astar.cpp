@@ -138,10 +138,10 @@ Node4D* create_dubins_node(Node4D* start, const Node4D goal) {
 	std::vector<float> dubins_yawtlist;
 	std::vector<float> dubins_yawt;
 
-	dubins_path.header.stamp = ros::Time::now();
-	dubins_path.header.frame_id = "/map";
-	dubins_path.poses.clear();
-	geometry_msgs::PoseStamped pose_stamped;
+	// dubins_path.header.stamp = ros::Time::now();
+	// dubins_path.header.frame_id = "/map";
+	// dubins_path.poses.clear();
+	// geometry_msgs::PoseStamped pose_stamped;
 
 	double q[3];
 	dubins_path_sample(&path, x, q);
@@ -151,13 +151,13 @@ Node4D* create_dubins_node(Node4D* start, const Node4D goal) {
 	dubins_yawtlist.push_back(pi_2_pi(start->get_yawt(n-1) + (dir * MOVE_STEP / RTR) * sin(start->get_yaw(n-1) - start->get_yawt(n-1))));
 	dubins_yawt.push_back(pi_2_pi(start->get_yaw_t(0) + (dir * MOVE_STEP / RTR) * sin(start->get_yaw(0) - start->get_yaw_t(0))));
 
-	pose_stamped.header.stamp = ros::Time::now();
-	pose_stamped.header.frame_id = "map";
-	pose_stamped.pose.position.x = q[0];
-	pose_stamped.pose.position.y = q[1];
-	pose_stamped.pose.position.z = 0;
-	pose_stamped.pose.orientation.w = pi_2_pi(q[2]);
-	dubins_path.poses.push_back(pose_stamped);
+	// pose_stamped.header.stamp = ros::Time::now();
+	// pose_stamped.header.frame_id = "map";
+	// pose_stamped.pose.position.x = q[0];
+	// pose_stamped.pose.position.y = q[1];
+	// pose_stamped.pose.position.z = 0;
+	// pose_stamped.pose.orientation.w = pi_2_pi(q[2]);
+	// dubins_path.poses.push_back(pose_stamped);
 
 	while (x <  length) {
 		dubins_path_sample(&path, x, q);
@@ -167,20 +167,20 @@ Node4D* create_dubins_node(Node4D* start, const Node4D goal) {
 		dubins_yawtlist.push_back(pi_2_pi(dubins_yawtlist[i-1] + (dir * MOVE_STEP / RTR) * sin(dubins_yawlist[i-1] - dubins_yawtlist[i-1])));
 		dubins_yawt.push_back(pi_2_pi(dubins_yawt[i-1] + (dir * MOVE_STEP / RTR) * sin(dubins_yawlist[i-1] - dubins_yawt[i-1])));
 
-		pose_stamped.header.stamp = ros::Time::now();
-		pose_stamped.header.frame_id = "map";
-		pose_stamped.pose.position.x = q[0];
-		pose_stamped.pose.position.y = q[1];
-		pose_stamped.pose.position.z = 0;
-		pose_stamped.pose.orientation.w = pi_2_pi(q[2]);
-		dubins_path.poses.push_back(pose_stamped);
+		// pose_stamped.header.stamp = ros::Time::now();
+		// pose_stamped.header.frame_id = "map";
+		// pose_stamped.pose.position.x = q[0];
+		// pose_stamped.pose.position.y = q[1];
+		// pose_stamped.pose.position.z = 0;
+		// pose_stamped.pose.orientation.w = pi_2_pi(q[2]);
+		// dubins_path.poses.push_back(pose_stamped);
 
 		x += MOVE_STEP;
 		i++;
 	}
 
-	dubins_path_pub.publish(dubins_path);
-	std::cout << "Dubins Node created" << "\n";
+	// dubins_path_pub.publish(dubins_path);
+	// std::cout << "Dubins Node created" << "\n";
 
 	return new Node4D(dubins_xlist, dubins_ylist, dubins_yawlist, dubins_yawtlist, dubins_yawt, 1, -1, 0.0, start);
 }
@@ -278,9 +278,9 @@ void visualize_final_path() {
 
 	int n;
 	geometry_msgs::PoseStamped pose_stamped;
-	cout << "Current Node - " << current_node << endl;
+	// cout << "Current Node - " << current_node << endl;
 	while(current_node->get_parent() != nullptr) {
-		cout << "Current Node - " << current_node << endl;
+		// cout << "Current Node - " << current_node << endl;
 		n = current_node->get_size();
 		for (int i = 0; i < n; i++) {
 			pose_stamped.header.stamp = ros::Time::now();
@@ -342,6 +342,7 @@ void hybrid_astar() {
 		nodes.scale.x = 0.02;
 		nodes.color.r = 1.0;
 		nodes.color.a = 1.0;
+		nodes.points.clear();
 
 		geometry_msgs::Point p;
 
@@ -382,12 +383,12 @@ void hybrid_astar() {
 
 		open_list.insert(pair<int, Node4D*>(calc_index(current_node), current_node)); // Adding the start node to the open list
 		// cout << "Open List: " << open_list.begin()->first << " " << open_list.begin()->second << endl;
-		cout << "Open List (Added start node) - " << endl;
-		display_map(open_list);
+		// cout << "Open List (Added start node) - " << endl;
+		// display_map(open_list);
 
 		priority_queue<pi, vector<pi>, greater<pi>> pq; // Creating a min priority queue to sort nodes with respect to highest priority (lowest cost)
 		pq.push(make_pair(calc_heuristic_cost(current_node), calc_index(current_node))); // Adding the start node to the priority queue
-		display_pq(pq);
+		// display_pq(pq);
 
 		pair<float, int> ind;
 		int new_ind;
@@ -398,7 +399,7 @@ void hybrid_astar() {
 			// cin.get();
 
 			iterations++;
-			cout << "Iteration: " << iterations << endl;
+			// cout << "Iteration: " << iterations << endl;
 
 			if(open_list.empty()) {
 				ROS_INFO("NO NODES FOUND IN OPEN LIST");
@@ -406,33 +407,30 @@ void hybrid_astar() {
 			}
 
 			ind = pq.top(); // Retrieve the pair with the highest priority (lowest cost)
-			cout << "Ind - " << endl;
-			cout << "\tCost: " << ind.first << " Index: " << ind.second << endl;
+			// cout << "Ind - " << endl;
+			// cout << "\tCost: " << ind.first << " Index: " << ind.second << endl;
 
 			pq.pop(); // Pop the pair with highest priority
-			display_pq(pq);
+			// display_pq(pq);
 
 			current_node = open_list[ind.second];
-			cout << "Current Node: " << current_node << endl;
+			// cout << "Current Node: " << current_node << endl;
 			closed_list[ind.second] = current_node;
-			cout << "Closed List (Added current node)- " << endl;
-			display_map(closed_list);
+			// cout << "Closed List (Added current node)- " << endl;
+			// display_map(closed_list);
 			open_list.erase(ind.second);
-			cout << "Open List - (Removed current node)" << endl;
-			display_map(open_list);
+			// cout << "Open List - (Removed current node)" << endl;
+			// display_map(open_list);
 
 			new_node = create_dubins_node(current_node, goal_node);
 			if(!new_node->check_collision(grid, bin_map, acc_obs_map)) {
 				cout << "SOLUTION FOUND - DUBINS NODE" << endl;
+				printf("Iterations: %d Nodes: %d \n", iterations, total_nodes);
 				current_node = new_node;
 				visualize_final_path();
+				visualize_nodes_pub.publish(nodes);
 				break;
 			}
-			// if(is_goal(current_node)) {
-			// 	ROS_INFO("SOLUTION FOUND");
-			// 	visualize_final_path();
-			// 	break;
-			// }
 
 			for(int i = 0; i < steer.capacity(); ++i) {
 				
@@ -440,7 +438,7 @@ void hybrid_astar() {
 				// cin.get();
 
 				new_node = create_successor(current_node, steer[i], 1);
-				cout << "New Node: " << new_node << " Parent: " << new_node->get_parent() << endl;
+				// cout << "New Node: " << new_node << " Parent: " << new_node->get_parent() << endl;
 
 				if(new_node->check_collision(grid, bin_map, acc_obs_map)) {
 					// ROS_INFO("NODE IN COLLISION");
@@ -453,20 +451,12 @@ void hybrid_astar() {
 					p.z = 0;
 					nodes.points.push_back(p);
 				}
-				visualize_nodes_pub.publish(nodes);
-
-				// if(is_goal(new_node)) {
-				// 	ROS_INFO("SOLUTION FOUND - NEW NODE");
-				// 	current_node = new_node;
-				// 	visualize_final_path();
-				// 	return;
-				// }
 
 				total_nodes++;
-				ROS_INFO("Total Nodes: %d", total_nodes);
+				// ROS_INFO("Total Nodes: %d", total_nodes);
 
 				new_ind = calc_index(new_node);
-				cout << "New Index: " << new_ind << endl;
+				// cout << "New Index: " << new_ind << endl;
 
 				if(closed_list.count(new_ind)) {
 					continue;
@@ -474,49 +464,19 @@ void hybrid_astar() {
 
 				if(!open_list.count(new_ind)) {
 					open_list[new_ind] = new_node;
-					cout << "Open List (Added new node) - " << endl;
-					display_map(open_list);
+					// cout << "Open List (Added new node) - " << endl;
+					// display_map(open_list);
 					pq.push(make_pair(calc_heuristic_cost(new_node), calc_index(new_node)));
-					display_pq(pq);
+					// display_pq(pq);
 				} else {
 					if(open_list[new_ind]->get_cost() > new_node->get_cost()) {
 						open_list[new_ind] = new_node;
-						cout << "Open List (Updated node cost) - " << endl;
-						display_map(open_list);
+						// cout << "Open List (Updated node cost) - " << endl;
+						// display_map(open_list);
 					}
 				}
 			}
 		}
-
-		// Node4D* test;
-		// for (int i = 0; i < 1; ++i) {
-
-		// 	cout << "Test 1" << endl;
-		// 	new_node = create_successor(current_node, steer[i], 1);
-		// 	new_node->check_collision(grid, bin_map, acc_obs_map);
-		// 	for(int j=0;j<ceil(PATH_LENGTH/MOVE_STEP);j++) {
-		// 		p.x = new_node->get_x(j);
-		// 		p.y = new_node->get_y(j);
-		// 		p.z = 0;
-		// 		nodes.points.push_back(p);
-		// 	}
-		// 	visualize_nodes_pub.publish(nodes);
-
-		// 	test = new_node;
-		// 	for (int j = 0; j < 3; ++j) {
-		// 		new_node = create_successor(test, steer[j], 1);
-		// 		new_node->check_collision(grid, bin_map, acc_obs_map);
-		// 		for(int j=0;j<ceil(PATH_LENGTH/MOVE_STEP);j++) {
-		// 			p.x = new_node->get_x(j);
-		// 			p.y = new_node->get_y(j);
-		// 			p.z = 0;
-		// 			nodes.points.push_back(p);
-		// 		}
-		// 		visualize_nodes_pub.publish(nodes);
-		// 	}
-		// }
-		
-		// current_node->check_collision(grid, bin_map, acc_obs_map);
 	}
 }
 
@@ -545,8 +505,8 @@ void callback_start_pose(const geometry_msgs::PoseWithCovarianceStamped::ConstPt
 			auto start = high_resolution_clock::now(); // Reading start time of planning
 			hybrid_astar();
 			auto stop = high_resolution_clock::now(); // Reading end time of planning
-			auto duration = duration_cast<microseconds>(stop-start);
-			std::cout << "Execution Time : " << duration.count() << " microseconds" << endl;
+			auto duration = duration_cast<seconds>(stop-start);
+			std::cout << "Execution Time : " << duration.count() << " seconds" << endl;
 		} else {
 			ROS_INFO("NO VALID GOAL FOUND!");
 		}
@@ -578,7 +538,11 @@ void callback_goal_pose(const geometry_msgs::PoseStamped::ConstPtr& pose) {
 		ROS_INFO("VALID GOAL!");
 		goal_pose_pub.publish(goal_pose);
 		if(valid_start) {
+			auto start = high_resolution_clock::now(); // Reading start time of planning
 			hybrid_astar();
+			auto stop = high_resolution_clock::now(); // Reading end time of planning
+			auto duration = duration_cast<seconds>(stop-start);
+			std::cout << "Execution Time : " << duration.count() << " seconds" << endl;
 		} else {
 			ROS_INFO("NO VALID START FOUND!");
 		}
