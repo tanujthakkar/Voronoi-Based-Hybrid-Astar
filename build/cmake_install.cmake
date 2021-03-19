@@ -145,6 +145,7 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   include("/home/tanujthakkar/ROS/catkin_ws/build/ridgeback_simulator/ridgeback_gazebo_plugins/cmake_install.cmake")
   include("/home/tanujthakkar/ROS/catkin_ws/build/ira_laser_tools/cmake_install.cmake")
   include("/home/tanujthakkar/ROS/catkin_ws/build/ridgeback/ridgeback_control/cmake_install.cmake")
+  include("/home/tanujthakkar/ROS/catkin_ws/build/universal_global_planner/cmake_install.cmake")
 
 endif()
 

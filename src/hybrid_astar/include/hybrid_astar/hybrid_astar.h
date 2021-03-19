@@ -42,5 +42,6 @@ extern ros::Publisher trailer_center_pub;
 extern ros::Publisher robot_collision_check_pub;
 extern ros::Publisher trailer_collision_check_pub;
 extern geometry_msgs::PoseStamped start_pose;
+extern nav_msgs::Path path;
 
 #endif

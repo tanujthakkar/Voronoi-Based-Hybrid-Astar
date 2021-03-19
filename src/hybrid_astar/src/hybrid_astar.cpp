@@ -289,7 +289,11 @@ void visualize_final_path() {
 			pose_stamped.pose.position.x = current_node->get_x(n-i-1);
 			pose_stamped.pose.position.y = current_node->get_y(n-i-1);
 			pose_stamped.pose.position.z = 0;
-			pose_stamped.pose.orientation.w = current_node->get_yaw(n-i-1);
+			tf::Quaternion quat = tf::createQuaternionFromYaw(current_node->get_yaw(n-i-1));
+			pose_stamped.pose.orientation.x = quat.x();
+			pose_stamped.pose.orientation.y = quat.y();
+			pose_stamped.pose.orientation.z = quat.z();
+			pose_stamped.pose.orientation.w = quat.w();;
 			path.poses.push_back(pose_stamped);
 		}
 		current_node = current_node->get_parent();
@@ -400,7 +404,7 @@ void hybrid_astar() {
 			// cout << "Iteration: " << iterations << endl;
 
 			if(open_list.empty()) {
-				ROS_INFO("NO NODES FOUND IN OPEN LIST");
+				ROS_INFO("SOLUTION DOESN'T EXIST - NO NODES FOUND IN OPEN LIST");
 				break;
 			}
 
@@ -503,8 +507,8 @@ void callback_start_pose(const geometry_msgs::PoseWithCovarianceStamped::ConstPt
 			auto start = high_resolution_clock::now(); // Reading start time of planning
 			hybrid_astar();
 			auto stop = high_resolution_clock::now(); // Reading end time of planning
-			auto duration = duration_cast<seconds>(stop-start);
-			std::cout << "Execution Time : " << duration.count() << " seconds" << endl;
+			auto duration = duration_cast<milliseconds>(stop-start);
+			std::cout << "Execution Time : " << duration.count() << " milliseconds (" << duration.count()/1000 << " seconds)" << endl;
 		} else {
 			ROS_INFO("NO VALID GOAL FOUND!");
 		}
@@ -539,8 +543,8 @@ void callback_goal_pose(const geometry_msgs::PoseStamped::ConstPtr& pose) {
 			auto start = high_resolution_clock::now(); // Reading start time of planning
 			hybrid_astar();
 			auto stop = high_resolution_clock::now(); // Reading end time of planning
-			auto duration = duration_cast<seconds>(stop-start);
-			std::cout << "Execution Time : " << duration.count() << " seconds" << endl;
+			auto duration = duration_cast<milliseconds>(stop-start);
+			std::cout << "Execution Time : " << duration.count() << " milliseconds (" << duration.count()/1000 << " seconds)" << endl;
 		} else {
 			ROS_INFO("NO VALID START FOUND!");
 		}
@@ -621,6 +625,7 @@ int main(int argc, char **argv) {
 	ros::Subscriber start_pose_sub = nh.subscribe("initialpose", 10, callback_start_pose);
 	ros::Subscriber goal_pose_sub = nh.subscribe("move_base_simple/goal", 10, callback_goal_pose);
 	ros::Subscriber map_sub = nh.subscribe("map", 1, callback_map);
+	// ros::Subscriber map_sub = nh.subscribe("/move_base/global_costmap/costmap", 1, callback_map);
 
 	ros::Rate loop_rate(10);
 
