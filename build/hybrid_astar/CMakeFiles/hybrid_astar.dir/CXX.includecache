@@ -6,6 +6,48 @@
 
 #IncludeRegexTransform: 
 
+/home/tanujthakkar/ROS/catkin_ws/devel/include/hybrid_astar/GlobalPath.h
+ros/service_traits.h
+-
+hybrid_astar/GlobalPathRequest.h
+-
+hybrid_astar/GlobalPathResponse.h
+-
+
+/home/tanujthakkar/ROS/catkin_ws/devel/include/hybrid_astar/GlobalPathRequest.h
+string
+-
+vector
+-
+map
+-
+ros/types.h
+-
+ros/serialization.h
+-
+ros/builtin_message_traits.h
+-
+ros/message_operations.h
+-
+
+/home/tanujthakkar/ROS/catkin_ws/devel/include/hybrid_astar/GlobalPathResponse.h
+string
+-
+vector
+-
+map
+-
+ros/types.h
+-
+ros/serialization.h
+-
+ros/builtin_message_traits.h
+-
+ros/message_operations.h
+-
+nav_msgs/Path.h
+-
+
 /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/constants.h
 
 /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/dubins.h
@@ -107,6 +149,8 @@ node4d.h
 /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/node4d.h
 dubins.h
 /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/dubins.h
+hybrid_astar/GlobalPath.h
+/home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/hybrid_astar/GlobalPath.h
 
 /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/node4d.h
 iostream

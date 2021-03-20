@@ -1140,6 +1140,9 @@ hybrid_astar_BINARY_DIR:STATIC=/home/tanujthakkar/ROS/catkin_ws/build/hybrid_ast
 //Value Computed by CMake
 hybrid_astar_SOURCE_DIR:STATIC=/home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar
 
+//Dependencies for target
+hybrid_astar_planner_lib_LIB_DEPENDS:STATIC=
+
 //The directory containing a CMake configuration file for ignition-cmake0.
 ignition-cmake0_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/ignition-cmake0
 

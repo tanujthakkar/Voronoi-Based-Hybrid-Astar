@@ -31,6 +31,7 @@ int** acc_obs_map;
 typedef pair<float, int> pi;
 
 nav_msgs::Path path; // Final Hybrid A* path
+bool path_found;
 nav_msgs::Path dubins_path;
 visualization_msgs::Marker nodes;
 
@@ -335,10 +336,12 @@ void visualize_all_nodes(std::map<int, Node4D*> open, std::map<int, Node4D*> clo
 }
 
 
-void hybrid_astar() {
+void hybrid_astar_plan() {
 
 	if(valid_start && valid_goal) {
 		ROS_INFO("Planning Hybrid A* path...");
+
+		path_found = false;
 
 		nodes.header.stamp = ros::Time::now();
 		nodes.header.frame_id = "/map";
@@ -431,6 +434,7 @@ void hybrid_astar() {
 				current_node = new_node;
 				visualize_final_path();
 				visualize_nodes_pub.publish(nodes);
+				path_found = true;
 				break;
 			}
 
@@ -497,7 +501,7 @@ void callback_start_pose(const geometry_msgs::PoseWithCovarianceStamped::ConstPt
 	start_pose.pose.orientation = pose->pose.pose.orientation;
 	syaw = tf::getYaw(start_pose.pose.orientation);
 
-	ROS_INFO("X: %f \t Y: %f \t YAW: %f", start_pose.pose.position.x, start_pose.pose.position.y, syaw);
+	ROS_INFO("START - X: %f \t Y: %f \t YAW: %f", start_pose.pose.position.x, start_pose.pose.position.y, syaw);
 	if(grid->info.height >= start_pose.pose.position.y && start_pose.pose.position.y >= 0 && 
 		grid->info.width >= start_pose.pose.position.x && start_pose.pose.position.x >= 0 && bin_map[(int)round(start_pose.pose.position.x/XY_RESOLUTION)][(int)round(start_pose.pose.position.y/XY_RESOLUTION)] == 0) {
 		valid_start = true;
@@ -505,7 +509,7 @@ void callback_start_pose(const geometry_msgs::PoseWithCovarianceStamped::ConstPt
 		start_pose_pub.publish(start_pose);
 		if(valid_goal) {
 			auto start = high_resolution_clock::now(); // Reading start time of planning
-			hybrid_astar();
+			hybrid_astar_plan();
 			auto stop = high_resolution_clock::now(); // Reading end time of planning
 			auto duration = duration_cast<milliseconds>(stop-start);
 			std::cout << "Execution Time : " << duration.count() << " milliseconds (" << duration.count()/1000 << " seconds)" << endl;
@@ -533,7 +537,7 @@ void callback_goal_pose(const geometry_msgs::PoseStamped::ConstPtr& pose) {
 	goal_pose.pose.orientation = pose->pose.orientation;
 	gyaw = tf::getYaw(goal_pose.pose.orientation);
 
-	ROS_INFO("X: %f \t Y: %f \t YAW: %f", goal_pose.pose.position.x, goal_pose.pose.position.y, gyaw);
+	ROS_INFO("GOAL - X: %f \t Y: %f \t YAW: %f", goal_pose.pose.position.x, goal_pose.pose.position.y, gyaw);
 	if (grid->info.height >= goal_pose.pose.position.y && goal_pose.pose.position.y >= 0 && 
 		grid->info.width >= goal_pose.pose.position.x && goal_pose.pose.position.x >= 0 && bin_map[(int)round(goal_pose.pose.position.x/XY_RESOLUTION)][(int)round(goal_pose.pose.position.y/XY_RESOLUTION)] == 0) {
 		valid_goal = true;
@@ -541,7 +545,7 @@ void callback_goal_pose(const geometry_msgs::PoseStamped::ConstPtr& pose) {
 		goal_pose_pub.publish(goal_pose);
 		if(valid_start) {
 			auto start = high_resolution_clock::now(); // Reading start time of planning
-			hybrid_astar();
+			hybrid_astar_plan();
 			auto stop = high_resolution_clock::now(); // Reading end time of planning
 			auto duration = duration_cast<milliseconds>(stop-start);
 			std::cout << "Execution Time : " << duration.count() << " milliseconds (" << duration.count()/1000 << " seconds)" << endl;
@@ -601,6 +605,16 @@ void callback_map(const nav_msgs::OccupancyGrid::Ptr map) {
 }
 
 
+bool callback_planner(hybrid_astar::GlobalPath::Request &req, hybrid_astar::GlobalPath::Response &res) {
+
+	while(!path_found) {
+	}
+	res.plan = path;
+
+	return true;
+}
+
+
 int main(int argc, char **argv) {
 
 	ros::init(argc, argv, "hybrid_astar");
@@ -610,7 +624,7 @@ int main(int argc, char **argv) {
 	// Publishers
 	start_pose_pub = nh.advertise<geometry_msgs::PoseStamped>("start_pose", 10);
 	goal_pose_pub = nh.advertise<geometry_msgs::PoseStamped>("goal_pose", 10);
-	path_pub = nh.advertise<nav_msgs::Path>("path", 10);
+	path_pub = nh.advertise<nav_msgs::Path>("hybrid_astar_path", 10);
 	dubins_path_pub = nh.advertise<nav_msgs::Path>("dubins_path", 10);
 	visualize_nodes_pub = nh.advertise<visualization_msgs::Marker>("nodes", 10);
 	robot_polygon_pub = nh.advertise<geometry_msgs::PolygonStamped>("robot_polygon", 10);
@@ -626,6 +640,9 @@ int main(int argc, char **argv) {
 	ros::Subscriber goal_pose_sub = nh.subscribe("move_base_simple/goal", 10, callback_goal_pose);
 	ros::Subscriber map_sub = nh.subscribe("map", 1, callback_map);
 	// ros::Subscriber map_sub = nh.subscribe("/move_base/global_costmap/costmap", 1, callback_map);
+
+	// Services
+	ros::ServiceServer ss = nh.advertiseService("hybrid_astar_planner_service", callback_planner);
 
 	ros::Rate loop_rate(10);
 

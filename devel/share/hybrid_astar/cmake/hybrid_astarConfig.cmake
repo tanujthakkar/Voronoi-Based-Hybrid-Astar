@@ -91,9 +91,9 @@ endif()
 # flag project as catkin-based to distinguish if a find_package()-ed project is a catkin project
 set(hybrid_astar_FOUND_CATKIN_PROJECT TRUE)
 
-if(NOT " " STREQUAL " ")
+if(NOT "/home/tanujthakkar/ROS/catkin_ws/devel/include " STREQUAL " ")
   set(hybrid_astar_INCLUDE_DIRS "")
-  set(_include_dirs "")
+  set(_include_dirs "/home/tanujthakkar/ROS/catkin_ws/devel/include")
   if(NOT " " STREQUAL " ")
     set(_report "Check the issue tracker '' and consider creating a ticket if the problem has not been reported yet.")
   elseif(NOT " " STREQUAL " ")
@@ -177,7 +177,7 @@ foreach(library ${libraries})
   endif()
 endforeach()
 
-set(hybrid_astar_EXPORTED_TARGETS "")
+set(hybrid_astar_EXPORTED_TARGETS "hybrid_astar_generate_messages_cpp;hybrid_astar_generate_messages_eus;hybrid_astar_generate_messages_lisp;hybrid_astar_generate_messages_nodejs;hybrid_astar_generate_messages_py")
 # create dummy targets for exported code generation targets to make life of users easier
 foreach(t ${hybrid_astar_EXPORTED_TARGETS})
   if(NOT TARGET ${t})
@@ -185,7 +185,7 @@ foreach(t ${hybrid_astar_EXPORTED_TARGETS})
   endif()
 endforeach()
 
-set(depends "")
+set(depends "roscpp;rospy;message_runtime")
 foreach(depend ${depends})
   string(REPLACE " " ";" depend_list ${depend})
   # the package name of the dependency must be kept in a unique variable so that it is not overwritten in recursive calls
@@ -214,7 +214,7 @@ foreach(depend ${depends})
   list(APPEND hybrid_astar_EXPORTED_TARGETS ${${hybrid_astar_dep}_EXPORTED_TARGETS})
 endforeach()
 
-set(pkg_cfg_extras "")
+set(pkg_cfg_extras "hybrid_astar-msg-extras.cmake")
 foreach(extra ${pkg_cfg_extras})
   if(NOT IS_ABSOLUTE ${extra})
     set(extra ${hybrid_astar_DIR}/${extra})

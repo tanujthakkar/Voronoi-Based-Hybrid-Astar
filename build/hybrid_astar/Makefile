@@ -90,17 +90,6 @@ list_install_components/fast: list_install_components
 
 .PHONY : list_install_components/fast
 
-# Special rule for the target edit_cache
-edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-	/usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
-.PHONY : edit_cache
-
-# Special rule for the target edit_cache
-edit_cache/fast: edit_cache
-
-.PHONY : edit_cache/fast
-
 # Special rule for the target test
 test:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running tests..."
@@ -111,6 +100,17 @@ test:
 test/fast: test
 
 .PHONY : test/fast
+
+# Special rule for the target edit_cache
+edit_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
+	/usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+.PHONY : edit_cache
+
+# Special rule for the target edit_cache
+edit_cache/fast: edit_cache
+
+.PHONY : edit_cache/fast
 
 # Special rule for the target rebuild_cache
 rebuild_cache:
@@ -168,139 +168,424 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
-hybrid_astar/CMakeFiles/roscpp_generate_messages_nodejs.dir/rule:
-	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 hybrid_astar/CMakeFiles/roscpp_generate_messages_nodejs.dir/rule
-.PHONY : hybrid_astar/CMakeFiles/roscpp_generate_messages_nodejs.dir/rule
+hybrid_astar/CMakeFiles/visualization_msgs_generate_messages_py.dir/rule:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 hybrid_astar/CMakeFiles/visualization_msgs_generate_messages_py.dir/rule
+.PHONY : hybrid_astar/CMakeFiles/visualization_msgs_generate_messages_py.dir/rule
 
 # Convenience name for target.
-roscpp_generate_messages_nodejs: hybrid_astar/CMakeFiles/roscpp_generate_messages_nodejs.dir/rule
+visualization_msgs_generate_messages_py: hybrid_astar/CMakeFiles/visualization_msgs_generate_messages_py.dir/rule
 
-.PHONY : roscpp_generate_messages_nodejs
+.PHONY : visualization_msgs_generate_messages_py
 
 # fast build rule for target.
-roscpp_generate_messages_nodejs/fast:
-	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/roscpp_generate_messages_nodejs.dir/build.make hybrid_astar/CMakeFiles/roscpp_generate_messages_nodejs.dir/build
-.PHONY : roscpp_generate_messages_nodejs/fast
+visualization_msgs_generate_messages_py/fast:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/visualization_msgs_generate_messages_py.dir/build.make hybrid_astar/CMakeFiles/visualization_msgs_generate_messages_py.dir/build
+.PHONY : visualization_msgs_generate_messages_py/fast
 
 # Convenience name for target.
-hybrid_astar/CMakeFiles/roscpp_generate_messages_eus.dir/rule:
-	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 hybrid_astar/CMakeFiles/roscpp_generate_messages_eus.dir/rule
-.PHONY : hybrid_astar/CMakeFiles/roscpp_generate_messages_eus.dir/rule
+hybrid_astar/CMakeFiles/hybrid_astar_geneus.dir/rule:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 hybrid_astar/CMakeFiles/hybrid_astar_geneus.dir/rule
+.PHONY : hybrid_astar/CMakeFiles/hybrid_astar_geneus.dir/rule
 
 # Convenience name for target.
-roscpp_generate_messages_eus: hybrid_astar/CMakeFiles/roscpp_generate_messages_eus.dir/rule
+hybrid_astar_geneus: hybrid_astar/CMakeFiles/hybrid_astar_geneus.dir/rule
 
-.PHONY : roscpp_generate_messages_eus
+.PHONY : hybrid_astar_geneus
 
 # fast build rule for target.
-roscpp_generate_messages_eus/fast:
-	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/roscpp_generate_messages_eus.dir/build.make hybrid_astar/CMakeFiles/roscpp_generate_messages_eus.dir/build
-.PHONY : roscpp_generate_messages_eus/fast
+hybrid_astar_geneus/fast:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/hybrid_astar_geneus.dir/build.make hybrid_astar/CMakeFiles/hybrid_astar_geneus.dir/build
+.PHONY : hybrid_astar_geneus/fast
 
 # Convenience name for target.
-hybrid_astar/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule:
-	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 hybrid_astar/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule
-.PHONY : hybrid_astar/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule
+hybrid_astar/CMakeFiles/visualization_msgs_generate_messages_eus.dir/rule:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 hybrid_astar/CMakeFiles/visualization_msgs_generate_messages_eus.dir/rule
+.PHONY : hybrid_astar/CMakeFiles/visualization_msgs_generate_messages_eus.dir/rule
 
 # Convenience name for target.
-rosgraph_msgs_generate_messages_cpp: hybrid_astar/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule
+visualization_msgs_generate_messages_eus: hybrid_astar/CMakeFiles/visualization_msgs_generate_messages_eus.dir/rule
 
-.PHONY : rosgraph_msgs_generate_messages_cpp
+.PHONY : visualization_msgs_generate_messages_eus
 
 # fast build rule for target.
-rosgraph_msgs_generate_messages_cpp/fast:
-	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/build.make hybrid_astar/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/build
-.PHONY : rosgraph_msgs_generate_messages_cpp/fast
+visualization_msgs_generate_messages_eus/fast:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/visualization_msgs_generate_messages_eus.dir/build.make hybrid_astar/CMakeFiles/visualization_msgs_generate_messages_eus.dir/build
+.PHONY : visualization_msgs_generate_messages_eus/fast
 
 # Convenience name for target.
-hybrid_astar/CMakeFiles/roscpp_generate_messages_cpp.dir/rule:
-	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 hybrid_astar/CMakeFiles/roscpp_generate_messages_cpp.dir/rule
-.PHONY : hybrid_astar/CMakeFiles/roscpp_generate_messages_cpp.dir/rule
+hybrid_astar/CMakeFiles/map_msgs_generate_messages_py.dir/rule:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 hybrid_astar/CMakeFiles/map_msgs_generate_messages_py.dir/rule
+.PHONY : hybrid_astar/CMakeFiles/map_msgs_generate_messages_py.dir/rule
 
 # Convenience name for target.
-roscpp_generate_messages_cpp: hybrid_astar/CMakeFiles/roscpp_generate_messages_cpp.dir/rule
+map_msgs_generate_messages_py: hybrid_astar/CMakeFiles/map_msgs_generate_messages_py.dir/rule
 
-.PHONY : roscpp_generate_messages_cpp
+.PHONY : map_msgs_generate_messages_py
 
 # fast build rule for target.
-roscpp_generate_messages_cpp/fast:
-	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/roscpp_generate_messages_cpp.dir/build.make hybrid_astar/CMakeFiles/roscpp_generate_messages_cpp.dir/build
-.PHONY : roscpp_generate_messages_cpp/fast
+map_msgs_generate_messages_py/fast:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/map_msgs_generate_messages_py.dir/build.make hybrid_astar/CMakeFiles/map_msgs_generate_messages_py.dir/build
+.PHONY : map_msgs_generate_messages_py/fast
 
 # Convenience name for target.
-hybrid_astar/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/rule:
-	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 hybrid_astar/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/rule
-.PHONY : hybrid_astar/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/rule
+hybrid_astar/CMakeFiles/visualization_msgs_generate_messages_cpp.dir/rule:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 hybrid_astar/CMakeFiles/visualization_msgs_generate_messages_cpp.dir/rule
+.PHONY : hybrid_astar/CMakeFiles/visualization_msgs_generate_messages_cpp.dir/rule
 
 # Convenience name for target.
-rosgraph_msgs_generate_messages_lisp: hybrid_astar/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/rule
+visualization_msgs_generate_messages_cpp: hybrid_astar/CMakeFiles/visualization_msgs_generate_messages_cpp.dir/rule
 
-.PHONY : rosgraph_msgs_generate_messages_lisp
+.PHONY : visualization_msgs_generate_messages_cpp
 
 # fast build rule for target.
-rosgraph_msgs_generate_messages_lisp/fast:
-	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/build.make hybrid_astar/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/build
-.PHONY : rosgraph_msgs_generate_messages_lisp/fast
+visualization_msgs_generate_messages_cpp/fast:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/visualization_msgs_generate_messages_cpp.dir/build.make hybrid_astar/CMakeFiles/visualization_msgs_generate_messages_cpp.dir/build
+.PHONY : visualization_msgs_generate_messages_cpp/fast
 
 # Convenience name for target.
-hybrid_astar/CMakeFiles/roscpp_generate_messages_py.dir/rule:
-	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 hybrid_astar/CMakeFiles/roscpp_generate_messages_py.dir/rule
-.PHONY : hybrid_astar/CMakeFiles/roscpp_generate_messages_py.dir/rule
+hybrid_astar/CMakeFiles/costmap_2d_generate_messages_py.dir/rule:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 hybrid_astar/CMakeFiles/costmap_2d_generate_messages_py.dir/rule
+.PHONY : hybrid_astar/CMakeFiles/costmap_2d_generate_messages_py.dir/rule
 
 # Convenience name for target.
-roscpp_generate_messages_py: hybrid_astar/CMakeFiles/roscpp_generate_messages_py.dir/rule
+costmap_2d_generate_messages_py: hybrid_astar/CMakeFiles/costmap_2d_generate_messages_py.dir/rule
 
-.PHONY : roscpp_generate_messages_py
+.PHONY : costmap_2d_generate_messages_py
 
 # fast build rule for target.
-roscpp_generate_messages_py/fast:
-	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/roscpp_generate_messages_py.dir/build.make hybrid_astar/CMakeFiles/roscpp_generate_messages_py.dir/build
-.PHONY : roscpp_generate_messages_py/fast
+costmap_2d_generate_messages_py/fast:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/costmap_2d_generate_messages_py.dir/build.make hybrid_astar/CMakeFiles/costmap_2d_generate_messages_py.dir/build
+.PHONY : costmap_2d_generate_messages_py/fast
 
 # Convenience name for target.
-hybrid_astar/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/rule:
-	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 hybrid_astar/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/rule
-.PHONY : hybrid_astar/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/rule
+hybrid_astar/CMakeFiles/map_msgs_generate_messages_nodejs.dir/rule:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 hybrid_astar/CMakeFiles/map_msgs_generate_messages_nodejs.dir/rule
+.PHONY : hybrid_astar/CMakeFiles/map_msgs_generate_messages_nodejs.dir/rule
 
 # Convenience name for target.
-rosgraph_msgs_generate_messages_nodejs: hybrid_astar/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/rule
+map_msgs_generate_messages_nodejs: hybrid_astar/CMakeFiles/map_msgs_generate_messages_nodejs.dir/rule
 
-.PHONY : rosgraph_msgs_generate_messages_nodejs
+.PHONY : map_msgs_generate_messages_nodejs
 
 # fast build rule for target.
-rosgraph_msgs_generate_messages_nodejs/fast:
-	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/build.make hybrid_astar/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/build
-.PHONY : rosgraph_msgs_generate_messages_nodejs/fast
+map_msgs_generate_messages_nodejs/fast:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/map_msgs_generate_messages_nodejs.dir/build.make hybrid_astar/CMakeFiles/map_msgs_generate_messages_nodejs.dir/build
+.PHONY : map_msgs_generate_messages_nodejs/fast
 
 # Convenience name for target.
-hybrid_astar/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/rule:
-	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 hybrid_astar/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/rule
-.PHONY : hybrid_astar/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/rule
+hybrid_astar/CMakeFiles/costmap_2d_gencfg.dir/rule:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 hybrid_astar/CMakeFiles/costmap_2d_gencfg.dir/rule
+.PHONY : hybrid_astar/CMakeFiles/costmap_2d_gencfg.dir/rule
 
 # Convenience name for target.
-rosgraph_msgs_generate_messages_py: hybrid_astar/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/rule
+costmap_2d_gencfg: hybrid_astar/CMakeFiles/costmap_2d_gencfg.dir/rule
 
-.PHONY : rosgraph_msgs_generate_messages_py
+.PHONY : costmap_2d_gencfg
 
 # fast build rule for target.
-rosgraph_msgs_generate_messages_py/fast:
-	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/build.make hybrid_astar/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/build
-.PHONY : rosgraph_msgs_generate_messages_py/fast
+costmap_2d_gencfg/fast:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/costmap_2d_gencfg.dir/build.make hybrid_astar/CMakeFiles/costmap_2d_gencfg.dir/build
+.PHONY : costmap_2d_gencfg/fast
 
 # Convenience name for target.
-hybrid_astar/CMakeFiles/roscpp_generate_messages_lisp.dir/rule:
-	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 hybrid_astar/CMakeFiles/roscpp_generate_messages_lisp.dir/rule
-.PHONY : hybrid_astar/CMakeFiles/roscpp_generate_messages_lisp.dir/rule
+hybrid_astar/CMakeFiles/costmap_2d_generate_messages_lisp.dir/rule:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 hybrid_astar/CMakeFiles/costmap_2d_generate_messages_lisp.dir/rule
+.PHONY : hybrid_astar/CMakeFiles/costmap_2d_generate_messages_lisp.dir/rule
 
 # Convenience name for target.
-roscpp_generate_messages_lisp: hybrid_astar/CMakeFiles/roscpp_generate_messages_lisp.dir/rule
+costmap_2d_generate_messages_lisp: hybrid_astar/CMakeFiles/costmap_2d_generate_messages_lisp.dir/rule
 
-.PHONY : roscpp_generate_messages_lisp
+.PHONY : costmap_2d_generate_messages_lisp
 
 # fast build rule for target.
-roscpp_generate_messages_lisp/fast:
-	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/roscpp_generate_messages_lisp.dir/build.make hybrid_astar/CMakeFiles/roscpp_generate_messages_lisp.dir/build
-.PHONY : roscpp_generate_messages_lisp/fast
+costmap_2d_generate_messages_lisp/fast:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/costmap_2d_generate_messages_lisp.dir/build.make hybrid_astar/CMakeFiles/costmap_2d_generate_messages_lisp.dir/build
+.PHONY : costmap_2d_generate_messages_lisp/fast
+
+# Convenience name for target.
+hybrid_astar/CMakeFiles/hybrid_astar_generate_messages.dir/rule:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 hybrid_astar/CMakeFiles/hybrid_astar_generate_messages.dir/rule
+.PHONY : hybrid_astar/CMakeFiles/hybrid_astar_generate_messages.dir/rule
+
+# Convenience name for target.
+hybrid_astar_generate_messages: hybrid_astar/CMakeFiles/hybrid_astar_generate_messages.dir/rule
+
+.PHONY : hybrid_astar_generate_messages
+
+# fast build rule for target.
+hybrid_astar_generate_messages/fast:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/hybrid_astar_generate_messages.dir/build.make hybrid_astar/CMakeFiles/hybrid_astar_generate_messages.dir/build
+.PHONY : hybrid_astar_generate_messages/fast
+
+# Convenience name for target.
+hybrid_astar/CMakeFiles/map_msgs_generate_messages_cpp.dir/rule:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 hybrid_astar/CMakeFiles/map_msgs_generate_messages_cpp.dir/rule
+.PHONY : hybrid_astar/CMakeFiles/map_msgs_generate_messages_cpp.dir/rule
+
+# Convenience name for target.
+map_msgs_generate_messages_cpp: hybrid_astar/CMakeFiles/map_msgs_generate_messages_cpp.dir/rule
+
+.PHONY : map_msgs_generate_messages_cpp
+
+# fast build rule for target.
+map_msgs_generate_messages_cpp/fast:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/map_msgs_generate_messages_cpp.dir/build.make hybrid_astar/CMakeFiles/map_msgs_generate_messages_cpp.dir/build
+.PHONY : map_msgs_generate_messages_cpp/fast
+
+# Convenience name for target.
+hybrid_astar/CMakeFiles/costmap_2d_generate_messages_nodejs.dir/rule:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 hybrid_astar/CMakeFiles/costmap_2d_generate_messages_nodejs.dir/rule
+.PHONY : hybrid_astar/CMakeFiles/costmap_2d_generate_messages_nodejs.dir/rule
+
+# Convenience name for target.
+costmap_2d_generate_messages_nodejs: hybrid_astar/CMakeFiles/costmap_2d_generate_messages_nodejs.dir/rule
+
+.PHONY : costmap_2d_generate_messages_nodejs
+
+# fast build rule for target.
+costmap_2d_generate_messages_nodejs/fast:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/costmap_2d_generate_messages_nodejs.dir/build.make hybrid_astar/CMakeFiles/costmap_2d_generate_messages_nodejs.dir/build
+.PHONY : costmap_2d_generate_messages_nodejs/fast
+
+# Convenience name for target.
+hybrid_astar/CMakeFiles/visualization_msgs_generate_messages_nodejs.dir/rule:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 hybrid_astar/CMakeFiles/visualization_msgs_generate_messages_nodejs.dir/rule
+.PHONY : hybrid_astar/CMakeFiles/visualization_msgs_generate_messages_nodejs.dir/rule
+
+# Convenience name for target.
+visualization_msgs_generate_messages_nodejs: hybrid_astar/CMakeFiles/visualization_msgs_generate_messages_nodejs.dir/rule
+
+.PHONY : visualization_msgs_generate_messages_nodejs
+
+# fast build rule for target.
+visualization_msgs_generate_messages_nodejs/fast:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/visualization_msgs_generate_messages_nodejs.dir/build.make hybrid_astar/CMakeFiles/visualization_msgs_generate_messages_nodejs.dir/build
+.PHONY : visualization_msgs_generate_messages_nodejs/fast
+
+# Convenience name for target.
+hybrid_astar/CMakeFiles/map_msgs_generate_messages_lisp.dir/rule:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 hybrid_astar/CMakeFiles/map_msgs_generate_messages_lisp.dir/rule
+.PHONY : hybrid_astar/CMakeFiles/map_msgs_generate_messages_lisp.dir/rule
+
+# Convenience name for target.
+map_msgs_generate_messages_lisp: hybrid_astar/CMakeFiles/map_msgs_generate_messages_lisp.dir/rule
+
+.PHONY : map_msgs_generate_messages_lisp
+
+# fast build rule for target.
+map_msgs_generate_messages_lisp/fast:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/map_msgs_generate_messages_lisp.dir/build.make hybrid_astar/CMakeFiles/map_msgs_generate_messages_lisp.dir/build
+.PHONY : map_msgs_generate_messages_lisp/fast
+
+# Convenience name for target.
+hybrid_astar/CMakeFiles/costmap_2d_generate_messages_eus.dir/rule:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 hybrid_astar/CMakeFiles/costmap_2d_generate_messages_eus.dir/rule
+.PHONY : hybrid_astar/CMakeFiles/costmap_2d_generate_messages_eus.dir/rule
+
+# Convenience name for target.
+costmap_2d_generate_messages_eus: hybrid_astar/CMakeFiles/costmap_2d_generate_messages_eus.dir/rule
+
+.PHONY : costmap_2d_generate_messages_eus
+
+# fast build rule for target.
+costmap_2d_generate_messages_eus/fast:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/costmap_2d_generate_messages_eus.dir/build.make hybrid_astar/CMakeFiles/costmap_2d_generate_messages_eus.dir/build
+.PHONY : costmap_2d_generate_messages_eus/fast
+
+# Convenience name for target.
+hybrid_astar/CMakeFiles/visualization_msgs_generate_messages_lisp.dir/rule:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 hybrid_astar/CMakeFiles/visualization_msgs_generate_messages_lisp.dir/rule
+.PHONY : hybrid_astar/CMakeFiles/visualization_msgs_generate_messages_lisp.dir/rule
+
+# Convenience name for target.
+visualization_msgs_generate_messages_lisp: hybrid_astar/CMakeFiles/visualization_msgs_generate_messages_lisp.dir/rule
+
+.PHONY : visualization_msgs_generate_messages_lisp
+
+# fast build rule for target.
+visualization_msgs_generate_messages_lisp/fast:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/visualization_msgs_generate_messages_lisp.dir/build.make hybrid_astar/CMakeFiles/visualization_msgs_generate_messages_lisp.dir/build
+.PHONY : visualization_msgs_generate_messages_lisp/fast
+
+# Convenience name for target.
+hybrid_astar/CMakeFiles/costmap_2d_generate_messages_cpp.dir/rule:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 hybrid_astar/CMakeFiles/costmap_2d_generate_messages_cpp.dir/rule
+.PHONY : hybrid_astar/CMakeFiles/costmap_2d_generate_messages_cpp.dir/rule
+
+# Convenience name for target.
+costmap_2d_generate_messages_cpp: hybrid_astar/CMakeFiles/costmap_2d_generate_messages_cpp.dir/rule
+
+.PHONY : costmap_2d_generate_messages_cpp
+
+# fast build rule for target.
+costmap_2d_generate_messages_cpp/fast:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/costmap_2d_generate_messages_cpp.dir/build.make hybrid_astar/CMakeFiles/costmap_2d_generate_messages_cpp.dir/build
+.PHONY : costmap_2d_generate_messages_cpp/fast
+
+# Convenience name for target.
+hybrid_astar/CMakeFiles/hybrid_astar_gencpp.dir/rule:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 hybrid_astar/CMakeFiles/hybrid_astar_gencpp.dir/rule
+.PHONY : hybrid_astar/CMakeFiles/hybrid_astar_gencpp.dir/rule
+
+# Convenience name for target.
+hybrid_astar_gencpp: hybrid_astar/CMakeFiles/hybrid_astar_gencpp.dir/rule
+
+.PHONY : hybrid_astar_gencpp
+
+# fast build rule for target.
+hybrid_astar_gencpp/fast:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/hybrid_astar_gencpp.dir/build.make hybrid_astar/CMakeFiles/hybrid_astar_gencpp.dir/build
+.PHONY : hybrid_astar_gencpp/fast
+
+# Convenience name for target.
+hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_eus.dir/rule:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_eus.dir/rule
+.PHONY : hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_eus.dir/rule
+
+# Convenience name for target.
+hybrid_astar_generate_messages_eus: hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_eus.dir/rule
+
+.PHONY : hybrid_astar_generate_messages_eus
+
+# fast build rule for target.
+hybrid_astar_generate_messages_eus/fast:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_eus.dir/build.make hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_eus.dir/build
+.PHONY : hybrid_astar_generate_messages_eus/fast
+
+# Convenience name for target.
+hybrid_astar/CMakeFiles/hybrid_astar_genpy.dir/rule:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 hybrid_astar/CMakeFiles/hybrid_astar_genpy.dir/rule
+.PHONY : hybrid_astar/CMakeFiles/hybrid_astar_genpy.dir/rule
+
+# Convenience name for target.
+hybrid_astar_genpy: hybrid_astar/CMakeFiles/hybrid_astar_genpy.dir/rule
+
+.PHONY : hybrid_astar_genpy
+
+# fast build rule for target.
+hybrid_astar_genpy/fast:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/hybrid_astar_genpy.dir/build.make hybrid_astar/CMakeFiles/hybrid_astar_genpy.dir/build
+.PHONY : hybrid_astar_genpy/fast
+
+# Convenience name for target.
+hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_lisp.dir/rule:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_lisp.dir/rule
+.PHONY : hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_lisp.dir/rule
+
+# Convenience name for target.
+hybrid_astar_generate_messages_lisp: hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_lisp.dir/rule
+
+.PHONY : hybrid_astar_generate_messages_lisp
+
+# fast build rule for target.
+hybrid_astar_generate_messages_lisp/fast:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_lisp.dir/build.make hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_lisp.dir/build
+.PHONY : hybrid_astar_generate_messages_lisp/fast
+
+# Convenience name for target.
+hybrid_astar/CMakeFiles/_hybrid_astar_generate_messages_check_deps_GlobalPath.dir/rule:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 hybrid_astar/CMakeFiles/_hybrid_astar_generate_messages_check_deps_GlobalPath.dir/rule
+.PHONY : hybrid_astar/CMakeFiles/_hybrid_astar_generate_messages_check_deps_GlobalPath.dir/rule
+
+# Convenience name for target.
+_hybrid_astar_generate_messages_check_deps_GlobalPath: hybrid_astar/CMakeFiles/_hybrid_astar_generate_messages_check_deps_GlobalPath.dir/rule
+
+.PHONY : _hybrid_astar_generate_messages_check_deps_GlobalPath
+
+# fast build rule for target.
+_hybrid_astar_generate_messages_check_deps_GlobalPath/fast:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/_hybrid_astar_generate_messages_check_deps_GlobalPath.dir/build.make hybrid_astar/CMakeFiles/_hybrid_astar_generate_messages_check_deps_GlobalPath.dir/build
+.PHONY : _hybrid_astar_generate_messages_check_deps_GlobalPath/fast
+
+# Convenience name for target.
+hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_cpp.dir/rule:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_cpp.dir/rule
+.PHONY : hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_cpp.dir/rule
+
+# Convenience name for target.
+hybrid_astar_generate_messages_cpp: hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_cpp.dir/rule
+
+.PHONY : hybrid_astar_generate_messages_cpp
+
+# fast build rule for target.
+hybrid_astar_generate_messages_cpp/fast:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_cpp.dir/build.make hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_cpp.dir/build
+.PHONY : hybrid_astar_generate_messages_cpp/fast
+
+# Convenience name for target.
+hybrid_astar/CMakeFiles/hybrid_astar_gennodejs.dir/rule:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 hybrid_astar/CMakeFiles/hybrid_astar_gennodejs.dir/rule
+.PHONY : hybrid_astar/CMakeFiles/hybrid_astar_gennodejs.dir/rule
+
+# Convenience name for target.
+hybrid_astar_gennodejs: hybrid_astar/CMakeFiles/hybrid_astar_gennodejs.dir/rule
+
+.PHONY : hybrid_astar_gennodejs
+
+# fast build rule for target.
+hybrid_astar_gennodejs/fast:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/hybrid_astar_gennodejs.dir/build.make hybrid_astar/CMakeFiles/hybrid_astar_gennodejs.dir/build
+.PHONY : hybrid_astar_gennodejs/fast
+
+# Convenience name for target.
+hybrid_astar/CMakeFiles/map_msgs_generate_messages_eus.dir/rule:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 hybrid_astar/CMakeFiles/map_msgs_generate_messages_eus.dir/rule
+.PHONY : hybrid_astar/CMakeFiles/map_msgs_generate_messages_eus.dir/rule
+
+# Convenience name for target.
+map_msgs_generate_messages_eus: hybrid_astar/CMakeFiles/map_msgs_generate_messages_eus.dir/rule
+
+.PHONY : map_msgs_generate_messages_eus
+
+# fast build rule for target.
+map_msgs_generate_messages_eus/fast:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/map_msgs_generate_messages_eus.dir/build.make hybrid_astar/CMakeFiles/map_msgs_generate_messages_eus.dir/build
+.PHONY : map_msgs_generate_messages_eus/fast
+
+# Convenience name for target.
+hybrid_astar/CMakeFiles/hybrid_astar_planner_lib.dir/rule:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 hybrid_astar/CMakeFiles/hybrid_astar_planner_lib.dir/rule
+.PHONY : hybrid_astar/CMakeFiles/hybrid_astar_planner_lib.dir/rule
+
+# Convenience name for target.
+hybrid_astar_planner_lib: hybrid_astar/CMakeFiles/hybrid_astar_planner_lib.dir/rule
+
+.PHONY : hybrid_astar_planner_lib
+
+# fast build rule for target.
+hybrid_astar_planner_lib/fast:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/hybrid_astar_planner_lib.dir/build.make hybrid_astar/CMakeFiles/hybrid_astar_planner_lib.dir/build
+.PHONY : hybrid_astar_planner_lib/fast
+
+# Convenience name for target.
+hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_py.dir/rule:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_py.dir/rule
+.PHONY : hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_py.dir/rule
+
+# Convenience name for target.
+hybrid_astar_generate_messages_py: hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_py.dir/rule
+
+.PHONY : hybrid_astar_generate_messages_py
+
+# fast build rule for target.
+hybrid_astar_generate_messages_py/fast:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_py.dir/build.make hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_py.dir/build
+.PHONY : hybrid_astar_generate_messages_py/fast
+
+# Convenience name for target.
+hybrid_astar/CMakeFiles/hybrid_astar_genlisp.dir/rule:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 hybrid_astar/CMakeFiles/hybrid_astar_genlisp.dir/rule
+.PHONY : hybrid_astar/CMakeFiles/hybrid_astar_genlisp.dir/rule
+
+# Convenience name for target.
+hybrid_astar_genlisp: hybrid_astar/CMakeFiles/hybrid_astar_genlisp.dir/rule
+
+.PHONY : hybrid_astar_genlisp
+
+# fast build rule for target.
+hybrid_astar_genlisp/fast:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/hybrid_astar_genlisp.dir/build.make hybrid_astar/CMakeFiles/hybrid_astar_genlisp.dir/build
+.PHONY : hybrid_astar_genlisp/fast
 
 # Convenience name for target.
 hybrid_astar/CMakeFiles/hybrid_astar.dir/rule:
@@ -318,19 +603,19 @@ hybrid_astar/fast:
 .PHONY : hybrid_astar/fast
 
 # Convenience name for target.
-hybrid_astar/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/rule:
-	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 hybrid_astar/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/rule
-.PHONY : hybrid_astar/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/rule
+hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_nodejs.dir/rule:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_nodejs.dir/rule
+.PHONY : hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_nodejs.dir/rule
 
 # Convenience name for target.
-rosgraph_msgs_generate_messages_eus: hybrid_astar/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/rule
+hybrid_astar_generate_messages_nodejs: hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_nodejs.dir/rule
 
-.PHONY : rosgraph_msgs_generate_messages_eus
+.PHONY : hybrid_astar_generate_messages_nodejs
 
 # fast build rule for target.
-rosgraph_msgs_generate_messages_eus/fast:
-	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/build.make hybrid_astar/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/build
-.PHONY : rosgraph_msgs_generate_messages_eus/fast
+hybrid_astar_generate_messages_nodejs/fast:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_nodejs.dir/build.make hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_nodejs.dir/build
+.PHONY : hybrid_astar_generate_messages_nodejs/fast
 
 src/dubins.o: src/dubins.cpp.o
 
@@ -386,6 +671,33 @@ src/hybrid_astar.cpp.s:
 	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/hybrid_astar.dir/build.make hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.s
 .PHONY : src/hybrid_astar.cpp.s
 
+src/hybrid_astar_planner.o: src/hybrid_astar_planner.cpp.o
+
+.PHONY : src/hybrid_astar_planner.o
+
+# target to build an object file
+src/hybrid_astar_planner.cpp.o:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/hybrid_astar_planner_lib.dir/build.make hybrid_astar/CMakeFiles/hybrid_astar_planner_lib.dir/src/hybrid_astar_planner.cpp.o
+.PHONY : src/hybrid_astar_planner.cpp.o
+
+src/hybrid_astar_planner.i: src/hybrid_astar_planner.cpp.i
+
+.PHONY : src/hybrid_astar_planner.i
+
+# target to preprocess a source file
+src/hybrid_astar_planner.cpp.i:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/hybrid_astar_planner_lib.dir/build.make hybrid_astar/CMakeFiles/hybrid_astar_planner_lib.dir/src/hybrid_astar_planner.cpp.i
+.PHONY : src/hybrid_astar_planner.cpp.i
+
+src/hybrid_astar_planner.s: src/hybrid_astar_planner.cpp.s
+
+.PHONY : src/hybrid_astar_planner.s
+
+# target to generate assembly for a file
+src/hybrid_astar_planner.cpp.s:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/hybrid_astar_planner_lib.dir/build.make hybrid_astar/CMakeFiles/hybrid_astar_planner_lib.dir/src/hybrid_astar_planner.cpp.s
+.PHONY : src/hybrid_astar_planner.cpp.s
+
 src/node4d.o: src/node4d.cpp.o
 
 .PHONY : src/node4d.o
@@ -420,22 +732,41 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... install/strip"
+	@echo "... visualization_msgs_generate_messages_py"
+	@echo "... hybrid_astar_geneus"
+	@echo "... visualization_msgs_generate_messages_eus"
+	@echo "... map_msgs_generate_messages_py"
+	@echo "... visualization_msgs_generate_messages_cpp"
+	@echo "... costmap_2d_generate_messages_py"
+	@echo "... map_msgs_generate_messages_nodejs"
+	@echo "... costmap_2d_gencfg"
+	@echo "... costmap_2d_generate_messages_lisp"
+	@echo "... hybrid_astar_generate_messages"
+	@echo "... map_msgs_generate_messages_cpp"
+	@echo "... costmap_2d_generate_messages_nodejs"
 	@echo "... install/local"
-	@echo "... roscpp_generate_messages_nodejs"
-	@echo "... roscpp_generate_messages_eus"
-	@echo "... rosgraph_msgs_generate_messages_cpp"
-	@echo "... roscpp_generate_messages_cpp"
-	@echo "... rosgraph_msgs_generate_messages_lisp"
-	@echo "... roscpp_generate_messages_py"
+	@echo "... visualization_msgs_generate_messages_nodejs"
+	@echo "... map_msgs_generate_messages_lisp"
+	@echo "... costmap_2d_generate_messages_eus"
+	@echo "... visualization_msgs_generate_messages_lisp"
+	@echo "... costmap_2d_generate_messages_cpp"
 	@echo "... list_install_components"
-	@echo "... rosgraph_msgs_generate_messages_nodejs"
-	@echo "... rosgraph_msgs_generate_messages_py"
-	@echo "... roscpp_generate_messages_lisp"
-	@echo "... edit_cache"
+	@echo "... hybrid_astar_gencpp"
+	@echo "... hybrid_astar_generate_messages_eus"
+	@echo "... hybrid_astar_genpy"
+	@echo "... hybrid_astar_generate_messages_lisp"
+	@echo "... _hybrid_astar_generate_messages_check_deps_GlobalPath"
+	@echo "... hybrid_astar_generate_messages_cpp"
+	@echo "... hybrid_astar_gennodejs"
+	@echo "... map_msgs_generate_messages_eus"
+	@echo "... hybrid_astar_planner_lib"
+	@echo "... hybrid_astar_generate_messages_py"
+	@echo "... hybrid_astar_genlisp"
 	@echo "... hybrid_astar"
+	@echo "... hybrid_astar_generate_messages_nodejs"
 	@echo "... test"
+	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... rosgraph_msgs_generate_messages_eus"
 	@echo "... install"
 	@echo "... src/dubins.o"
 	@echo "... src/dubins.i"
@@ -443,6 +774,9 @@ help:
 	@echo "... src/hybrid_astar.o"
 	@echo "... src/hybrid_astar.i"
 	@echo "... src/hybrid_astar.s"
+	@echo "... src/hybrid_astar_planner.o"
+	@echo "... src/hybrid_astar_planner.i"
+	@echo "... src/hybrid_astar_planner.s"
 	@echo "... src/node4d.o"
 	@echo "... src/node4d.i"
 	@echo "... src/node4d.s"

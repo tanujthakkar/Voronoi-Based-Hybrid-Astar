@@ -28,6 +28,8 @@
 #include "node4d.h"
 #include "dubins.h"
 
+#include "hybrid_astar/GlobalPath.h"
+
 using namespace std;
 
 extern ros::Publisher start_pose_pub;

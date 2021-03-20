@@ -3,6 +3,6 @@ prefix=/home/tanujthakkar/ROS/catkin_ws/devel
 Name: hybrid_astar
 Description: Description of hybrid_astar
 Version: 0.0.0
-Cflags: 
+Cflags: -I/home/tanujthakkar/ROS/catkin_ws/devel/include
 Libs: -L${prefix}/lib 
-Requires: 
+Requires: roscpp rospy message_runtime
