@@ -8,6 +8,7 @@ using namespace std::chrono;
 ros::Publisher start_pose_pub;
 ros::Publisher goal_pose_pub;
 ros::Publisher path_pub;
+ros::Publisher path_pub_center;
 ros::Publisher dubins_path_pub;
 ros::Publisher visualize_nodes_pub;
 ros::Publisher robot_polygon_pub;
@@ -32,6 +33,7 @@ typedef pair<float, int> pi;
 
 nav_msgs::Path path; // Final Hybrid A* path
 bool path_found;
+nav_msgs::Path path_center;
 nav_msgs::Path dubins_path;
 visualization_msgs::Marker nodes;
 
@@ -115,7 +117,14 @@ Node4D* create_successor(Node4D* node, float steer,int dir) {
 	return new Node4D(xlist, ylist, yawlist, yawtlist, yawt, dir, steer, cost, node);
 }
 
+/*
+	Function to create a dubins node
 
+	start: start node to start planning from
+	goal: goal node
+
+	Returns a pointer to the new node
+*/
 Node4D* create_dubins_node(Node4D* start, const Node4D goal) {
 
 	int n = start->get_size();
@@ -280,9 +289,7 @@ void visualize_final_path() {
 
 	int n;
 	geometry_msgs::PoseStamped pose_stamped;
-	// cout << "Current Node - " << current_node << endl;
 	while(current_node->get_parent() != nullptr) {
-		// cout << "Current Node - " << current_node << endl;
 		n = current_node->get_size();
 		for (int i = 0; i < n; i++) {
 			pose_stamped.header.stamp = ros::Time::now();
@@ -297,10 +304,41 @@ void visualize_final_path() {
 			pose_stamped.pose.orientation.w = quat.w();;
 			path.poses.push_back(pose_stamped);
 		}
+		current_node->get_parent()->set_child(current_node);
 		current_node = current_node->get_parent();
 	}
 
 	path_pub.publish(path);
+}
+
+void visualize_final_path_center() {
+
+	path_center.header.stamp = ros::Time::now();
+	path_center.header.frame_id = "/map";
+	path_center.poses.clear();
+
+	int n;
+	float deltar = (RF - RB) / 2.0;
+	float yaw;
+	geometry_msgs::PoseStamped pose_stamped;
+	while(current_node->get_child() != nullptr) {
+		n = current_node->get_size();
+		for (int i = 0; i < n; i++) {
+			pose_stamped.header.stamp = ros::Time::now();
+			pose_stamped.header.frame_id = "map";
+			pose_stamped.pose.position.x = current_node->get_x(i) + deltar * cos(current_node->get_yaw(i));
+			pose_stamped.pose.position.y = current_node->get_y(i) + deltar * sin(current_node->get_yaw(i));
+			pose_stamped.pose.position.z = 0;
+			tf::Quaternion quat = tf::createQuaternionFromYaw(current_node->get_yaw(i));
+			pose_stamped.pose.orientation.x = quat.x();
+			pose_stamped.pose.orientation.y = quat.y();
+			pose_stamped.pose.orientation.z = quat.z();
+			pose_stamped.pose.orientation.w = quat.w();;
+			path_center.poses.push_back(pose_stamped);
+		}
+		current_node = current_node->get_child();
+	}
+	path_pub_center.publish(path_center);
 }
 
 
@@ -322,9 +360,7 @@ void visualize_all_nodes(std::map<int, Node4D*> open, std::map<int, Node4D*> clo
 	nodes.color.a = 1.0;
 
 	geometry_msgs::Point p;
-	// cout << " Current Node : " << current_node << endl;
 	while(current_node->get_parent() != nullptr) {
-		// cout << "Node : " << current_node << " Next Node : " << current_node->get_parent() << endl;
 		for(int i=0;i<ceil(PATH_LENGTH/MOVE_STEP);i++) {
 			p.x = current_node->get_x(i);
 			p.y = current_node->get_y(i);
@@ -431,8 +467,10 @@ void hybrid_astar_plan() {
 			if(!new_node->check_collision(grid, bin_map, acc_obs_map)) {
 				cout << "SOLUTION FOUND - DUBINS NODE" << endl;
 				printf("Iterations: %d Nodes: %d \n", iterations, total_nodes);
+				new_node->set_child(&goal_node);
 				current_node = new_node;
 				visualize_final_path();
+				visualize_final_path_center();
 				visualize_nodes_pub.publish(nodes);
 				path_found = true;
 				break;
@@ -609,7 +647,7 @@ bool callback_planner(hybrid_astar::GlobalPath::Request &req, hybrid_astar::Glob
 
 	while(!path_found) {
 	}
-	res.plan = path;
+	res.plan = path_center;
 
 	return true;
 }
@@ -625,6 +663,7 @@ int main(int argc, char **argv) {
 	start_pose_pub = nh.advertise<geometry_msgs::PoseStamped>("start_pose", 10);
 	goal_pose_pub = nh.advertise<geometry_msgs::PoseStamped>("goal_pose", 10);
 	path_pub = nh.advertise<nav_msgs::Path>("hybrid_astar_path", 10);
+	path_pub_center = nh.advertise<nav_msgs::Path>("test", 10);
 	dubins_path_pub = nh.advertise<nav_msgs::Path>("dubins_path", 10);
 	visualize_nodes_pub = nh.advertise<visualization_msgs::Marker>("nodes", 10);
 	robot_polygon_pub = nh.advertise<geometry_msgs::PolygonStamped>("robot_polygon", 10);

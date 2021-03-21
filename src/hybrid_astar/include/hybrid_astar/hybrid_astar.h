@@ -35,6 +35,7 @@ using namespace std;
 extern ros::Publisher start_pose_pub;
 extern ros::Publisher goal_pose_pub;
 extern ros::Publisher path_pub;
+extern ros::Publisher path_pub_center;
 extern ros::Publisher dubins_path_pub;
 extern ros::Publisher visualize_nodes_pub;
 extern ros::Publisher robot_polygon_pub;

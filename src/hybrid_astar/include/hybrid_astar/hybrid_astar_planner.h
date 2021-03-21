@@ -29,7 +29,10 @@ namespace hybrid_astar_planner {
 
 	private:
 		ros::NodeHandle nh;
+		ros::Publisher global_plan_pub;
 		ros::ServiceClient sc;
+
+		nav_msgs::Path path;
 	};
 }
 

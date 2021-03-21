@@ -40,6 +40,7 @@ public:
 		this->steer = 0.0;
 		this->cost = 0.0;
 		this->parent = nullptr;
+		this->child = nullptr;
 	}
 
 	// Constructor for successor nodes
@@ -62,6 +63,7 @@ public:
 		this->steer = steer;
 		this->cost = cost;
 		this->parent = parent;
+		this->child = nullptr;
 	}
 	
 
@@ -84,7 +86,12 @@ public:
 
 	Node4D* get_parent() { return parent; }
 
+	Node4D* get_child() { return child; }
+
 	int get_size() const { return xlist.capacity(); }
+
+	// Set functions to set class data
+	void set_child(Node4D* next) { child = next; } 
 
 
 	// Fucntion to check path collision
@@ -109,8 +116,8 @@ private:
 	int direction; // Direction of motion
 	float steer; // Node steering angle
 	float cost; // Node cost
-	int pind;
 	Node4D* parent; // Pointer to the parent node
+	Node4D* child; // Pointer to the next/child node in the final path
 };
 
 #endif
