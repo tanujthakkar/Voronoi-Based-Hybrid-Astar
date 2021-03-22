@@ -7,8 +7,9 @@ Panels:
         - /Global Options1
         - /Hybrid A*1
         - /Global Planner1
-        - /Global Planner1/Global Plan1
         - /Local Planner1
+        - /Local Planner1/Global Plan1
+        - /Local Planner1/Local Plan1
       Splitter Ratio: 0.5
     Tree Height: 719
   - Class: rviz/Selection
@@ -114,42 +115,12 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        front_left_cart_wheel_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        front_left_wheel_holder_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        front_left_wheel_holder_mid_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
         front_left_wheel_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
         front_lights_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        front_right_cart_wheel_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        front_right_wheel_holder_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        front_right_wheel_holder_mid_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -367,13 +338,13 @@ Visualization Manager:
           Unreliable: false
           Value: false
         - Class: rviz/Marker
-          Enabled: true
+          Enabled: false
           Marker Topic: /nodes
           Name: Nodes
           Namespaces:
             {}
           Queue Size: 100
-          Value: true
+          Value: false
         - Alpha: 1
           Class: rviz/PointStamped
           Color: 0; 255; 0
@@ -481,7 +452,7 @@ Visualization Manager:
           Buffer Length: 1
           Class: rviz/Path
           Color: 25; 255; 0
-          Enabled: false
+          Enabled: true
           Head Diameter: 0.30000001192092896
           Head Length: 0.20000000298023224
           Length: 0.30000001192092896
@@ -499,12 +470,12 @@ Visualization Manager:
           Shaft Length: 0.10000000149011612
           Topic: /move_base/DWAPlannerROS/global_plan
           Unreliable: false
-          Value: false
+          Value: true
         - Alpha: 1
           Buffer Length: 1
           Class: rviz/Path
           Color: 32; 74; 135
-          Enabled: false
+          Enabled: true
           Head Diameter: 0.30000001192092896
           Head Length: 0.20000000298023224
           Length: 0.30000001192092896
@@ -522,7 +493,7 @@ Visualization Manager:
           Shaft Length: 0.10000000149011612
           Topic: /move_base/DWAPlannerROS/local_plan
           Unreliable: false
-          Value: false
+          Value: true
       Enabled: true
       Name: Local Planner
   Enabled: true

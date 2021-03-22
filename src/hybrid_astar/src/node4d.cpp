@@ -101,13 +101,15 @@ bool Node4D::check_collision(nav_msgs::OccupancyGrid::Ptr grid, bool** bin_map, 
 		cx = xlist[i] + deltar * cos(yawlist[i]);
 		cy = ylist[i] + deltar * sin(yawlist[i]);
 
-		geometry_msgs::PointStamped robot_center;
-		robot_center.header.stamp = ros::Time::now();
-		robot_center.header.frame_id = "/map";
-		robot_center.point.x = cx;
-		robot_center.point.y = cy;
-		robot_center_pub.publish(robot_center);
-		robot_polygon_pub.publish(this->create_polygon(RL, RW, cx, cy, yawlist[i]));
+		if(visualization) {	
+			geometry_msgs::PointStamped robot_center;
+			robot_center.header.stamp = ros::Time::now();
+			robot_center.header.frame_id = "/map";
+			robot_center.point.x = cx;
+			robot_center.point.y = cy;
+			robot_center_pub.publish(robot_center);
+			robot_polygon_pub.publish(this->create_polygon(RL, RW, cx, cy, yawlist[i]));
+		}
 
 		if(xlist[i] >= grid->info.width || xlist[i]<0 || ylist[i] >= grid->info.height || ylist[i] < 0) {
 			// ROS_INFO("ROBOT OUT OF BOUNDS");
@@ -160,13 +162,15 @@ bool Node4D::check_collision(nav_msgs::OccupancyGrid::Ptr grid, bool** bin_map, 
 		ctx = xlist[i] + deltat * cos(yawt[i]);
 		cty = ylist[i] + deltat * sin(yawt[i]);
 
-		geometry_msgs::PointStamped trailer_center;
-		trailer_center.header.stamp = ros::Time::now();
-		trailer_center.header.frame_id = "/map";
-		trailer_center.point.x = ctx;
-		trailer_center.point.y = cty;
-		trailer_center_pub.publish(trailer_center);
-		trailer_polygon_pub.publish(this->create_polygon(TL, TW, ctx, cty, yawt[i]));
+		if(visualization) {
+			geometry_msgs::PointStamped trailer_center;
+			trailer_center.header.stamp = ros::Time::now();
+			trailer_center.header.frame_id = "/map";
+			trailer_center.point.x = ctx;
+			trailer_center.point.y = cty;
+			trailer_center_pub.publish(trailer_center);
+			trailer_polygon_pub.publish(this->create_polygon(TL, TW, ctx, cty, yawt[i]));
+		}
 
 		max_x =  (ctx + TL * (cos(yawt[i]))/2 + TW * (sin(yawt[i]))/2) + MIN_SAFE_DIST;
 		min_x =  (ctx - TL * (cos(yawt[i]))/2 - TW * (sin(yawt[i]))/2) - MIN_SAFE_DIST;

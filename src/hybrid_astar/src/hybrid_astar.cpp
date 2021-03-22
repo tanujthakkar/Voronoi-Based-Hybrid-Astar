@@ -8,7 +8,6 @@ using namespace std::chrono;
 ros::Publisher start_pose_pub;
 ros::Publisher goal_pose_pub;
 ros::Publisher path_pub;
-ros::Publisher path_pub_center;
 ros::Publisher dubins_path_pub;
 ros::Publisher visualize_nodes_pub;
 ros::Publisher robot_polygon_pub;
@@ -17,6 +16,8 @@ ros::Publisher robot_center_pub;
 ros::Publisher trailer_center_pub;
 ros::Publisher robot_collision_check_pub;
 ros::Publisher trailer_collision_check_pub;
+
+bool visualization = false;
 
 geometry_msgs::PoseStamped start_pose; // Start pose msg
 bool valid_start; // Start pose validity check
@@ -48,7 +49,7 @@ float gx; // x coordinate of goal pose of the rear axle/hitch point of the vehic
 float gy; // y coordinate of goal pose of the rear axle/hitch point of the vehicle
 float gyaw; // yaw coordinate of goal pose of the rear axle/hitch point of the vehicle
 
-std::vector<int> steer = {-30, 0, 30}; // Steering inputs for which the nodes have to be created
+std::vector<int> steer = {-45, -30, -15, 0, 15, 30, 45}; // Steering inputs for which the nodes have to be created
 
 
 /*
@@ -338,7 +339,6 @@ void visualize_final_path_center() {
 		}
 		current_node = current_node->get_child();
 	}
-	path_pub_center.publish(path_center);
 }
 
 
@@ -399,12 +399,20 @@ void hybrid_astar_plan() {
 
 		// Computing rear-axle/hitch-point pose for start node
 		float deltar = (RF - RB) / 2.0;
-		syaw = tf::getYaw(start_pose.pose.orientation);
-		sx = start_pose.pose.position.x - deltar * cos(syaw);
-		sy = start_pose.pose.position.y - deltar * sin(syaw);
+		// syaw = tf::getYaw(start_pose.pose.orientation);
+		// sx = start_pose.pose.position.x - deltar * cos(syaw);
+		// sy = start_pose.pose.position.y - deltar * sin(syaw);
+
+		tf::StampedTransform transform_robot;
+		tf::TransformListener listener;
+
+		listener.waitForTransform("map", "base_link", ros::Time::now(), ros::Duration(2.0));
+		listener.lookupTransform("map", "base_link", ros::Time(0), transform_robot);
+		syaw = tf::getYaw(transform_robot.getRotation());
+		sx = transform_robot.getOrigin().x() - deltar * cos(syaw);
+		sy = transform_robot.getOrigin().y() - deltar * sin(syaw);
 		ROS_INFO("sx: %f sy: %f syaw: %f", sx, sy, syaw);
 
-		// Node4D start_node = Node4D(10.29, 12.29, 0, 0);
 		Node4D start_node = Node4D(sx, sy, syaw, 0);
 		current_node = &start_node;
 
@@ -471,7 +479,9 @@ void hybrid_astar_plan() {
 				current_node = new_node;
 				visualize_final_path();
 				visualize_final_path_center();
-				visualize_nodes_pub.publish(nodes);
+				if(visualization) {
+					visualize_nodes_pub.publish(nodes);
+				}
 				path_found = true;
 				break;
 			}
@@ -489,11 +499,13 @@ void hybrid_astar_plan() {
 					continue;
 				}
 
-				for(int j=0;j<ceil(PATH_LENGTH/MOVE_STEP);j++) {
-					p.x = new_node->get_x(j);
-					p.y = new_node->get_y(j);
-					p.z = 0;
-					nodes.points.push_back(p);
+				if(visualization) {
+					for(int j=0;j<ceil(PATH_LENGTH/MOVE_STEP);j++) {
+						p.x = new_node->get_x(j);
+						p.y = new_node->get_y(j);
+						p.z = 0;
+						nodes.points.push_back(p);
+					}
 				}
 
 				total_nodes++;
@@ -545,15 +557,15 @@ void callback_start_pose(const geometry_msgs::PoseWithCovarianceStamped::ConstPt
 		valid_start = true;
 		ROS_INFO("VALID START!");
 		start_pose_pub.publish(start_pose);
-		if(valid_goal) {
-			auto start = high_resolution_clock::now(); // Reading start time of planning
-			hybrid_astar_plan();
-			auto stop = high_resolution_clock::now(); // Reading end time of planning
-			auto duration = duration_cast<milliseconds>(stop-start);
-			std::cout << "Execution Time : " << duration.count() << " milliseconds (" << duration.count()/1000 << " seconds)" << endl;
-		} else {
-			ROS_INFO("NO VALID GOAL FOUND!");
-		}
+		// if(valid_goal) {
+		// 	auto start = high_resolution_clock::now(); // Reading start time of planning
+		// 	hybrid_astar_plan();
+		// 	auto stop = high_resolution_clock::now(); // Reading end time of planning
+		// 	auto duration = duration_cast<milliseconds>(stop-start);
+		// 	std::cout << "Execution Time : " << duration.count() << " milliseconds (" << duration.count()/1000 << " seconds)" << endl;
+		// } else {
+		// 	ROS_INFO("NO VALID GOAL FOUND!");
+		// }
 	} else {
 		valid_start = false;
 		ROS_INFO("INVALID START!");
@@ -585,7 +597,7 @@ void callback_goal_pose(const geometry_msgs::PoseStamped::ConstPtr& pose) {
 			auto start = high_resolution_clock::now(); // Reading start time of planning
 			hybrid_astar_plan();
 			auto stop = high_resolution_clock::now(); // Reading end time of planning
-			auto duration = duration_cast<milliseconds>(stop-start);
+			auto duration = duration_cast<milliseconds>(stop-start) - 2;
 			std::cout << "Execution Time : " << duration.count() << " milliseconds (" << duration.count()/1000 << " seconds)" << endl;
 		} else {
 			ROS_INFO("NO VALID START FOUND!");
@@ -663,7 +675,6 @@ int main(int argc, char **argv) {
 	start_pose_pub = nh.advertise<geometry_msgs::PoseStamped>("start_pose", 10);
 	goal_pose_pub = nh.advertise<geometry_msgs::PoseStamped>("goal_pose", 10);
 	path_pub = nh.advertise<nav_msgs::Path>("hybrid_astar_path", 10);
-	path_pub_center = nh.advertise<nav_msgs::Path>("test", 10);
 	dubins_path_pub = nh.advertise<nav_msgs::Path>("dubins_path", 10);
 	visualize_nodes_pub = nh.advertise<visualization_msgs::Marker>("nodes", 10);
 	robot_polygon_pub = nh.advertise<geometry_msgs::PolygonStamped>("robot_polygon", 10);
