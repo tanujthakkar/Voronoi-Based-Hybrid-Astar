@@ -10,6 +10,7 @@ hybrid_astar/CMakeFiles/hybrid_astar.dir/src/dubins.cpp.o
  /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/helper.h
  /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/hybrid_astar.h
  /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/node4d.h
+ /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/pure_pursuit.h
  /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/src/dubins.cpp
  /opt/ros/melodic/include/geometry_msgs/Point.h
  /opt/ros/melodic/include/geometry_msgs/Point32.h
@@ -26,10 +27,12 @@ hybrid_astar/CMakeFiles/hybrid_astar.dir/src/dubins.cpp.o
  /opt/ros/melodic/include/geometry_msgs/TransformStamped.h
  /opt/ros/melodic/include/geometry_msgs/Twist.h
  /opt/ros/melodic/include/geometry_msgs/TwistStamped.h
+ /opt/ros/melodic/include/geometry_msgs/TwistWithCovariance.h
  /opt/ros/melodic/include/geometry_msgs/Vector3.h
  /opt/ros/melodic/include/geometry_msgs/Vector3Stamped.h
  /opt/ros/melodic/include/nav_msgs/MapMetaData.h
  /opt/ros/melodic/include/nav_msgs/OccupancyGrid.h
+ /opt/ros/melodic/include/nav_msgs/Odometry.h
  /opt/ros/melodic/include/nav_msgs/Path.h
  /opt/ros/melodic/include/ros/advertise_options.h
  /opt/ros/melodic/include/ros/advertise_service_options.h
@@ -140,6 +143,7 @@ hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o
  /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/helper.h
  /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/hybrid_astar.h
  /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/node4d.h
+ /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/pure_pursuit.h
  /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/src/hybrid_astar.cpp
  /opt/ros/melodic/include/geometry_msgs/Point.h
  /opt/ros/melodic/include/geometry_msgs/Point32.h
@@ -156,10 +160,12 @@ hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o
  /opt/ros/melodic/include/geometry_msgs/TransformStamped.h
  /opt/ros/melodic/include/geometry_msgs/Twist.h
  /opt/ros/melodic/include/geometry_msgs/TwistStamped.h
+ /opt/ros/melodic/include/geometry_msgs/TwistWithCovariance.h
  /opt/ros/melodic/include/geometry_msgs/Vector3.h
  /opt/ros/melodic/include/geometry_msgs/Vector3Stamped.h
  /opt/ros/melodic/include/nav_msgs/MapMetaData.h
  /opt/ros/melodic/include/nav_msgs/OccupancyGrid.h
+ /opt/ros/melodic/include/nav_msgs/Odometry.h
  /opt/ros/melodic/include/nav_msgs/Path.h
  /opt/ros/melodic/include/ros/advertise_options.h
  /opt/ros/melodic/include/ros/advertise_service_options.h
@@ -270,6 +276,7 @@ hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o
  /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/helper.h
  /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/hybrid_astar.h
  /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/node4d.h
+ /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/pure_pursuit.h
  /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/src/node4d.cpp
  /opt/ros/melodic/include/geometry_msgs/Point.h
  /opt/ros/melodic/include/geometry_msgs/Point32.h
@@ -286,10 +293,12 @@ hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o
  /opt/ros/melodic/include/geometry_msgs/TransformStamped.h
  /opt/ros/melodic/include/geometry_msgs/Twist.h
  /opt/ros/melodic/include/geometry_msgs/TwistStamped.h
+ /opt/ros/melodic/include/geometry_msgs/TwistWithCovariance.h
  /opt/ros/melodic/include/geometry_msgs/Vector3.h
  /opt/ros/melodic/include/geometry_msgs/Vector3Stamped.h
  /opt/ros/melodic/include/nav_msgs/MapMetaData.h
  /opt/ros/melodic/include/nav_msgs/OccupancyGrid.h
+ /opt/ros/melodic/include/nav_msgs/Odometry.h
  /opt/ros/melodic/include/nav_msgs/Path.h
  /opt/ros/melodic/include/ros/advertise_options.h
  /opt/ros/melodic/include/ros/advertise_service_options.h

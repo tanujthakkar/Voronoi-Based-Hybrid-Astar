@@ -2664,6 +2664,19 @@ hybrid_astar/fast:
 .PHONY : hybrid_astar/fast
 
 #=============================================================================
+# Target rules for targets named pure_pursuit
+
+# Build rule for target.
+pure_pursuit: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 pure_pursuit
+.PHONY : pure_pursuit
+
+# fast build rule for target.
+pure_pursuit/fast:
+	$(MAKE) -f hybrid_astar/CMakeFiles/pure_pursuit.dir/build.make hybrid_astar/CMakeFiles/pure_pursuit.dir/build
+.PHONY : pure_pursuit/fast
+
+#=============================================================================
 # Target rules for targets named hybrid_astar_generate_messages_nodejs
 
 # Build rule for target.
@@ -3037,6 +3050,7 @@ help:
 	@echo "... hybrid_astar_generate_messages_py"
 	@echo "... hybrid_astar_genlisp"
 	@echo "... hybrid_astar"
+	@echo "... pure_pursuit"
 	@echo "... hybrid_astar_generate_messages_nodejs"
 	@echo "... universal_global_planner_generate_messages_lisp"
 	@echo "... universal_global_planner_gencpp"

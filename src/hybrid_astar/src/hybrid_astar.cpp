@@ -7,7 +7,8 @@ using namespace std::chrono;
 // Global Variables
 ros::Publisher start_pose_pub;
 ros::Publisher goal_pose_pub;
-ros::Publisher path_pub;
+ros::Publisher hybrid_path_pub;
+ros::Publisher global_path_pub;
 ros::Publisher dubins_path_pub;
 ros::Publisher visualize_nodes_pub;
 ros::Publisher robot_polygon_pub;
@@ -309,7 +310,7 @@ void visualize_final_path() {
 		current_node = current_node->get_parent();
 	}
 
-	path_pub.publish(path);
+	hybrid_path_pub.publish(path);
 }
 
 void visualize_final_path_center() {
@@ -339,6 +340,8 @@ void visualize_final_path_center() {
 		}
 		current_node = current_node->get_child();
 	}
+
+	global_path_pub.publish(path_center);
 }
 
 
@@ -597,7 +600,7 @@ void callback_goal_pose(const geometry_msgs::PoseStamped::ConstPtr& pose) {
 			auto start = high_resolution_clock::now(); // Reading start time of planning
 			hybrid_astar_plan();
 			auto stop = high_resolution_clock::now(); // Reading end time of planning
-			auto duration = duration_cast<milliseconds>(stop-start) - 2;
+			auto duration = duration_cast<milliseconds>(stop-start);
 			std::cout << "Execution Time : " << duration.count() << " milliseconds (" << duration.count()/1000 << " seconds)" << endl;
 		} else {
 			ROS_INFO("NO VALID START FOUND!");
@@ -674,7 +677,8 @@ int main(int argc, char **argv) {
 	// Publishers
 	start_pose_pub = nh.advertise<geometry_msgs::PoseStamped>("start_pose", 10);
 	goal_pose_pub = nh.advertise<geometry_msgs::PoseStamped>("goal_pose", 10);
-	path_pub = nh.advertise<nav_msgs::Path>("hybrid_astar_path", 10);
+	hybrid_path_pub = nh.advertise<nav_msgs::Path>("hybrid_astar_path", 10);
+	global_path_pub = nh.advertise<nav_msgs::Path>("global_path", 10);
 	dubins_path_pub = nh.advertise<nav_msgs::Path>("dubins_path", 10);
 	visualize_nodes_pub = nh.advertise<visualization_msgs::Marker>("nodes", 10);
 	robot_polygon_pub = nh.advertise<geometry_msgs::PolygonStamped>("robot_polygon", 10);
@@ -683,7 +687,6 @@ int main(int argc, char **argv) {
 	trailer_center_pub = nh.advertise<geometry_msgs::PointStamped>("trailer_center", 10);
 	robot_collision_check_pub = nh.advertise<visualization_msgs::Marker>("robot_collision_check", 10);
 	trailer_collision_check_pub = nh.advertise<visualization_msgs::Marker>("trailer_collision_check", 10);
-
 
 	// Subscribers
 	ros::Subscriber start_pose_sub = nh.subscribe("initialpose", 10, callback_start_pose);

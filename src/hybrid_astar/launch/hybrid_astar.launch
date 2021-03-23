@@ -21,7 +21,11 @@
 	    <arg name="yaw" default="0"/>
 	</include>
 
+	<!-- AMCL -->
 	<include file="$(find ridgeback_navigation)/launch/amcl_demo.launch"/>
+
+	<!--- Move Base -->
+  	<include file="$(find ridgeback_navigation)/launch/include/move_base.launch" />
 
     <node pkg="map_server" name="map_server" type="map_server" args="$(find indoor_nav)/maps/dual_hoyuko_full_map.yaml"/>
 

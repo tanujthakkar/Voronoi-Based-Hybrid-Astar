@@ -9,6 +9,7 @@ hybrid_astar/CMakeFiles/hybrid_astar.dir/src/dubins.cpp.o: /home/tanujthakkar/RO
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/dubins.cpp.o: /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/helper.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/dubins.cpp.o: /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/hybrid_astar.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/dubins.cpp.o: /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/node4d.h
+hybrid_astar/CMakeFiles/hybrid_astar.dir/src/dubins.cpp.o: /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/pure_pursuit.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/dubins.cpp.o: /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/src/dubins.cpp
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/dubins.cpp.o: /opt/ros/melodic/include/geometry_msgs/Point.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/dubins.cpp.o: /opt/ros/melodic/include/geometry_msgs/Point32.h
@@ -25,10 +26,12 @@ hybrid_astar/CMakeFiles/hybrid_astar.dir/src/dubins.cpp.o: /opt/ros/melodic/incl
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/dubins.cpp.o: /opt/ros/melodic/include/geometry_msgs/TransformStamped.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/dubins.cpp.o: /opt/ros/melodic/include/geometry_msgs/Twist.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/dubins.cpp.o: /opt/ros/melodic/include/geometry_msgs/TwistStamped.h
+hybrid_astar/CMakeFiles/hybrid_astar.dir/src/dubins.cpp.o: /opt/ros/melodic/include/geometry_msgs/TwistWithCovariance.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/dubins.cpp.o: /opt/ros/melodic/include/geometry_msgs/Vector3.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/dubins.cpp.o: /opt/ros/melodic/include/geometry_msgs/Vector3Stamped.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/dubins.cpp.o: /opt/ros/melodic/include/nav_msgs/MapMetaData.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/dubins.cpp.o: /opt/ros/melodic/include/nav_msgs/OccupancyGrid.h
+hybrid_astar/CMakeFiles/hybrid_astar.dir/src/dubins.cpp.o: /opt/ros/melodic/include/nav_msgs/Odometry.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/dubins.cpp.o: /opt/ros/melodic/include/nav_msgs/Path.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/dubins.cpp.o: /opt/ros/melodic/include/ros/advertise_options.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/dubins.cpp.o: /opt/ros/melodic/include/ros/advertise_service_options.h
@@ -139,6 +142,7 @@ hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o: /home/tanujthak
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o: /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/helper.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o: /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/hybrid_astar.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o: /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/node4d.h
+hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o: /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/pure_pursuit.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o: /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/src/hybrid_astar.cpp
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o: /opt/ros/melodic/include/geometry_msgs/Point.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o: /opt/ros/melodic/include/geometry_msgs/Point32.h
@@ -155,10 +159,12 @@ hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o: /opt/ros/melodi
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o: /opt/ros/melodic/include/geometry_msgs/TransformStamped.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o: /opt/ros/melodic/include/geometry_msgs/Twist.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o: /opt/ros/melodic/include/geometry_msgs/TwistStamped.h
+hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o: /opt/ros/melodic/include/geometry_msgs/TwistWithCovariance.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o: /opt/ros/melodic/include/geometry_msgs/Vector3.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o: /opt/ros/melodic/include/geometry_msgs/Vector3Stamped.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o: /opt/ros/melodic/include/nav_msgs/MapMetaData.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o: /opt/ros/melodic/include/nav_msgs/OccupancyGrid.h
+hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o: /opt/ros/melodic/include/nav_msgs/Odometry.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o: /opt/ros/melodic/include/nav_msgs/Path.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o: /opt/ros/melodic/include/ros/advertise_options.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o: /opt/ros/melodic/include/ros/advertise_service_options.h
@@ -269,6 +275,7 @@ hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o: /home/tanujthakkar/RO
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o: /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/helper.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o: /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/hybrid_astar.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o: /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/node4d.h
+hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o: /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/pure_pursuit.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o: /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/src/node4d.cpp
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o: /opt/ros/melodic/include/geometry_msgs/Point.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o: /opt/ros/melodic/include/geometry_msgs/Point32.h
@@ -285,10 +292,12 @@ hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o: /opt/ros/melodic/incl
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o: /opt/ros/melodic/include/geometry_msgs/TransformStamped.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o: /opt/ros/melodic/include/geometry_msgs/Twist.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o: /opt/ros/melodic/include/geometry_msgs/TwistStamped.h
+hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o: /opt/ros/melodic/include/geometry_msgs/TwistWithCovariance.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o: /opt/ros/melodic/include/geometry_msgs/Vector3.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o: /opt/ros/melodic/include/geometry_msgs/Vector3Stamped.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o: /opt/ros/melodic/include/nav_msgs/MapMetaData.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o: /opt/ros/melodic/include/nav_msgs/OccupancyGrid.h
+hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o: /opt/ros/melodic/include/nav_msgs/Odometry.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o: /opt/ros/melodic/include/nav_msgs/Path.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o: /opt/ros/melodic/include/ros/advertise_options.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o: /opt/ros/melodic/include/ros/advertise_service_options.h

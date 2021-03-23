@@ -68,9 +68,13 @@ include_directories(include ${catkin_INCLUDE_DIRS})
 
 # Hybrid A* Header and Source files
 add_executable(hybrid_astar src/hybrid_astar.cpp ${SOURCES} ${HEADERS})
+add_executable(pure_pursuit src/pure_pursuit.cpp)
+
 add_dependencies(hybrid_astar ${PROJECT_NAME}_generate_messages_cpp )
+
 target_link_libraries(hybrid_astar ${catkin_LIBRARIES})
 target_link_libraries(hybrid_astar ${OMPL_LIBRARIES})
+target_link_libraries(pure_pursuit ${catkin_LIBRARIES})
 
 # Hybrid A* Planner
 add_library(hybrid_astar_planner_lib src/hybrid_astar_planner.cpp)

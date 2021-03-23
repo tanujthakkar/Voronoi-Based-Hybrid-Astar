@@ -603,6 +603,21 @@ hybrid_astar/fast:
 .PHONY : hybrid_astar/fast
 
 # Convenience name for target.
+hybrid_astar/CMakeFiles/pure_pursuit.dir/rule:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 hybrid_astar/CMakeFiles/pure_pursuit.dir/rule
+.PHONY : hybrid_astar/CMakeFiles/pure_pursuit.dir/rule
+
+# Convenience name for target.
+pure_pursuit: hybrid_astar/CMakeFiles/pure_pursuit.dir/rule
+
+.PHONY : pure_pursuit
+
+# fast build rule for target.
+pure_pursuit/fast:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/pure_pursuit.dir/build.make hybrid_astar/CMakeFiles/pure_pursuit.dir/build
+.PHONY : pure_pursuit/fast
+
+# Convenience name for target.
 hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_nodejs.dir/rule:
 	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_nodejs.dir/rule
 .PHONY : hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_nodejs.dir/rule
@@ -725,6 +740,33 @@ src/node4d.cpp.s:
 	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/hybrid_astar.dir/build.make hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.s
 .PHONY : src/node4d.cpp.s
 
+src/pure_pursuit.o: src/pure_pursuit.cpp.o
+
+.PHONY : src/pure_pursuit.o
+
+# target to build an object file
+src/pure_pursuit.cpp.o:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/pure_pursuit.dir/build.make hybrid_astar/CMakeFiles/pure_pursuit.dir/src/pure_pursuit.cpp.o
+.PHONY : src/pure_pursuit.cpp.o
+
+src/pure_pursuit.i: src/pure_pursuit.cpp.i
+
+.PHONY : src/pure_pursuit.i
+
+# target to preprocess a source file
+src/pure_pursuit.cpp.i:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/pure_pursuit.dir/build.make hybrid_astar/CMakeFiles/pure_pursuit.dir/src/pure_pursuit.cpp.i
+.PHONY : src/pure_pursuit.cpp.i
+
+src/pure_pursuit.s: src/pure_pursuit.cpp.s
+
+.PHONY : src/pure_pursuit.s
+
+# target to generate assembly for a file
+src/pure_pursuit.cpp.s:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/pure_pursuit.dir/build.make hybrid_astar/CMakeFiles/pure_pursuit.dir/src/pure_pursuit.cpp.s
+.PHONY : src/pure_pursuit.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -732,6 +774,7 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... install/strip"
+	@echo "... install/local"
 	@echo "... visualization_msgs_generate_messages_py"
 	@echo "... hybrid_astar_geneus"
 	@echo "... visualization_msgs_generate_messages_eus"
@@ -744,7 +787,6 @@ help:
 	@echo "... hybrid_astar_generate_messages"
 	@echo "... map_msgs_generate_messages_cpp"
 	@echo "... costmap_2d_generate_messages_nodejs"
-	@echo "... install/local"
 	@echo "... visualization_msgs_generate_messages_nodejs"
 	@echo "... map_msgs_generate_messages_lisp"
 	@echo "... costmap_2d_generate_messages_eus"
@@ -763,6 +805,7 @@ help:
 	@echo "... hybrid_astar_generate_messages_py"
 	@echo "... hybrid_astar_genlisp"
 	@echo "... hybrid_astar"
+	@echo "... pure_pursuit"
 	@echo "... hybrid_astar_generate_messages_nodejs"
 	@echo "... test"
 	@echo "... edit_cache"
@@ -780,6 +823,9 @@ help:
 	@echo "... src/node4d.o"
 	@echo "... src/node4d.i"
 	@echo "... src/node4d.s"
+	@echo "... src/pure_pursuit.o"
+	@echo "... src/pure_pursuit.i"
+	@echo "... src/pure_pursuit.s"
 .PHONY : help
 
 
