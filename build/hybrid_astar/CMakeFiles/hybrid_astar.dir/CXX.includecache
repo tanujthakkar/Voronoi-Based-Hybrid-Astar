@@ -215,6 +215,10 @@ geometry_msgs/Quaternion.h
 -
 std_msgs/Int32.h
 /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/std_msgs/Int32.h
+constants.h
+/home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/constants.h
+helper.h
+/home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/helper.h
 hybrid_astar/GlobalPath.h
 /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/hybrid_astar/GlobalPath.h
 

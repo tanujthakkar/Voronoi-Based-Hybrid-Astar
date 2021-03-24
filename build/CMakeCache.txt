@@ -1094,6 +1094,9 @@ _gtest_INCLUDES:FILEPATH=/usr/include/gtest/gtest.h
 //Path to a file.
 _gtest_SOURCES:FILEPATH=/usr/src/gtest/src/gtest.cc
 
+//The directory containing a CMake configuration file for ackermann_msgs.
+ackermann_msgs_DIR:PATH=/opt/ros/melodic/share/ackermann_msgs/cmake
+
 //The directory containing a CMake configuration file for actionlib.
 actionlib_DIR:PATH=/opt/ros/melodic/share/actionlib/cmake
 
@@ -1362,6 +1365,9 @@ ompl_DIR:PATH=/opt/ros/melodic/share/ompl/cmake
 //Path to a library.
 onelib:FILEPATH=/usr/lib/x86_64-linux-gnu/libsdformat.so
 
+//The directory containing a CMake configuration file for orocos_kdl.
+orocos_kdl_DIR:PATH=/opt/ros/melodic/share/orocos_kdl/cmake
+
 //The directory containing a CMake configuration file for pcl_conversions.
 pcl_conversions_DIR:PATH=/opt/ros/melodic/share/pcl_conversions/cmake
 
@@ -1382,6 +1388,12 @@ prius_msgs_DIR:PATH=/home/tanujthakkar/ROS/catkin_ws/devel/share/prius_msgs/cmak
 
 //Value Computed by CMake
 prius_msgs_SOURCE_DIR:STATIC=/home/tanujthakkar/ROS/catkin_ws/src/Path-Tracking-Simulation-master/car_demo/prius_msgs
+
+//Value Computed by CMake
+pure_pursuit_BINARY_DIR:STATIC=/home/tanujthakkar/ROS/catkin_ws/build/pure_pursuit
+
+//Value Computed by CMake
+pure_pursuit_SOURCE_DIR:STATIC=/home/tanujthakkar/ROS/catkin_ws/src/pure_pursuit
 
 //Value Computed by CMake
 pure_pursuit_local_planner_BINARY_DIR:STATIC=/home/tanujthakkar/ROS/catkin_ws/build/pure_pursuit

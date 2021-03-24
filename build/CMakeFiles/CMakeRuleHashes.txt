@@ -3,6 +3,7 @@ d686fbcc736621db687a21c4bba85b7c /home/tanujthakkar/ROS/catkin_ws/devel/include/
 a4d3c032e5d4baa542eee288e629fb23 /home/tanujthakkar/ROS/catkin_ws/devel/include/hybrid_astar/Planner.h
 f6921ad3c9372ca3963f7044aad6e80a /home/tanujthakkar/ROS/catkin_ws/devel/include/ira_laser_tools/laserscan_multi_mergerConfig.h
 49e3e27e034c465345d362527311ef91 /home/tanujthakkar/ROS/catkin_ws/devel/include/ira_laser_tools/laserscan_virtualizerConfig.h
+4ad71feafd027b44c6ec70a43bf36e67 /home/tanujthakkar/ROS/catkin_ws/devel/include/pure_pursuit/PurePursuitConfig.h
 c7bf8a03c0b576ef6e0a41207d28a690 /home/tanujthakkar/ROS/catkin_ws/devel/include/pure_pursuit_local_planner/PurePursuitPlannerConfig.h
 6afb706376c7f0713e2f6bba9e760964 /home/tanujthakkar/ROS/catkin_ws/devel/include/ridgeback_msgs/Fans.h
 17fe3aa8a6cc8b3fb54b704797d4b47c /home/tanujthakkar/ROS/catkin_ws/devel/include/ridgeback_msgs/Lights.h

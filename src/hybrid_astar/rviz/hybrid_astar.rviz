@@ -8,6 +8,7 @@ Panels:
         - /Hybrid A*1
         - /Global Planner1
         - /Local Planner1
+        - /Pure Pursuit1
       Splitter Ratio: 0.5
     Tree Height: 719
   - Class: rviz/Selection
@@ -494,6 +495,20 @@ Visualization Manager:
           Value: true
       Enabled: true
       Name: Local Planner
+    - Class: rviz/Group
+      Displays:
+        - Alpha: 1
+          Class: rviz/PointStamped
+          Color: 204; 41; 204
+          Enabled: true
+          History Length: 1
+          Name: PointStamped
+          Radius: 0.20000000298023224
+          Topic: /target_point
+          Unreliable: false
+          Value: true
+      Enabled: true
+      Name: Pure Pursuit
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
