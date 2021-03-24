@@ -18,7 +18,7 @@ ros::Publisher trailer_center_pub;
 ros::Publisher robot_collision_check_pub;
 ros::Publisher trailer_collision_check_pub;
 
-bool visualization = false;
+bool visualization = false; // Visualization toggle
 
 geometry_msgs::PoseStamped start_pose; // Start pose msg
 bool valid_start; // Start pose validity check
@@ -33,18 +33,19 @@ int** acc_obs_map;
 
 typedef pair<float, int> pi;
 
-nav_msgs::Path path; // Final Hybrid A* path
-bool path_found;
-nav_msgs::Path path_center;
-nav_msgs::Path dubins_path;
-visualization_msgs::Marker nodes;
+nav_msgs::Path path; // Hybrid A* path
+bool path_found; // Solution found flag
+nav_msgs::Path path_center; // Global Path w.r.t robot center
+nav_msgs::Path dubins_path; // Dubins Path
+visualization_msgs::Marker nodes; // All created nodes
 
 Node4D* current_node; // Pointer to the current node
 Node4D* new_node; // Pointer to the next node
 
-float sx; // x coordinate of start pose of the rear axle/hitch point of the vehicle
-float sy; // y coordinate of start pose of the rear axle/hitch point of the vehicle
-float syaw; // yaw coordinate of start pose of the rear axle/hitch point of the vehicle
+float sx; // x coordinate of current pose of the rear axle/hitch point of the vehicle
+float sy; // y coordinate of current pose of the rear axle/hitch point of the vehicle
+float syaw; // yaw coordinate of current pose of the rear axle/hitch point of the vehicle
+float syaw_t; // yaw coordinate of current pose of the trailer
 
 float gx; // x coordinate of goal pose of the rear axle/hitch point of the vehicle
 float gy; // y coordinate of goal pose of the rear axle/hitch point of the vehicle
@@ -131,14 +132,12 @@ Node4D* create_dubins_node(Node4D* start, const Node4D goal) {
 
 	int n = start->get_size();
 	int dir = 1;
-	// start
-	double q0[] = { start->get_x(n-1), start->get_y(n-1), start->get_yaw(n-1) };
-	// goal
-	double q1[] = { goal.get_x(0), goal.get_y(0), goal.get_yaw(0) };
-	// initialize the path
-	DubinsPath path;
-	// calculate the path
-	dubins_init(q0, q1, 1, &path);
+
+	double q0[] = { start->get_x(n-1), start->get_y(n-1), start->get_yaw(n-1) }; // start
+	double q1[] = { goal.get_x(0), goal.get_y(0), goal.get_yaw(0) }; // goal
+
+	DubinsPath path; // initialize the path
+	dubins_init(q0, q1, 1, &path); // calculate the path
 
 	int i = 1;
 	float x = 0.f;
@@ -155,6 +154,7 @@ Node4D* create_dubins_node(Node4D* start, const Node4D goal) {
 	// dubins_path.poses.clear();
 	// geometry_msgs::PoseStamped pose_stamped;
 
+	// Sampling the dubins path with the MOVE_STEP
 	double q[3];
 	dubins_path_sample(&path, x, q);
 	dubins_xlist.push_back(q[0]);
@@ -198,6 +198,13 @@ Node4D* create_dubins_node(Node4D* start, const Node4D goal) {
 }
 
 
+/*
+	Function to create a list of steering inputs
+
+	max_steer: maximum steering input in either direction
+
+	Updates the global steer vector with steering inputs
+*/
 void create_steer_inputs(float max_steer) {
 
 	steer.resize(STEER_STEP);
@@ -236,21 +243,11 @@ float calc_heuristic_cost(Node4D* n) {
 }
 
 
-bool is_goal(Node4D* n) {
-	int size = n->get_size();
-	float x_error = abs(n->get_x(size-1) - gx);
-	float y_error = abs(n->get_y(size-1) - gy);
-	float yaw_error = abs(n->get_yaw(size-1) - gyaw);
+/*
+	Function to display contents of a map
 
-	cout << "x_error: " << x_error << " y_error: " << y_error << " yaw_error: " << yaw_error << endl;
-	if(x_error <= XY_TOLERANCE && y_error <= XY_TOLERANCE && yaw_error <= YAW_TOLERANCE) {
-		return true;
-	} else {
-		return false;
-	}
-}
-
-
+	m: map to be displayed
+*/
 void display_map(map<int, Node4D*> m) {
 
 	map<int, Node4D*>::iterator itr;
@@ -264,6 +261,11 @@ void display_map(map<int, Node4D*> m) {
 }
 
 
+/*
+	Function to display contents of the priority queue
+
+	gq: priority queue to be displayed
+*/
 void display_pq(priority_queue<pi, vector<pi>, greater<pi>> gq)
 { 
 	priority_queue<pi, vector<pi>, greater<pi>> g = gq;
@@ -281,7 +283,7 @@ void display_pq(priority_queue<pi, vector<pi>, greater<pi>> gq)
 
 
 /*
-	Publishes the final path using the current_node pointer as a marker array
+	Publishes the hybrid a* path using the current_node pointer
 */
 void visualize_final_path() {
 
@@ -313,6 +315,10 @@ void visualize_final_path() {
 	hybrid_path_pub.publish(path);
 }
 
+
+/*
+	Publishes the final path using the current_node pointer
+*/
 void visualize_final_path_center() {
 
 	path_center.header.stamp = ros::Time::now();
@@ -375,6 +381,9 @@ void visualize_all_nodes(std::map<int, Node4D*> open, std::map<int, Node4D*> clo
 }
 
 
+/*
+	Computes the Hybrid A* path
+*/
 void hybrid_astar_plan() {
 
 	if(valid_start && valid_goal) {
@@ -407,16 +416,21 @@ void hybrid_astar_plan() {
 		// sy = start_pose.pose.position.y - deltar * sin(syaw);
 
 		tf::StampedTransform transform_robot;
+		tf::StampedTransform transform_trailer;
 		tf::TransformListener listener;
 
 		listener.waitForTransform("map", "base_link", ros::Time::now(), ros::Duration(2.0));
 		listener.lookupTransform("map", "base_link", ros::Time(0), transform_robot);
+
 		syaw = tf::getYaw(transform_robot.getRotation());
 		sx = transform_robot.getOrigin().x() - deltar * cos(syaw);
 		sy = transform_robot.getOrigin().y() - deltar * sin(syaw);
 		ROS_INFO("sx: %f sy: %f syaw: %f", sx, sy, syaw);
 
-		Node4D start_node = Node4D(sx, sy, syaw, 0);
+		listener.lookupTransform("map", "cargo_cart_link", ros::Time(0), transform_trailer);
+		syaw_t = tf::getYaw(transform_trailer.getRotation());
+
+		Node4D start_node = Node4D(sx, sy, syaw, 0, syaw_t);
 		current_node = &start_node;
 
 		// Computing rear-axle/hitch-point pose for goal node
@@ -426,7 +440,7 @@ void hybrid_astar_plan() {
 		gy = goal_pose.pose.position.y - deltar * sin(gyaw);
 		ROS_INFO("gx: %f gy: %f gyaw: %f", gx, gy, gyaw);
 
-		Node4D goal_node = Node4D(gx, gy, gyaw, 0);
+		Node4D goal_node = Node4D(gx, gy, gyaw, 0, 0);
 
 		// create_steer_inputs(30);
 
@@ -509,6 +523,7 @@ void hybrid_astar_plan() {
 						p.z = 0;
 						nodes.points.push_back(p);
 					}
+					visualize_nodes_pub.publish(nodes);
 				}
 
 				total_nodes++;
@@ -658,6 +673,9 @@ void callback_map(const nav_msgs::OccupancyGrid::Ptr map) {
 }
 
 
+/*
+	Callback function to respond service call with the final global path
+*/
 bool callback_planner(hybrid_astar::GlobalPath::Request &req, hybrid_astar::GlobalPath::Response &res) {
 
 	while(!path_found) {

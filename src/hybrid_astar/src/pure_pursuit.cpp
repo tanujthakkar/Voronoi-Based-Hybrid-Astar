@@ -20,6 +20,13 @@ const float kf = 0.1; // look forward gain
 const float max_vel = 0.3; // maximum velocity
 const float max_ang_vel = 0.3; // maximum angular
 
+
+/*	
+	Callback function for "global_path" to implement the pure pursuit controller
+	
+	Subscribes: global_path
+	Publishers: target_point, cmd_vel
+*/
 void callback_path(const nav_msgs::Path p) {
 
 	tf::TransformListener listener;
@@ -58,6 +65,7 @@ void callback_path(const nav_msgs::Path p) {
 		}
 
 		if(hypot(p.poses[n-1].pose.position.x - x, p.poses[n-1].pose.position.y - y) < 0.2) {
+			ROS_INFO("GOAL REACHED!");
 			break;
 		}
 

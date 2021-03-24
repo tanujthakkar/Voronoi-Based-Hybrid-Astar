@@ -91,8 +91,6 @@ bool Node4D::check_collision(nav_msgs::OccupancyGrid::Ptr grid, bool** bin_map, 
 		// printf("xlist: %f ylist: %f yaw: %f yawt: %f yaw_t: %f \n", xlist[i], ylist[i], yawlist[i], yawtlist[i], yawt[i]);
 		// cin.get();
 
-		// ROS_INFO("Collision check for X : %f || Y : %f ", xlist[i], ylist[i]);
-
 		if(abs(yawlist[i]) - abs(yawt[i]) >= 1.395) {
 			// ROS_INFO("SELF-COLLISION - JACKNIFE");
 			return true;
@@ -139,8 +137,8 @@ bool Node4D::check_collision(nav_msgs::OccupancyGrid::Ptr grid, bool** bin_map, 
 		// }
 
 		// Checking the robot polygon/rectangle
-		for(float k = -RL/2; k <= RL/2 + MIN_SAFE_DIST; k += 0.25) {
-			for(float j = -RW/2; j <= RW/2 + MIN_SAFE_DIST; j += 0.25) {
+		for(float k = -RL/2; k <= RL/2 + MIN_SAFE_DIST; k += RL/4) {
+			for(float j = -RW/2 - MIN_SAFE_DIST; j <= RW/2 + MIN_SAFE_DIST; j += RW/4) {
 
 				s = (cx + k * cos(yawlist[i]) + j * sin(yawlist[i]))/XY_RESOLUTION + 0.001;
 				t = (cy + k * sin(yawlist[i]) + j * cos(yawlist[i]))/XY_RESOLUTION + 0.001;
@@ -148,6 +146,7 @@ bool Node4D::check_collision(nav_msgs::OccupancyGrid::Ptr grid, bool** bin_map, 
 	     		// robot_collision_check_point.x = s * XY_RESOLUTION;
 	     		// robot_collision_check_point.y = t * XY_RESOLUTION;
 	     		// robot_collision_check_points.points.push_back(robot_collision_check_point);
+	     		// robot_collision_check_pub.publish(robot_collision_check_points);
 
 	     		if(bin_map[s][t] != 0) {
 					// cout << "X : " << s << " Y : "<< t << " BIN_MAP : " << bin_map[s][t] << endl;
@@ -195,8 +194,8 @@ bool Node4D::check_collision(nav_msgs::OccupancyGrid::Ptr grid, bool** bin_map, 
 		// }
 
 		// Checking the robot polygon/rectangle
-		for(float k = -TL/2; k <= TL/2 + MIN_SAFE_DIST; k += 0.25) {
-			for(float j = -TW/2; j <= TW/2 + MIN_SAFE_DIST; j += 0.25) {
+		for(float k = -TL/2 - MIN_SAFE_DIST; k <= TL/2; k += TL/4) {
+			for(float j = -TW/2 - MIN_SAFE_DIST; j <= TW/2 + MIN_SAFE_DIST; j += TW/4) {
 
 				s = (ctx + k * cos(yawt[i]) + j * sin(yawt[i]))/XY_RESOLUTION + 0.001;
 				t = (cty + k * sin(yawt[i]) + j * cos(yawt[i]))/XY_RESOLUTION + 0.001;
@@ -204,6 +203,7 @@ bool Node4D::check_collision(nav_msgs::OccupancyGrid::Ptr grid, bool** bin_map, 
 	     		// trailer_collision_check_point.x = s * XY_RESOLUTION;
 	     		// trailer_collision_check_point.y = t * XY_RESOLUTION;
 	     		// trailer_collision_check_points.points.push_back(trailer_collision_check_point);
+	     		// trailer_collision_check_pub.publish(trailer_collision_check_points);
 
 	     		if(bin_map[s][t] != 0) {
 					// cout << "X : " << s << " Y : "<< t << " BIN_MAP : " << bin_map[s][t] << endl;
@@ -213,9 +213,6 @@ bool Node4D::check_collision(nav_msgs::OccupancyGrid::Ptr grid, bool** bin_map, 
 			}
 		}
 	}
-
-	// robot_collision_check_pub.publish(robot_collision_check_points);
-	// trailer_collision_check_pub.publish(trailer_collision_check_points);
 
 	// ROS_INFO("NO COLLISION - SAFE");
 	return false; // NO COLLISION

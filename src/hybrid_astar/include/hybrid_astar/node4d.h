@@ -29,13 +29,13 @@ class Node4D {
 public:
 
 	// Constructor for start and goal nodes
-	Node4D(float x, float y, float yaw, float yawt) {
+	Node4D(float x, float y, float yaw, float yawt, float yaw_t) {
 
 		xlist.push_back(x);
 		ylist.push_back(y);
 		yawlist.push_back(yaw);
 		yawtlist.push_back(yawt);
-		this->yawt.push_back(yaw);
+		this->yawt.push_back(yaw_t);
 		this->direction = 1;
 		this->steer = 0.0;
 		this->cost = 0.0;
