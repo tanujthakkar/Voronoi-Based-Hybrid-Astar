@@ -63,9 +63,9 @@
 
   <!-- Cart Links -->
   <gazebo reference="tow_hitch_link"><material>Gazebo/Yellow</material></gazebo>
-  <gazebo reference="cargo_cart_link"><material>Gazebo/Grey</material></gazebo>
-  <gazebo reference="cargo_cart_mid_link"><material>Gazebo/Grey</material></gazebo>
-  <gazebo reference="cargo_cart_bed_link"><material>Gazebo/Grey</material></gazebo>
+  <gazebo reference="cargo_cart_link"><material>Gazebo/White</material></gazebo>
+  <gazebo reference="cargo_cart_mid_link"><material>Gazebo/White</material></gazebo>
+  <gazebo reference="cargo_cart_bed_link"><material>Gazebo/White</material></gazebo>
 
 
   <!-- Wheel friction to zero, as movement is handled by applying forces at

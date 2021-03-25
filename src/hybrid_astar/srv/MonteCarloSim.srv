@@ -1,0 +1,15 @@
+float32 sx
+float32 sy
+float32 syaw
+float32 syaw_t
+float32 gx
+float32 gy
+float32 gyaw
+---
+bool valid_start
+bool valid_goal
+bool solution_found
+nav_msgs/Path path
+uint64 iterations
+uint64 nodes
+uint64 execution_time

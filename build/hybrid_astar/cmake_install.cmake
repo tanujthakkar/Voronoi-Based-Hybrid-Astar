@@ -38,7 +38,10 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/hybrid_astar/srv" TYPE FILE FILES "/home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/srv/GlobalPath.srv")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/hybrid_astar/srv" TYPE FILE FILES
+    "/home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/srv/GlobalPath.srv"
+    "/home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/srv/MonteCarloSim.srv"
+    )
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
@@ -86,5 +89,9 @@ endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/hybrid_astar" TYPE FILE FILES "/home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/package.xml")
+endif()
+
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/hybrid_astar" TYPE PROGRAM FILES "/home/tanujthakkar/ROS/catkin_ws/build/hybrid_astar/catkin_generated/installspace/monte_carlo_simulation.py")
 endif()
 

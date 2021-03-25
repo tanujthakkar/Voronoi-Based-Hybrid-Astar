@@ -31,6 +31,7 @@
 #include "pure_pursuit.h"
 
 #include "hybrid_astar/GlobalPath.h"
+#include "hybrid_astar/MonteCarloSim.h"
 
 using namespace std;
 

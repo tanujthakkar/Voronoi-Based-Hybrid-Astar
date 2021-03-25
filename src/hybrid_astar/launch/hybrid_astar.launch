@@ -1,7 +1,7 @@
 <launch>
 
-	<arg name="debug" default="false"/>
-	<arg name="gui" default="true"/>
+	<!-- <arg name="debug" default="false"/>
+	<arg name="gui" default="false"/>
 	<arg name="pause" default="false"/>
 	<arg name="world" value="$(find indoor_nav)/world/indoor_world_01.world"/>
 
@@ -19,10 +19,10 @@
 	    <arg name="y" default="-6.0"/>
 	    <arg name="z" default="0.025893"/>
 	    <arg name="yaw" default="0"/>
-	</include>
+	</include> -->
 
 	<!-- AMCL -->
-	<include file="$(find ridgeback_navigation)/launch/amcl_demo.launch"/>
+	<!-- <include file="$(find ridgeback_navigation)/launch/amcl_demo.launch"/> -->
 
 	<!--- Move Base -->
   	<!-- <include file="$(find ridgeback_navigation)/launch/include/move_base.launch" /> -->
@@ -33,7 +33,7 @@
     <node pkg="hybrid_astar" type="hybrid_astar" name="hybrid_astar" output="screen"/>
 
     <!-- Pure Pursuit -->
-    <node pkg="hybrid_astar" type="pure_pursuit" name="pure_pursuit" output="screen"/>
+    <!-- <node pkg="hybrid_astar" type="pure_pursuit" name="pure_pursuit" output="screen"/> -->
 
     <arg name="config" default="hybrid_astar" />
     <node name="rviz" pkg="rviz" type="rviz" args="-d $(find hybrid_astar)/rviz/$(arg config).rviz" />

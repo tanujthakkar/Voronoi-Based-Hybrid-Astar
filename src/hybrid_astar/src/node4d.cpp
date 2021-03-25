@@ -87,8 +87,8 @@ bool Node4D::check_collision(nav_msgs::OccupancyGrid::Ptr grid, bool** bin_map, 
 
 	for (int i = 0; i < xlist.capacity(); ++i) {
 
-		// cout << "Press ENTER for iteration " << i << endl;
 		// printf("xlist: %f ylist: %f yaw: %f yawt: %f yaw_t: %f \n", xlist[i], ylist[i], yawlist[i], yawtlist[i], yawt[i]);
+		// cout << "Press ENTER for iteration " << i << endl;
 		// cin.get();
 
 		if(abs(yawlist[i]) - abs(yawt[i]) >= 1.395) {

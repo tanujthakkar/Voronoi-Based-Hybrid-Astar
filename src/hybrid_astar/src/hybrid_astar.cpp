@@ -18,7 +18,7 @@ ros::Publisher trailer_center_pub;
 ros::Publisher robot_collision_check_pub;
 ros::Publisher trailer_collision_check_pub;
 
-bool visualization = false; // Visualization toggle
+bool visualization = true; // Visualization toggle
 
 geometry_msgs::PoseStamped start_pose; // Start pose msg
 bool valid_start; // Start pose validity check
@@ -50,6 +50,9 @@ float syaw_t; // yaw coordinate of current pose of the trailer
 float gx; // x coordinate of goal pose of the rear axle/hitch point of the vehicle
 float gy; // y coordinate of goal pose of the rear axle/hitch point of the vehicle
 float gyaw; // yaw coordinate of goal pose of the rear axle/hitch point of the vehicle
+
+int iterations; // total iterations of hybrid a* planning
+int total_nodes; // total nodes of hybrid a* planning
 
 std::vector<int> steer = {-45, -30, -15, 0, 15, 30, 45}; // Steering inputs for which the nodes have to be created
 
@@ -384,10 +387,9 @@ void visualize_all_nodes(std::map<int, Node4D*> open, std::map<int, Node4D*> clo
 /*
 	Computes the Hybrid A* path
 */
-void hybrid_astar_plan() {
+bool hybrid_astar_plan() {
 
-	if(valid_start && valid_goal) {
-		ROS_INFO("Planning Hybrid A* path...");
+	if(1) {
 
 		path_found = false;
 
@@ -406,42 +408,56 @@ void hybrid_astar_plan() {
 
 		geometry_msgs::Point p;
 
-		int iterations = 0;
-		int total_nodes = 0;
+		iterations = 0;
+		total_nodes = 0;
 
 		// Computing rear-axle/hitch-point pose for start node
-		float deltar = (RF - RB) / 2.0;
+		// float deltar = (RF - RB) / 2.0;
 		// syaw = tf::getYaw(start_pose.pose.orientation);
 		// sx = start_pose.pose.position.x - deltar * cos(syaw);
 		// sy = start_pose.pose.position.y - deltar * sin(syaw);
 
-		tf::StampedTransform transform_robot;
-		tf::StampedTransform transform_trailer;
-		tf::TransformListener listener;
+		// tf::StampedTransform transform_robot;
+		// tf::StampedTransform transform_trailer;
+		// tf::TransformListener listener;
 
-		listener.waitForTransform("map", "base_link", ros::Time::now(), ros::Duration(2.0));
-		listener.lookupTransform("map", "base_link", ros::Time(0), transform_robot);
+		// listener.waitForTransform("map", "base_link", ros::Time::now(), ros::Duration(2.0));
+		// listener.lookupTransform("map", "base_link", ros::Time(0), transform_robot);
 
-		syaw = tf::getYaw(transform_robot.getRotation());
-		sx = transform_robot.getOrigin().x() - deltar * cos(syaw);
-		sy = transform_robot.getOrigin().y() - deltar * sin(syaw);
-		ROS_INFO("sx: %f sy: %f syaw: %f", sx, sy, syaw);
+		// syaw = tf::getYaw(transform_robot.getRotation());
+		// sx = transform_robot.getOrigin().x() - deltar * cos(syaw);
+		// sy = transform_robot.getOrigin().y() - deltar * sin(syaw);
 
-		listener.lookupTransform("map", "cargo_cart_link", ros::Time(0), transform_trailer);
-		syaw_t = tf::getYaw(transform_trailer.getRotation());
+		// listener.lookupTransform("map", "cargo_cart_link", ros::Time(0), transform_trailer);
+		// syaw_t = tf::getYaw(transform_trailer.getRotation());
 
 		Node4D start_node = Node4D(sx, sy, syaw, 0, syaw_t);
+		if(start_node.check_collision(grid, bin_map, acc_obs_map)) {
+			ROS_INFO("INVALID START");
+			valid_start = false;
+			return false;
+		}
+		ROS_INFO("VALID START - sx: %f sy: %f syaw: %f", sx, sy, syaw);
+		valid_start = true;
+
 		current_node = &start_node;
 
 		// Computing rear-axle/hitch-point pose for goal node
-		deltar = (RF - RB) / 2.0;
-		gyaw = tf::getYaw(goal_pose.pose.orientation);
-		gx = goal_pose.pose.position.x - deltar * cos(gyaw);
-		gy = goal_pose.pose.position.y - deltar * sin(gyaw);
-		ROS_INFO("gx: %f gy: %f gyaw: %f", gx, gy, gyaw);
+		// deltar = (RF - RB) / 2.0;
+		// gyaw = tf::getYaw(goal_pose.pose.orientation);
+		// gx = goal_pose.pose.position.x - deltar * cos(gyaw);
+		// gy = goal_pose.pose.position.y - deltar * sin(gyaw);
 
 		Node4D goal_node = Node4D(gx, gy, gyaw, 0, 0);
+		if(goal_node.check_collision(grid, bin_map, acc_obs_map)) {
+			ROS_INFO("INVALID GOAL");
+			valid_goal = false;
+			return false;
+		}
+		ROS_INFO("VALID GOAL - gx: %f gy: %f gyaw: %f", gx, gy, gyaw);
+		valid_goal = true;
 
+		ROS_INFO("Planning Hybrid A* path...");
 		// create_steer_inputs(30);
 
 		std::map<int, Node4D*> open_list; // Creating the open_list using a map
@@ -469,7 +485,7 @@ void hybrid_astar_plan() {
 
 			if(open_list.empty()) {
 				ROS_INFO("SOLUTION DOESN'T EXIST - NO NODES FOUND IN OPEN LIST");
-				break;
+				return false;
 			}
 
 			ind = pq.top(); // Retrieve the pair with the highest priority (lowest cost)
@@ -500,7 +516,7 @@ void hybrid_astar_plan() {
 					visualize_nodes_pub.publish(nodes);
 				}
 				path_found = true;
-				break;
+				return true;
 			}
 
 			for(int i = 0; i < steer.capacity(); ++i) {
@@ -686,6 +702,32 @@ bool callback_planner(hybrid_astar::GlobalPath::Request &req, hybrid_astar::Glob
 }
 
 
+bool callback_monte_carlo(hybrid_astar::MonteCarloSim::Request &req, hybrid_astar::MonteCarloSim::Response &res) {
+	
+	sx = req.sx;
+	sy = req.sy;
+	syaw = req.syaw;
+	syaw_t = req.syaw_t;
+
+	gx = req.gx;
+	gy = req.gy;
+	gyaw = req.gyaw;
+
+	auto start = high_resolution_clock::now(); // Reading start time of planning
+	res.solution_found = hybrid_astar_plan();
+	auto stop = high_resolution_clock::now(); // Reading end time of planning
+	auto execution_time = duration_cast<milliseconds>(stop-start);
+	res.valid_start = valid_start;
+	res.valid_goal = valid_goal;
+	res.path = path_center;
+	res.iterations = iterations;
+	res.nodes = total_nodes;
+	res.execution_time = execution_time.count();
+
+	return true;
+}
+
+
 int main(int argc, char **argv) {
 
 	ros::init(argc, argv, "hybrid_astar");
@@ -713,7 +755,8 @@ int main(int argc, char **argv) {
 	// ros::Subscriber map_sub = nh.subscribe("/move_base/global_costmap/costmap", 1, callback_map);
 
 	// Services
-	ros::ServiceServer ss = nh.advertiseService("hybrid_astar_planner_service", callback_planner);
+	// ros::ServiceServer pure_pursuit_service = nh.advertiseService("hybrid_astar_planner_service", callback_planner);
+	ros::ServiceServer monte_carlo_sim_service = nh.advertiseService("monte_carlo_sim_service", callback_monte_carlo);
 
 	ros::Rate loop_rate(10);
 

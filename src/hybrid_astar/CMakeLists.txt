@@ -32,6 +32,7 @@ find_package(catkin REQUIRED COMPONENTS
 add_service_files(
   FILES
   GlobalPath.srv
+  MonteCarloSim.srv
 )
 
 ## Generate added messages and services with any dependencies listed here
@@ -78,3 +79,7 @@ target_link_libraries(pure_pursuit ${catkin_LIBRARIES})
 
 # Hybrid A* Planner
 add_library(hybrid_astar_planner_lib src/hybrid_astar_planner.cpp)
+
+catkin_install_python(PROGRAMS scripts/monte_carlo_simulation.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
