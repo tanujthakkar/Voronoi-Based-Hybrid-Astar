@@ -18,7 +18,7 @@ ros::Publisher trailer_center_pub;
 ros::Publisher robot_collision_check_pub;
 ros::Publisher trailer_collision_check_pub;
 
-bool visualization = true; // Visualization toggle
+bool visualization = false; // Visualization toggle
 
 geometry_msgs::PoseStamped start_pose; // Start pose msg
 bool valid_start; // Start pose validity check
@@ -39,9 +39,6 @@ nav_msgs::Path path_center; // Global Path w.r.t robot center
 nav_msgs::Path dubins_path; // Dubins Path
 visualization_msgs::Marker nodes; // All created nodes
 
-Node4D* current_node; // Pointer to the current node
-Node4D* new_node; // Pointer to the next node
-
 float sx; // x coordinate of current pose of the rear axle/hitch point of the vehicle
 float sy; // y coordinate of current pose of the rear axle/hitch point of the vehicle
 float syaw; // yaw coordinate of current pose of the rear axle/hitch point of the vehicle
@@ -50,6 +47,11 @@ float syaw_t; // yaw coordinate of current pose of the trailer
 float gx; // x coordinate of goal pose of the rear axle/hitch point of the vehicle
 float gy; // y coordinate of goal pose of the rear axle/hitch point of the vehicle
 float gyaw; // yaw coordinate of goal pose of the rear axle/hitch point of the vehicle
+
+Node4D* start_node_ptr; // Pointer to the start node
+Node4D* goal_node_ptr; // Pointer to the goal node
+Node4D* current_node; // Pointer to the current node
+Node4D* new_node; // Pointer to the next node
 
 int iterations; // total iterations of hybrid a* planning
 int total_nodes; // total nodes of hybrid a* planning
@@ -131,13 +133,13 @@ Node4D* create_successor(Node4D* node, float steer,int dir) {
 
 	Returns a pointer to the new node
 */
-Node4D* create_dubins_node(Node4D* start, const Node4D goal) {
+Node4D* create_dubins_node(Node4D* start, Node4D* goal) {
 
 	int n = start->get_size();
 	int dir = 1;
 
 	double q0[] = { start->get_x(n-1), start->get_y(n-1), start->get_yaw(n-1) }; // start
-	double q1[] = { goal.get_x(0), goal.get_y(0), goal.get_yaw(0) }; // goal
+	double q1[] = { goal->get_x(0), goal->get_y(0), goal->get_yaw(0) }; // goal
 
 	DubinsPath path; // initialize the path
 	dubins_init(q0, q1, 1, &path); // calculate the path
@@ -264,6 +266,18 @@ void display_map(map<int, Node4D*> m) {
 }
 
 
+void release_map_memory(map<int, Node4D*> m) {
+
+	map<int, Node4D*>::iterator itr;
+	if(m.empty()) {
+		cout << "List EMPTY - Release" << endl;
+	}
+	for (itr = m.begin(); itr != m.end(); ++itr) {
+		delete itr->second;
+	}
+}
+
+
 /*
 	Function to display contents of the priority queue
 
@@ -357,7 +371,7 @@ void visualize_final_path_center() {
 /*
 	Publishes all the nodes from open and closed lists
 */
-void visualize_all_nodes(std::map<int, Node4D*> open, std::map<int, Node4D*> closed) {
+void visualize_all_nodes() {
 
 	nodes.header.stamp = ros::Time::now();
 	nodes.header.frame_id = "/map";
@@ -389,33 +403,33 @@ void visualize_all_nodes(std::map<int, Node4D*> open, std::map<int, Node4D*> clo
 */
 bool hybrid_astar_plan() {
 
-	if(1) {
+	if(valid_start && valid_goal) {
 
-		path_found = false;
+		// path_found = false;
 
-		nodes.header.stamp = ros::Time::now();
-		nodes.header.frame_id = "/map";
-		nodes.ns = "v_nodes";
-		nodes.action = visualization_msgs::Marker::ADD;
-		nodes.id = 0;
-		nodes.type = visualization_msgs::Marker::LINE_LIST;
-		nodes.scale.x = 0.02;
-		nodes.color.r = 1.0;
-		nodes.color.g = 0.26;
-		nodes.color.b = 0.20;
-		nodes.color.a = 1.0;
-		nodes.points.clear();
+		// nodes.header.stamp = ros::Time::now();
+		// nodes.header.frame_id = "/map";
+		// nodes.ns = "v_nodes";
+		// nodes.action = visualization_msgs::Marker::ADD;
+		// nodes.id = 0;
+		// nodes.type = visualization_msgs::Marker::LINE_LIST;
+		// nodes.scale.x = 0.02;
+		// nodes.color.r = 1.0;
+		// nodes.color.g = 0.26;
+		// nodes.color.b = 0.20;
+		// nodes.color.a = 1.0;
+		// nodes.points.clear();
 
-		geometry_msgs::Point p;
+		// geometry_msgs::Point p;
 
 		iterations = 0;
 		total_nodes = 0;
 
 		// Computing rear-axle/hitch-point pose for start node
-		// float deltar = (RF - RB) / 2.0;
-		// syaw = tf::getYaw(start_pose.pose.orientation);
-		// sx = start_pose.pose.position.x - deltar * cos(syaw);
-		// sy = start_pose.pose.position.y - deltar * sin(syaw);
+		float deltar = (RF - RB) / 2.0;
+		syaw = tf::getYaw(start_pose.pose.orientation);
+		sx = start_pose.pose.position.x - deltar * cos(syaw);
+		sy = start_pose.pose.position.y - deltar * sin(syaw);
 
 		// tf::StampedTransform transform_robot;
 		// tf::StampedTransform transform_trailer;
@@ -431,27 +445,29 @@ bool hybrid_astar_plan() {
 		// listener.lookupTransform("map", "cargo_cart_link", ros::Time(0), transform_trailer);
 		// syaw_t = tf::getYaw(transform_trailer.getRotation());
 
-		Node4D start_node = Node4D(sx, sy, syaw, 0, syaw_t);
-		if(start_node.check_collision(grid, bin_map, acc_obs_map)) {
-			ROS_INFO("INVALID START");
+		start_node_ptr = new Node4D(sx, sy, syaw, 0, syaw_t);
+		if(start_node_ptr->check_collision(grid, bin_map, acc_obs_map)) {
+			// ROS_INFO("INVALID START");
 			valid_start = false;
+			delete start_node_ptr;
 			return false;
 		}
 		ROS_INFO("VALID START - sx: %f sy: %f syaw: %f", sx, sy, syaw);
 		valid_start = true;
 
-		current_node = &start_node;
+		current_node = start_node_ptr;
 
 		// Computing rear-axle/hitch-point pose for goal node
-		// deltar = (RF - RB) / 2.0;
-		// gyaw = tf::getYaw(goal_pose.pose.orientation);
-		// gx = goal_pose.pose.position.x - deltar * cos(gyaw);
-		// gy = goal_pose.pose.position.y - deltar * sin(gyaw);
+		deltar = (RF - RB) / 2.0;
+		gyaw = tf::getYaw(goal_pose.pose.orientation);
+		gx = goal_pose.pose.position.x - deltar * cos(gyaw);
+		gy = goal_pose.pose.position.y - deltar * sin(gyaw);
 
-		Node4D goal_node = Node4D(gx, gy, gyaw, 0, 0);
-		if(goal_node.check_collision(grid, bin_map, acc_obs_map)) {
-			ROS_INFO("INVALID GOAL");
+		goal_node_ptr = new Node4D(gx, gy, gyaw, 0, gyaw);
+		if(goal_node_ptr->check_collision(grid, bin_map, acc_obs_map)) {
+			// ROS_INFO("INVALID GOAL");
 			valid_goal = false;
+			delete goal_node_ptr;
 			return false;
 		}
 		ROS_INFO("VALID GOAL - gx: %f gy: %f gyaw: %f", gx, gy, gyaw);
@@ -504,20 +520,23 @@ bool hybrid_astar_plan() {
 			// cout << "Open List - (Removed current node)" << endl;
 			// display_map(open_list);
 
-			new_node = create_dubins_node(current_node, goal_node);
+			new_node = create_dubins_node(current_node, goal_node_ptr);
 			if(!new_node->check_collision(grid, bin_map, acc_obs_map)) {
 				cout << "SOLUTION FOUND - DUBINS NODE" << endl;
 				printf("Iterations: %d Nodes: %d \n", iterations, total_nodes);
-				new_node->set_child(&goal_node);
+				new_node->set_child(goal_node_ptr);
 				current_node = new_node;
 				visualize_final_path();
 				visualize_final_path_center();
-				if(visualization) {
-					visualize_nodes_pub.publish(nodes);
-				}
+				release_map_memory(open_list);
+				release_map_memory(closed_list);
+				// if(visualization) {
+				// 	visualize_nodes_pub.publish(nodes);
+				// }
 				path_found = true;
 				return true;
 			}
+			delete new_node;
 
 			for(int i = 0; i < steer.capacity(); ++i) {
 				
@@ -529,18 +548,19 @@ bool hybrid_astar_plan() {
 
 				if(new_node->check_collision(grid, bin_map, acc_obs_map)) {
 					// ROS_INFO("NODE IN COLLISION");
+					delete new_node;
 					continue;
 				}
 
-				if(visualization) {
-					for(int j=0;j<ceil(PATH_LENGTH/MOVE_STEP);j++) {
-						p.x = new_node->get_x(j);
-						p.y = new_node->get_y(j);
-						p.z = 0;
-						nodes.points.push_back(p);
-					}
-					visualize_nodes_pub.publish(nodes);
-				}
+				// if(visualization) {
+				// 	for(int j=0;j<ceil(PATH_LENGTH/MOVE_STEP);j++) {
+				// 		p.x = new_node->get_x(j);
+				// 		p.y = new_node->get_y(j);
+				// 		p.z = 0;
+				// 		nodes.points.push_back(p);
+				// 	}
+				// 	visualize_nodes_pub.publish(nodes);
+				// }
 
 				total_nodes++;
 				// ROS_INFO("Total Nodes: %d", total_nodes);
@@ -585,11 +605,11 @@ void callback_start_pose(const geometry_msgs::PoseWithCovarianceStamped::ConstPt
 	start_pose.pose.orientation = pose->pose.pose.orientation;
 	syaw = tf::getYaw(start_pose.pose.orientation);
 
-	ROS_INFO("START - X: %f \t Y: %f \t YAW: %f", start_pose.pose.position.x, start_pose.pose.position.y, syaw);
+	// ROS_INFO("START - X: %f \t Y: %f \t YAW: %f", start_pose.pose.position.x, start_pose.pose.position.y, syaw);
 	if(grid->info.height >= start_pose.pose.position.y && start_pose.pose.position.y >= 0 && 
 		grid->info.width >= start_pose.pose.position.x && start_pose.pose.position.x >= 0 && bin_map[(int)round(start_pose.pose.position.x/XY_RESOLUTION)][(int)round(start_pose.pose.position.y/XY_RESOLUTION)] == 0) {
 		valid_start = true;
-		ROS_INFO("VALID START!");
+		// ROS_INFO("VALID START!");
 		start_pose_pub.publish(start_pose);
 		// if(valid_goal) {
 		// 	auto start = high_resolution_clock::now(); // Reading start time of planning
@@ -621,11 +641,11 @@ void callback_goal_pose(const geometry_msgs::PoseStamped::ConstPtr& pose) {
 	goal_pose.pose.orientation = pose->pose.orientation;
 	gyaw = tf::getYaw(goal_pose.pose.orientation);
 
-	ROS_INFO("GOAL - X: %f \t Y: %f \t YAW: %f", goal_pose.pose.position.x, goal_pose.pose.position.y, gyaw);
+	// ROS_INFO("GOAL - X: %f \t Y: %f \t YAW: %f", goal_pose.pose.position.x, goal_pose.pose.position.y, gyaw);
 	if (grid->info.height >= goal_pose.pose.position.y && goal_pose.pose.position.y >= 0 && 
 		grid->info.width >= goal_pose.pose.position.x && goal_pose.pose.position.x >= 0 && bin_map[(int)round(goal_pose.pose.position.x/XY_RESOLUTION)][(int)round(goal_pose.pose.position.y/XY_RESOLUTION)] == 0) {
 		valid_goal = true;
-		ROS_INFO("VALID GOAL!");
+		// ROS_INFO("VALID GOAL!");
 		goal_pose_pub.publish(goal_pose);
 		if(valid_start) {
 			auto start = high_resolution_clock::now(); // Reading start time of planning
