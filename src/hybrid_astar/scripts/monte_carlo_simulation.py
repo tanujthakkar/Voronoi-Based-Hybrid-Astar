@@ -53,6 +53,8 @@ def main():
 		gyaw = uniform(-3.14, 3.14)
 		result = test(sx, sy, syaw, syaw_t, gx, gy, gyaw)
 		if(result.valid_start and result.valid_goal):
+			x = []
+			y = []
 			print('Test: ', valid_tests)
 			# print("Valid Start ", result.valid_start)
 			# print("Valid Goal ", result.valid_goal)
@@ -64,15 +66,11 @@ def main():
 			if(result.solution_found):
 				successful_tests = successful_tests + 1
 				solution_found = 'TRUE'
-				x = []
-				y = []
 				for i in range(len(result.path.poses)):
 					x.append(result.path.poses[i].pose.position.x)
 					y.append(result.path.poses[i].pose.position.y)
 			else:
 				solution_found = 'FALSE'
-				x = []
-				y = []
 			valid_tests = valid_tests + 1
 			df = pd.DataFrame([[sx, sy, syaw, syaw_t, gx, gy, gyaw, solution_found, result.iterations, result.nodes + 1, result.execution_time, [x, y]]], columns = ['sx', 'sy', 'syaw', 'syaw_t', 'gx', 'gy', 'gyaw', 'Solution', 'Iterations', 'Nodes', 'Execution Time', 'Path'])
 			df.to_csv(dt_string + '.csv', mode = 'a', header = False)

@@ -43,10 +43,12 @@ float sx; // x coordinate of current pose of the rear axle/hitch point of the ve
 float sy; // y coordinate of current pose of the rear axle/hitch point of the vehicle
 float syaw; // yaw coordinate of current pose of the rear axle/hitch point of the vehicle
 float syaw_t; // yaw coordinate of current pose of the trailer
+int s_ind;
 
 float gx; // x coordinate of goal pose of the rear axle/hitch point of the vehicle
 float gy; // y coordinate of goal pose of the rear axle/hitch point of the vehicle
 float gyaw; // yaw coordinate of goal pose of the rear axle/hitch point of the vehicle
+int g_ind;
 
 Node4D* start_node_ptr; // Pointer to the start node
 Node4D* goal_node_ptr; // Pointer to the goal node
@@ -55,6 +57,20 @@ int iterations; // total iterations of hybrid a* planning
 int total_nodes; // total nodes of hybrid a* planning
 
 std::vector<int> steer = {-45, -30, -15, 0, 15, 30, 45}; // Steering inputs for which the nodes have to be created
+
+
+/*
+	Function to calculate the index of the node to check for redundant nodes in open and close lists
+
+	n: Pointer to the node
+
+	Returns the index (int)
+*/
+int calc_index(Node4D &n) {
+
+	int size = n.get_size();
+	return (int)(round(n.get_yaw(size-1)/YAW_RESOLUTION) * grid_width * grid_height + round(n.get_y(size-1)/XY_RESOLUTION) * grid_width + round(n.get_x(size-1)/XY_RESOLUTION));
+}
 
 
 /*
@@ -120,7 +136,9 @@ Node4D create_successor(Node4D &node, float steer,int dir) {
 	cost = cost + node.get_cost();
 	// cout << "Cost : " << cost << endl;
 
-	return Node4D(xlist, ylist, yawlist, yawtlist, yawt, dir, steer, cost, node.get_parent_ind());
+	int ind = (int)(round(yawlist[nlist-1]/YAW_RESOLUTION) * grid_width * grid_height + round(ylist[nlist-1]/XY_RESOLUTION) * grid_width + round(xlist[nlist-1]/XY_RESOLUTION));
+
+	return Node4D(xlist, ylist, yawlist, yawtlist, yawt, dir, steer, cost, ind, node.get_ind());
 }
 
 /*
@@ -194,10 +212,14 @@ Node4D create_dubins_node(Node4D &start, Node4D &goal) {
 		i++;
 	}
 
+	int nlist = dubins_xlist.capacity();
+	int ind = (int)(round(dubins_yawlist[nlist-1]/YAW_RESOLUTION) * grid_width * grid_height + round(dubins_ylist[nlist-1]/XY_RESOLUTION) * grid_width + round(dubins_xlist[nlist-1]/XY_RESOLUTION));
 	// dubins_path_pub.publish(dubins_path);
 	// std::cout << "Dubins Node created" << "\n";
 
-	return Node4D(dubins_xlist, dubins_ylist, dubins_yawlist, dubins_yawtlist, dubins_yawt, 1, -1, 0.0, start.get_parent_ind());
+	// cout << "Dubins PIND: " << start.get_parent_ind() << endl;
+
+	return Node4D(dubins_xlist, dubins_ylist, dubins_yawlist, dubins_yawtlist, dubins_yawt, 1, -1, 0.0, ind, start.get_ind());
 }
 
 
@@ -216,20 +238,6 @@ void create_steer_inputs(float max_steer) {
 		steer[i] = max_steer - i * (2 * max_steer / STEER_STEP);
 		cout << steer[i] << " ";
 	}
-}
-
-
-/*
-	Function to calculate the index of the node to check for redundant nodes in open and close lists
-
-	n: Pointer to the node
-
-	Returns the index (int)
-*/
-int calc_index(Node4D &n) {
-
-	int size = n.get_size();
-	return (int)(round(n.get_yaw(size-1)/YAW_RESOLUTION) * grid_width * grid_height + round(n.get_y(size-1)/XY_RESOLUTION) * grid_width + round(n.get_x(size-1)/XY_RESOLUTION));
 }
 
 
@@ -323,7 +331,7 @@ void visualize_final_path(Node4D &current_node, std::map<int, Node4D> &closed_li
 			pose_stamped.pose.orientation.w = quat.w();;
 			path.poses.push_back(pose_stamped);
 		}
-		closed_list[current_node.get_parent_ind()].set_child_ind(calc_index(current_node));
+		closed_list[current_node.get_parent_ind()].set_child_ind(current_node.get_ind());
 		current_node = closed_list[current_node.get_parent_ind()];
 	}
 
@@ -334,7 +342,7 @@ void visualize_final_path(Node4D &current_node, std::map<int, Node4D> &closed_li
 /*
 	Publishes the final path using the current_node pointer
 */
-void visualize_final_path_center(Node4D &current_node, std::map<int, Node4D> &closed_list) {
+void visualize_final_path_center(Node4D &current_node, Node4D &dubins_node,std::map<int, Node4D> &closed_list) {
 
 	path_center.header.stamp = ros::Time::now();
 	path_center.header.frame_id = "/map";
@@ -360,6 +368,21 @@ void visualize_final_path_center(Node4D &current_node, std::map<int, Node4D> &cl
 			path_center.poses.push_back(pose_stamped);
 		}
 		current_node = closed_list[current_node.get_child_ind()];
+	}
+
+	for (int i = 0; i < dubins_node.get_size(); ++i)
+	{
+		pose_stamped.header.stamp = ros::Time::now();
+		pose_stamped.header.frame_id = "map";
+		pose_stamped.pose.position.x = dubins_node.get_x(i) + deltar * cos(dubins_node.get_yaw(i));
+		pose_stamped.pose.position.y = dubins_node.get_y(i) + deltar * sin(dubins_node.get_yaw(i));
+		pose_stamped.pose.position.z = 0;
+		tf::Quaternion quat = tf::createQuaternionFromYaw(dubins_node.get_yaw(i));
+		pose_stamped.pose.orientation.x = quat.x();
+		pose_stamped.pose.orientation.y = quat.y();
+		pose_stamped.pose.orientation.z = quat.z();
+		pose_stamped.pose.orientation.w = quat.w();;
+		path_center.poses.push_back(pose_stamped);
 	}
 
 	global_path_pub.publish(path_center);
@@ -401,7 +424,7 @@ void visualize_final_path_center(Node4D &current_node, std::map<int, Node4D> &cl
 */
 bool hybrid_astar_plan() {
 
-	if(valid_start && valid_goal) {
+	if(1) {
 
 		// path_found = false;
 
@@ -427,10 +450,10 @@ bool hybrid_astar_plan() {
 		total_nodes = 0;
 
 		// Computing rear-axle/hitch-point pose for start node
-		float deltar = (RF - RB) / 2.0;
-		syaw = tf::getYaw(start_pose.pose.orientation);
-		sx = start_pose.pose.position.x - deltar * cos(syaw);
-		sy = start_pose.pose.position.y - deltar * sin(syaw);
+		// float deltar = (RF - RB) / 2.0;
+		// syaw = tf::getYaw(start_pose.pose.orientation);
+		// sx = start_pose.pose.position.x - deltar * cos(syaw);
+		// sy = start_pose.pose.position.y - deltar * sin(syaw);
 
 		// tf::StampedTransform transform_robot;
 		// tf::StampedTransform transform_trailer;
@@ -446,45 +469,48 @@ bool hybrid_astar_plan() {
 		// listener.lookupTransform("map", "cargo_cart_link", ros::Time(0), transform_trailer);
 		// syaw_t = tf::getYaw(transform_trailer.getRotation());
 
-		Node4D start_node = Node4D(sx, sy, syaw, 0, syaw_t);
+		s_ind = (int)(round(syaw/YAW_RESOLUTION) * grid_width * grid_height + round(sy/XY_RESOLUTION) * grid_width + round(sx/XY_RESOLUTION));
+
+		Node4D start_node = Node4D(sx, sy, syaw, 0, syaw_t, s_ind);
 		if(start_node.check_collision(grid, bin_map, acc_obs_map)) {
 			// ROS_INFO("INVALID START");
 			valid_start = false;
 			return false;
 		}
-		ROS_INFO("VALID START - sx: %f sy: %f syaw: %f", sx, sy, syaw);
+		// ROS_INFO("VALID START - sx: %f sy: %f syaw: %f", sx, sy, syaw);
 		valid_start = true;
 
 		current_node = start_node;
 
 		// Computing rear-axle/hitch-point pose for goal node
-		deltar = (RF - RB) / 2.0;
-		gyaw = tf::getYaw(goal_pose.pose.orientation);
-		gx = goal_pose.pose.position.x - deltar * cos(gyaw);
-		gy = goal_pose.pose.position.y - deltar * sin(gyaw);
+		// deltar = (RF - RB) / 2.0;
+		// gyaw = tf::getYaw(goal_pose.pose.orientation);
+		// gx = goal_pose.pose.position.x - deltar * cos(gyaw);
+		// gy = goal_pose.pose.position.y - deltar * sin(gyaw);
+		g_ind = (int)(round(gyaw/YAW_RESOLUTION) * grid_width * grid_height + round(gy/XY_RESOLUTION) * grid_width + round(gx/XY_RESOLUTION));
 
-		Node4D goal_node = Node4D(gx, gy, gyaw, 0, gyaw);
+		Node4D goal_node = Node4D(gx, gy, gyaw, 0, gyaw, g_ind);
 		if(goal_node.check_collision(grid, bin_map, acc_obs_map)) {
 			// ROS_INFO("INVALID GOAL");
 			valid_goal = false;
 			return false;
 		}
-		ROS_INFO("VALID GOAL - gx: %f gy: %f gyaw: %f", gx, gy, gyaw);
+		// ROS_INFO("VALID GOAL - gx: %f gy: %f gyaw: %f", gx, gy, gyaw);
 		valid_goal = true;
 
-		ROS_INFO("Planning Hybrid A* path...");
+		// ROS_INFO("Planning Hybrid A* path...");
 		// create_steer_inputs(30);
 
 		std::map<int, Node4D> open_list; // Creating the open_list using a map
 		std::map<int, Node4D> closed_list; // Creating the closed_list using a map
 
-		open_list.insert(pair<int, Node4D>(calc_index(current_node), current_node)); // Adding the start node to the open list
+		open_list.insert(pair<int, Node4D>(current_node.get_ind(), current_node)); // Adding the start node to the open list
 		// cout << "Open List: " << open_list.begin()->first << " " << open_list.begin()->second << endl;
 		// cout << "Open List (Added start node) - " << endl;
 		// display_map(open_list);
 
 		priority_queue<pi, vector<pi>, greater<pi>> pq; // Creating a min priority queue to sort nodes with respect to highest priority (lowest cost)
-		pq.push(make_pair(calc_heuristic_cost(current_node), calc_index(current_node))); // Adding the start node to the priority queue
+		pq.push(make_pair(calc_heuristic_cost(current_node), current_node.get_ind())); // Adding the start node to the priority queue
 		// display_pq(pq);
 
 		pair<float, int> ind;
@@ -499,7 +525,7 @@ bool hybrid_astar_plan() {
 			// cout << "Iteration: " << iterations << endl;
 
 			if(open_list.empty()) {
-				ROS_INFO("SOLUTION DOESN'T EXIST - NO NODES FOUND IN OPEN LIST");
+				// ROS_INFO("SOLUTION DOESN'T EXIST - NO NODES FOUND IN OPEN LIST");
 				return false;
 			}
 
@@ -521,13 +547,13 @@ bool hybrid_astar_plan() {
 
 			new_node = create_dubins_node(current_node, goal_node);
 			if(!new_node.check_collision(grid, bin_map, acc_obs_map)) {
-				cout << "SOLUTION FOUND - DUBINS NODE" << endl;
-				printf("Iterations: %d Nodes: %d \n", iterations, total_nodes);
-				new_node.set_child_ind(calc_index(goal_node));
-				current_node = new_node;
+				// cout << "SOLUTION FOUND - DUBINS NODE" << endl;
+				// printf("Iterations: %d Nodes: %d \n", iterations, total_nodes);
+				// new_node.set_child_ind(goal_node.get_ind());
+				// current_node = new_node;
 				visualize_final_path(current_node, closed_list);
-				current_node = start_node;
-				visualize_final_path_center(current_node, closed_list);
+				// current_node = start_node;
+				visualize_final_path_center(current_node, new_node, closed_list);
 				// if(visualization) {
 				// 	visualize_nodes_pub.publish(nodes);
 				// }
@@ -561,7 +587,7 @@ bool hybrid_astar_plan() {
 				total_nodes++;
 				// ROS_INFO("Total Nodes: %d", total_nodes);
 
-				new_ind = calc_index(new_node);
+				new_ind = new_node.get_ind();
 				// cout << "New Index: " << new_ind << endl;
 
 				if(closed_list.count(new_ind)) {
@@ -572,7 +598,7 @@ bool hybrid_astar_plan() {
 					open_list[new_ind] = new_node;
 					// cout << "Open List (Added new node) - " << endl;
 					// display_map(open_list);
-					pq.push(make_pair(calc_heuristic_cost(new_node), calc_index(new_node)));
+					pq.push(make_pair(calc_heuristic_cost(new_node), new_node.get_ind()));
 					// display_pq(pq);
 				} else {
 					if(open_list[new_ind].get_cost() > new_node.get_cost()) {

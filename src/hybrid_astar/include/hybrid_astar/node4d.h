@@ -31,7 +31,7 @@ public:
 	Node4D() {};
 
 	// Constructor for start and goal nodes
-	Node4D(float x, float y, float yaw, float yawt, float yaw_t) {
+	Node4D(float x, float y, float yaw, float yawt, float yaw_t, int ind) {
 
 		xlist.push_back(x);
 		ylist.push_back(y);
@@ -41,13 +41,14 @@ public:
 		this->direction = 1;
 		this->steer = 0.0;
 		this->cost = 0.0;
-		this->parent = NULL;
-		this->child = NULL;
+		this->ind = ind;
+		this->parent_ind = NULL;
+		this->child_ind = NULL;
 	}
 
 	// Constructor for successor nodes
 	Node4D(std::vector<float> xlist, std::vector<float> ylist, std::vector<float> yawlist, 
-		std::vector<float> yawtlist, std::vector<float> yawt,int dir, float steer, float cost, int parent_ind) {
+		std::vector<float> yawtlist, std::vector<float> yawt,int dir, float steer, float cost, int ind, int parent_ind) {
 
 		int n = xlist.capacity();
 		this->xlist.resize(n);
@@ -64,6 +65,7 @@ public:
 		this->direction = dir;
 		this->steer = steer;
 		this->cost = cost;
+		this->ind = ind;
 		this->parent_ind = parent_ind;
 		this->child_ind = NULL;
 	}
@@ -90,6 +92,8 @@ public:
 
 	Node4D* get_child() { return child; }
 
+	int get_ind() { return ind; }
+
 	int get_parent_ind() { return parent_ind; }
 
 	int get_child_ind() { return child_ind; }
@@ -98,6 +102,8 @@ public:
 
 	// Set functions to set class data
 	void set_child(Node4D* next) { child = next; } 
+
+	void set_ind(int ind) { this->ind = ind; }
 
 	void set_child_ind(int child_ind) { this->child_ind = child_ind; }
 
@@ -112,9 +118,6 @@ public:
 	
 private:
 	// Private node variables
-	int xind;
-	int yind;
-	int yawind;
 	std::vector<float> xlist; // x coords of path points
 	std::vector<float> ylist; // y coords of path points
 	std::vector<float> yawlist; // yaw of path points
@@ -125,6 +128,7 @@ private:
 	float cost; // Node cost
 	Node4D* parent; // Pointer to the parent node
 	Node4D* child; // Pointer to the next/child node in the final path
+	int ind;
 	int parent_ind;
 	int child_ind;
 };
