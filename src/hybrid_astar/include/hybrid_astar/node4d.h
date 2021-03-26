@@ -28,6 +28,8 @@ class Node4D {
 
 public:
 
+	Node4D() {};
+
 	// Constructor for start and goal nodes
 	Node4D(float x, float y, float yaw, float yawt, float yaw_t) {
 
@@ -39,13 +41,13 @@ public:
 		this->direction = 1;
 		this->steer = 0.0;
 		this->cost = 0.0;
-		this->parent = nullptr;
-		this->child = nullptr;
+		this->parent = NULL;
+		this->child = NULL;
 	}
 
 	// Constructor for successor nodes
 	Node4D(std::vector<float> xlist, std::vector<float> ylist, std::vector<float> yawlist, 
-		std::vector<float> yawtlist, std::vector<float> yawt,int dir, float steer, float cost, Node4D* parent) {
+		std::vector<float> yawtlist, std::vector<float> yawt,int dir, float steer, float cost, int parent_ind) {
 
 		int n = xlist.capacity();
 		this->xlist.resize(n);
@@ -62,8 +64,8 @@ public:
 		this->direction = dir;
 		this->steer = steer;
 		this->cost = cost;
-		this->parent = parent;
-		this->child = nullptr;
+		this->parent_ind = parent_ind;
+		this->child_ind = NULL;
 	}
 	
 
@@ -88,11 +90,16 @@ public:
 
 	Node4D* get_child() { return child; }
 
+	int get_parent_ind() { return parent_ind; }
+
+	int get_child_ind() { return child_ind; }
+
 	int get_size() const { return xlist.capacity(); }
 
 	// Set functions to set class data
 	void set_child(Node4D* next) { child = next; } 
 
+	void set_child_ind(int child_ind) { this->child_ind = child_ind; }
 
 	// Fucntion to check path collision
 	bool check_path_collision(bool** bin_map);
@@ -118,6 +125,8 @@ private:
 	float cost; // Node cost
 	Node4D* parent; // Pointer to the parent node
 	Node4D* child; // Pointer to the next/child node in the final path
+	int parent_ind;
+	int child_ind;
 };
 
 #endif
