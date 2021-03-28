@@ -7,7 +7,7 @@ static const float YAW_RESOLUTION = (15 * (M_PI / 180)); // [rad] Yaw resolution
 static const float MOVE_STEP = 0.1; // [m] Path interpolate resolution
 static const float PATH_LENGTH = 0.8; // [m] Length of the path create by each node
 static const int VECTOR_SIZE = ceil(PATH_LENGTH/MOVE_STEP);
-static const float MIN_SAFE_DIST = 0.25; // [m] Minimum safe distance between vehicle and obstacles
+static const float MIN_SAFE_DIST = 0.10; // [m] Minimum safe distance between vehicle and obstacles
 static const int STEER_STEP = 2;
 
 // Path accuracy

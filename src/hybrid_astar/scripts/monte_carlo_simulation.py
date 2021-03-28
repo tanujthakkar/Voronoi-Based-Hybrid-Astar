@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 
 # Importing libraries
+import sys
 from math import pi
 import pandas as pd
 from random import uniform
@@ -30,27 +31,27 @@ def main():
 	successful_tests = 0
 	results = []
 
-	now = datetime.now()
-	dt_string = now.strftime("%Y%m%d-%H%M%S")
-	df = pd.DataFrame([], columns = ['sx', 'sy', 'syaw', 'syaw_t', 'gx', 'gy', 'gyaw', 'Solution', 'Iterations', 'Nodes', 'Execution Time', 'Path'])
-	df.to_csv(dt_string + '.csv', mode = 'a')
+	# now = datetime.now()
+	# dt_string = now.strftime("%Y%m%d-%H%M%S")
+	# df = pd.DataFrame([], columns = ['sx', 'sy', 'syaw', 'syaw_t', 'gx', 'gy', 'gyaw', 'Solution', 'Iterations', 'Nodes', 'Execution Time', 'Path'])
+	# df.to_csv(dt_string + '.csv', mode = 'a')
 
-	while(valid_tests < 5):
+	while(valid_tests < 1):
 		total_tests = total_tests + 1
-		# sx = 6.24
-		# sy = 5.25
-		# syaw = 0.0
-		# syaw_t = 0.0
-		# gx = 17.06
-		# gy = 8.50
-		# gyaw = 1.57
-		sx = uniform(1.5 ,20.0)
-		sy = uniform(2.0 ,20.0)
-		syaw = uniform(-3.14, 3.14)
-		syaw_t = uniform(min(pi_to_pi(syaw - 1.395), pi_to_pi(syaw + 1.395)), max(pi_to_pi(syaw - 1.395), pi_to_pi(syaw + 1.395)))
-		gx = uniform(1.5 ,20.0)
-		gy = uniform(2.0 ,20.0)
-		gyaw = uniform(-3.14, 3.14)
+		sx = 4.85
+		sy = 15.22
+		syaw = -1.57
+		syaw_t = -1.57
+		gx = 6.25
+		gy = 5.25
+		gyaw = 0.0
+		# sx = uniform(1.5 ,20.0)
+		# sy = uniform(2.0 ,20.0)
+		# syaw = uniform(-3.14, 3.14)
+		# syaw_t = uniform(min(pi_to_pi(syaw - 1.395), pi_to_pi(syaw + 1.395)), max(pi_to_pi(syaw - 1.395), pi_to_pi(syaw + 1.395)))
+		# gx = uniform(1.5 ,20.0)
+		# gy = uniform(2.0 ,20.0)
+		# gyaw = uniform(-3.14, 3.14)
 		result = test(sx, sy, syaw, syaw_t, gx, gy, gyaw)
 		if(result.valid_start and result.valid_goal):
 			x = []
@@ -72,8 +73,8 @@ def main():
 			else:
 				solution_found = 'FALSE'
 			valid_tests = valid_tests + 1
-			df = pd.DataFrame([[sx, sy, syaw, syaw_t, gx, gy, gyaw, solution_found, result.iterations, result.nodes + 1, result.execution_time, [x, y]]], columns = ['sx', 'sy', 'syaw', 'syaw_t', 'gx', 'gy', 'gyaw', 'Solution', 'Iterations', 'Nodes', 'Execution Time', 'Path'])
-			df.to_csv(dt_string + '.csv', mode = 'a', header = False)
+			# df = pd.DataFrame([[sx, sy, syaw, syaw_t, gx, gy, gyaw, solution_found, result.iterations, result.nodes + 1, result.execution_time, [x, y]]], columns = ['sx', 'sy', 'syaw', 'syaw_t', 'gx', 'gy', 'gyaw', 'Solution', 'Iterations', 'Nodes', 'Execution Time', 'Path'])
+			# df.to_csv(dt_string + '.csv', mode = 'a', header = False)
 	
 	print("Successful Test: ", successful_tests)
 	print("Total Tests: ", total_tests)

@@ -140,20 +140,69 @@ bool Node4D::check_collision(nav_msgs::OccupancyGrid::Ptr grid, bool** bin_map, 
 		for(float k = -RL/2; k <= RL/2 + MIN_SAFE_DIST; k += RL/4) {
 			for(float j = -RW/2 - MIN_SAFE_DIST; j <= RW/2 + MIN_SAFE_DIST; j += RW/4) {
 
-				s = (cx + k * cos(yawlist[i]) + j * sin(yawlist[i]))/XY_RESOLUTION + 0.001;
-				t = (cy + k * sin(yawlist[i]) + j * cos(yawlist[i]))/XY_RESOLUTION + 0.001;
+				// Top Right
+				s = (cx + (k * cos(yawlist[i])) - (j * sin(yawlist[i])))/XY_RESOLUTION;
+				t = (cy + (k * sin(yawlist[i])) + (j * cos(yawlist[i])))/XY_RESOLUTION;
 
-	     		// robot_collision_check_point.x = s * XY_RESOLUTION;
-	     		// robot_collision_check_point.y = t * XY_RESOLUTION;
-	     		// robot_collision_check_points.points.push_back(robot_collision_check_point);
-	     		// robot_collision_check_pub.publish(robot_collision_check_points);
+				// robot_collision_check_point.x = s * XY_RESOLUTION;
+	   //   		robot_collision_check_point.y = t * XY_RESOLUTION;
+	   //   		robot_collision_check_points.points.push_back(robot_collision_check_point);
+	   //   		robot_collision_check_pub.publish(robot_collision_check_points);
 
-	     		if(bin_map[s][t] != 0) {
+				if(bin_map[s][t] != 0) {
 					// cout << "X : " << s << " Y : "<< t << " BIN_MAP : " << bin_map[s][t] << endl;
-	     			// robot_collision_check_pub.publish(robot_collision_check_points);
-	     			// ROS_INFO("ROBOT POLYGON COLLISION");
+					// robot_collision_check_pub.publish(robot_collision_check_points);
+					// ROS_INFO("ROBOT POLYGON COLLISION");
 					return true; // IN COLLISION
-	     		}
+				}
+
+				// Top Left
+				s = (cx - (k * cos(yawlist[i])) - (j * sin(yawlist[i])))/XY_RESOLUTION;
+				t = (cy - (k * sin(yawlist[i])) + (j * cos(yawlist[i])))/XY_RESOLUTION;
+
+				// robot_collision_check_point.x = s * XY_RESOLUTION;
+	   //   		robot_collision_check_point.y = t * XY_RESOLUTION;
+	   //   		robot_collision_check_points.points.push_back(robot_collision_check_point);
+	   //   		robot_collision_check_pub.publish(robot_collision_check_points);
+
+				if(bin_map[s][t] != 0) {
+					// cout << "X : " << s << " Y : "<< t << " BIN_MAP : " << bin_map[s][t] << endl;
+					// robot_collision_check_pub.publish(robot_collision_check_points);
+					// ROS_INFO("ROBOT POLYGON COLLISION");
+					return true; // IN COLLISION
+				}
+
+				// Bottom Left
+				s = (cx - (k * cos(yawlist[i])) + (j * sin(yawlist[i])))/XY_RESOLUTION;
+				t = (cy - (k * sin(yawlist[i])) - (j * cos(yawlist[i])))/XY_RESOLUTION;
+
+				// robot_collision_check_point.x = s * XY_RESOLUTION;
+	   //   		robot_collision_check_point.y = t * XY_RESOLUTION;
+	   //   		robot_collision_check_points.points.push_back(robot_collision_check_point);
+	   //   		robot_collision_check_pub.publish(robot_collision_check_points);
+
+				if(bin_map[s][t] != 0) {
+					// cout << "X : " << s << " Y : "<< t << " BIN_MAP : " << bin_map[s][t] << endl;
+					// robot_collision_check_pub.publish(robot_collision_check_points);
+					// ROS_INFO("ROBOT POLYGON COLLISION");
+					return true; // IN COLLISION
+				}
+
+				// Bottom Right
+				s = (cx + (k * cos(yawlist[i])) + (j * sin(yawlist[i])))/XY_RESOLUTION;
+				t = (cy + (k * sin(yawlist[i])) - (j * cos(yawlist[i])))/XY_RESOLUTION;
+
+				// robot_collision_check_point.x = s * XY_RESOLUTION;
+	   //   		robot_collision_check_point.y = t * XY_RESOLUTION;
+	   //   		robot_collision_check_points.points.push_back(robot_collision_check_point);
+	   //   		robot_collision_check_pub.publish(robot_collision_check_points);
+
+				if(bin_map[s][t] != 0) {
+					// cout << "X : " << s << " Y : "<< t << " BIN_MAP : " << bin_map[s][t] << endl;
+					// robot_collision_check_pub.publish(robot_collision_check_points);
+					// ROS_INFO("ROBOT POLYGON COLLISION");
+					return true; // IN COLLISION
+				}
 			}
 		}
 
@@ -193,23 +242,73 @@ bool Node4D::check_collision(nav_msgs::OccupancyGrid::Ptr grid, bool** bin_map, 
 		// 	return false; // NO COLLISION
 		// }
 
-		// Checking the robot polygon/rectangle
+		// Checking the trailer polygon/rectangle
 		for(float k = -TL/2 - MIN_SAFE_DIST; k <= TL/2; k += TL/4) {
 			for(float j = -TW/2 - MIN_SAFE_DIST; j <= TW/2 + MIN_SAFE_DIST; j += TW/4) {
 
-				s = (ctx + k * cos(yawt[i]) + j * sin(yawt[i]))/XY_RESOLUTION + 0.001;
-				t = (cty + k * sin(yawt[i]) + j * cos(yawt[i]))/XY_RESOLUTION + 0.001;
-	     		
-	     		// trailer_collision_check_point.x = s * XY_RESOLUTION;
-	     		// trailer_collision_check_point.y = t * XY_RESOLUTION;
-	     		// trailer_collision_check_points.points.push_back(trailer_collision_check_point);
-	     		// trailer_collision_check_pub.publish(trailer_collision_check_points);
+				// Top Right
+				s = (ctx + (k * cos(yawt[i])) - (j * sin(yawt[i])))/XY_RESOLUTION;
+				t = (cty + (k * sin(yawt[i])) + (j * cos(yawt[i])))/XY_RESOLUTION;
 
-	     		if(bin_map[s][t] != 0) {
+				// trailer_collision_check_point.x = s * XY_RESOLUTION;
+	   //   		trailer_collision_check_point.y = t * XY_RESOLUTION;
+	   //   		trailer_collision_check_points.points.push_back(trailer_collision_check_point);
+	   //   		trailer_collision_check_pub.publish(trailer_collision_check_points);
+
+				if(bin_map[s][t] != 0) {
 					// cout << "X : " << s << " Y : "<< t << " BIN_MAP : " << bin_map[s][t] << endl;
-	     			// ROS_INFO("TRAILER POLYGON COLLISION");
+					// robot_collision_check_pub.publish(robot_collision_check_points);
+					// ROS_INFO("ROBOT POLYGON COLLISION");
 					return true; // IN COLLISION
-	     		}
+				}
+
+				// Top Left
+				s = (ctx - (k * cos(yawt[i])) - (j * sin(yawt[i])))/XY_RESOLUTION;
+				t = (cty - (k * sin(yawt[i])) + (j * cos(yawt[i])))/XY_RESOLUTION;
+
+				// trailer_collision_check_point.x = s * XY_RESOLUTION;
+				// trailer_collision_check_point.y = t * XY_RESOLUTION;
+				// trailer_collision_check_points.points.push_back(trailer_collision_check_point);
+				// trailer_collision_check_pub.publish(trailer_collision_check_points);
+
+				if(bin_map[s][t] != 0) {
+					// cout << "X : " << s << " Y : "<< t << " BIN_MAP : " << bin_map[s][t] << endl;
+					// robot_collision_check_pub.publish(robot_collision_check_points);
+					// ROS_INFO("ROBOT POLYGON COLLISION");
+					return true; // IN COLLISION
+				}
+
+				// Bottom Left
+				s = (ctx - (k * cos(yawt[i])) + (j * sin(yawt[i])))/XY_RESOLUTION;
+				t = (cty - (k * sin(yawt[i])) - (j * cos(yawt[i])))/XY_RESOLUTION;
+
+				// trailer_collision_check_point.x = s * XY_RESOLUTION;
+				// trailer_collision_check_point.y = t * XY_RESOLUTION;
+				// trailer_collision_check_points.points.push_back(trailer_collision_check_point);
+				// trailer_collision_check_pub.publish(trailer_collision_check_points);
+
+				if(bin_map[s][t] != 0) {
+					// cout << "X : " << s << " Y : "<< t << " BIN_MAP : " << bin_map[s][t] << endl;
+					// robot_collision_check_pub.publish(robot_collision_check_points);
+					// ROS_INFO("ROBOT POLYGON COLLISION");
+					return true; // IN COLLISION
+				}
+
+				// Bottom Right
+				s = (ctx + (k * cos(yawt[i])) + (j * sin(yawt[i])))/XY_RESOLUTION;
+				t = (cty + (k * sin(yawt[i])) - (j * cos(yawt[i])))/XY_RESOLUTION;
+
+				// trailer_collision_check_point.x = s * XY_RESOLUTION;
+				// trailer_collision_check_point.y = t * XY_RESOLUTION;
+				// trailer_collision_check_points.points.push_back(trailer_collision_check_point);
+				// trailer_collision_check_pub.publish(trailer_collision_check_points);
+
+				if(bin_map[s][t] != 0) {
+					// cout << "X : " << s << " Y : "<< t << " BIN_MAP : " << bin_map[s][t] << endl;
+					// robot_collision_check_pub.publish(robot_collision_check_points);
+					// ROS_INFO("ROBOT POLYGON COLLISION");
+					return true; // IN COLLISION
+				}
 			}
 		}
 	}
