@@ -91,7 +91,7 @@ bool Node4D::check_collision(nav_msgs::OccupancyGrid::Ptr grid, bool** bin_map, 
 		// cout << "Press ENTER for iteration " << i << endl;
 		// cin.get();
 
-		if(abs(yawlist[i]) - abs(yawt[i]) >= 1.395) {
+		if(abs(abs(yawlist[i] - yawt[i]) - 3.14) <= 1.744) {
 			// ROS_INFO("SELF-COLLISION - JACKNIFE");
 			return true;
 		}

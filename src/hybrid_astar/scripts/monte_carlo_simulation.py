@@ -29,7 +29,8 @@ def main():
 	total_tests = 0
 	valid_tests = 0
 	successful_tests = 0
-	results = []
+	tests = []
+	redundant = 0
 
 	# now = datetime.now()
 	# dt_string = now.strftime("%Y%m%d-%H%M%S")
@@ -38,13 +39,13 @@ def main():
 
 	while(valid_tests < 1):
 		total_tests = total_tests + 1
-		sx = 4.85
-		sy = 15.22
-		syaw = -1.57
-		syaw_t = -1.57
-		gx = 6.25
-		gy = 5.25
-		gyaw = 0.0
+		sx = 55.17
+		sy = 47.95
+		syaw = -0.785
+		syaw_t = -0.785
+		gx = 49.51
+		gy = 59.72
+		gyaw = -1.57
 		# sx = uniform(1.5 ,20.0)
 		# sy = uniform(2.0 ,20.0)
 		# syaw = uniform(-3.14, 3.14)
@@ -52,6 +53,10 @@ def main():
 		# gx = uniform(1.5 ,20.0)
 		# gy = uniform(2.0 ,20.0)
 		# gyaw = uniform(-3.14, 3.14)
+		if([sx, sy, syaw, syaw_t, gx, gy, gyaw] in tests):
+			redundant = redundant + 1
+			continue
+		tests.append([sx, sy, syaw, syaw_t, gx, gy, gyaw])
 		result = test(sx, sy, syaw, syaw_t, gx, gy, gyaw)
 		if(result.valid_start and result.valid_goal):
 			x = []
@@ -76,7 +81,8 @@ def main():
 			# df = pd.DataFrame([[sx, sy, syaw, syaw_t, gx, gy, gyaw, solution_found, result.iterations, result.nodes + 1, result.execution_time, [x, y]]], columns = ['sx', 'sy', 'syaw', 'syaw_t', 'gx', 'gy', 'gyaw', 'Solution', 'Iterations', 'Nodes', 'Execution Time', 'Path'])
 			# df.to_csv(dt_string + '.csv', mode = 'a', header = False)
 	
-	print("Successful Test: ", successful_tests)
+	print("Successful Tests: ", successful_tests)
+	print("Redundant Tests: ", redundant)
 	print("Total Tests: ", total_tests)
 
 

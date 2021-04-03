@@ -131,6 +131,7 @@ endif()
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("/home/tanujthakkar/ROS/catkin_ws/build/gtest/cmake_install.cmake")
+  include("/home/tanujthakkar/ROS/catkin_ws/build/aws-robomaker-hospital-world/cmake_install.cmake")
   include("/home/tanujthakkar/ROS/catkin_ws/build/ridgeback_desktop/ridgeback_desktop/cmake_install.cmake")
   include("/home/tanujthakkar/ROS/catkin_ws/build/ridgeback_simulator/ridgeback_simulator/cmake_install.cmake")
   include("/home/tanujthakkar/ROS/catkin_ws/build/ridgeback_simulator/mecanum_gazebo_plugin/cmake_install.cmake")

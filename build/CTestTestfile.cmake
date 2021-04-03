@@ -5,6 +5,7 @@
 # This file includes the relevant testing commands required for 
 # testing this directory and lists subdirectories to be tested as well.
 subdirs("gtest")
+subdirs("aws-robomaker-hospital-world")
 subdirs("ridgeback_desktop/ridgeback_desktop")
 subdirs("ridgeback_simulator/ridgeback_simulator")
 subdirs("ridgeback_simulator/mecanum_gazebo_plugin")

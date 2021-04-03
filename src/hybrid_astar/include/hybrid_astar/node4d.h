@@ -101,6 +101,8 @@ public:
 	int get_size() const { return xlist.capacity(); }
 
 	// Set functions to set class data
+	void set_cost(float cost) { this->cost + cost; }
+
 	void set_child(Node4D* next) { child = next; } 
 
 	void set_ind(int ind) { this->ind = ind; }

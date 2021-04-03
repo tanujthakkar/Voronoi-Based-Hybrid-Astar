@@ -41,6 +41,19 @@
     </plugin>
   </gazebo>
 
+  <gazebo>
+    <plugin name="p3d_base_controller" filename="libgazebo_ros_p3d.so">
+      <alwaysOn>true</alwaysOn>
+      <updateRate>50.0</updateRate>
+      <bodyName>base_link</bodyName>
+      <topicName>ground_truth/state</topicName>
+      <gaussianNoise>0.01</gaussianNoise>
+      <frameName>map</frameName>
+      <xyzOffsets>0 0 0</xyzOffsets>
+      <rpyOffsets>0 0 0</rpyOffsets>
+    </plugin>
+  </gazebo>
+
   <!-- All static links get collapsed down to base_link in Gazebo, so that's
        the one to apply the colour to (in Gazebo 5+). -->
   <gazebo reference="base_link">

@@ -1109,6 +1109,12 @@ astar_BINARY_DIR:STATIC=/home/tanujthakkar/ROS/catkin_ws/build/Astar
 //Value Computed by CMake
 astar_SOURCE_DIR:STATIC=/home/tanujthakkar/ROS/catkin_ws/src/Astar
 
+//Value Computed by CMake
+aws_robomaker_hospital_world_BINARY_DIR:STATIC=/home/tanujthakkar/ROS/catkin_ws/build/aws-robomaker-hospital-world
+
+//Value Computed by CMake
+aws_robomaker_hospital_world_SOURCE_DIR:STATIC=/home/tanujthakkar/ROS/catkin_ws/src/aws-robomaker-hospital-world
+
 //The directory containing a CMake configuration file for bond.
 bond_DIR:PATH=/opt/ros/melodic/share/bond/cmake
 
@@ -2140,7 +2146,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=18
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=19
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP

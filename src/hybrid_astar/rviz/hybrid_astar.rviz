@@ -10,7 +10,7 @@ Panels:
         - /Local Planner1
         - /Pure Pursuit1
       Splitter Ratio: 0.5
-    Tree Height: 363
+    Tree Height: 719
   - Class: rviz/Selection
     Name: Selection
   - Class: rviz/Tool Properties
@@ -551,16 +551,16 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 23.64531707763672
+      Distance: 23.948869705200195
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 10.868510246276855
-        Y: 11.233424186706543
-        Z: 1.188267707824707
+        X: 54.605342864990234
+        Y: 51.68745040893555
+        Z: 1.2320444583892822
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
@@ -569,7 +569,7 @@ Visualization Manager:
       Pitch: 1.5697963237762451
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 3.143582820892334
+      Yaw: 3.1235833168029785
     Saved: ~
 Window Geometry:
   Displays:
