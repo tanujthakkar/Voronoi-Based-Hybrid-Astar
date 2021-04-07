@@ -145,9 +145,9 @@ bool Node4D::check_collision(nav_msgs::OccupancyGrid::Ptr grid, bool** bin_map, 
 				t = (cy + (k * sin(yawlist[i])) + (j * cos(yawlist[i])))/XY_RESOLUTION;
 
 				// robot_collision_check_point.x = s * XY_RESOLUTION;
-	   //   		robot_collision_check_point.y = t * XY_RESOLUTION;
-	   //   		robot_collision_check_points.points.push_back(robot_collision_check_point);
-	   //   		robot_collision_check_pub.publish(robot_collision_check_points);
+				// robot_collision_check_point.y = t * XY_RESOLUTION;
+				// robot_collision_check_points.points.push_back(robot_collision_check_point);
+				// robot_collision_check_pub.publish(robot_collision_check_points);
 
 				if(bin_map[s][t] != 0) {
 					// cout << "X : " << s << " Y : "<< t << " BIN_MAP : " << bin_map[s][t] << endl;
@@ -161,9 +161,9 @@ bool Node4D::check_collision(nav_msgs::OccupancyGrid::Ptr grid, bool** bin_map, 
 				t = (cy - (k * sin(yawlist[i])) + (j * cos(yawlist[i])))/XY_RESOLUTION;
 
 				// robot_collision_check_point.x = s * XY_RESOLUTION;
-	   //   		robot_collision_check_point.y = t * XY_RESOLUTION;
-	   //   		robot_collision_check_points.points.push_back(robot_collision_check_point);
-	   //   		robot_collision_check_pub.publish(robot_collision_check_points);
+				// robot_collision_check_point.y = t * XY_RESOLUTION;
+				// robot_collision_check_points.points.push_back(robot_collision_check_point);
+				// robot_collision_check_pub.publish(robot_collision_check_points);
 
 				if(bin_map[s][t] != 0) {
 					// cout << "X : " << s << " Y : "<< t << " BIN_MAP : " << bin_map[s][t] << endl;
@@ -177,9 +177,9 @@ bool Node4D::check_collision(nav_msgs::OccupancyGrid::Ptr grid, bool** bin_map, 
 				t = (cy - (k * sin(yawlist[i])) - (j * cos(yawlist[i])))/XY_RESOLUTION;
 
 				// robot_collision_check_point.x = s * XY_RESOLUTION;
-	   //   		robot_collision_check_point.y = t * XY_RESOLUTION;
-	   //   		robot_collision_check_points.points.push_back(robot_collision_check_point);
-	   //   		robot_collision_check_pub.publish(robot_collision_check_points);
+				// robot_collision_check_point.y = t * XY_RESOLUTION;
+				// robot_collision_check_points.points.push_back(robot_collision_check_point);
+				// robot_collision_check_pub.publish(robot_collision_check_points);
 
 				if(bin_map[s][t] != 0) {
 					// cout << "X : " << s << " Y : "<< t << " BIN_MAP : " << bin_map[s][t] << endl;
@@ -193,9 +193,9 @@ bool Node4D::check_collision(nav_msgs::OccupancyGrid::Ptr grid, bool** bin_map, 
 				t = (cy + (k * sin(yawlist[i])) - (j * cos(yawlist[i])))/XY_RESOLUTION;
 
 				// robot_collision_check_point.x = s * XY_RESOLUTION;
-	   //   		robot_collision_check_point.y = t * XY_RESOLUTION;
-	   //   		robot_collision_check_points.points.push_back(robot_collision_check_point);
-	   //   		robot_collision_check_pub.publish(robot_collision_check_points);
+				// robot_collision_check_point.y = t * XY_RESOLUTION;
+				// robot_collision_check_points.points.push_back(robot_collision_check_point);
+				// robot_collision_check_pub.publish(robot_collision_check_points);
 
 				if(bin_map[s][t] != 0) {
 					// cout << "X : " << s << " Y : "<< t << " BIN_MAP : " << bin_map[s][t] << endl;
@@ -251,9 +251,9 @@ bool Node4D::check_collision(nav_msgs::OccupancyGrid::Ptr grid, bool** bin_map, 
 				t = (cty + (k * sin(yawt[i])) + (j * cos(yawt[i])))/XY_RESOLUTION;
 
 				// trailer_collision_check_point.x = s * XY_RESOLUTION;
-	   //   		trailer_collision_check_point.y = t * XY_RESOLUTION;
-	   //   		trailer_collision_check_points.points.push_back(trailer_collision_check_point);
-	   //   		trailer_collision_check_pub.publish(trailer_collision_check_points);
+				// trailer_collision_check_point.y = t * XY_RESOLUTION;
+				// trailer_collision_check_points.points.push_back(trailer_collision_check_point);
+				// trailer_collision_check_pub.publish(trailer_collision_check_points);
 
 				if(bin_map[s][t] != 0) {
 					// cout << "X : " << s << " Y : "<< t << " BIN_MAP : " << bin_map[s][t] << endl;

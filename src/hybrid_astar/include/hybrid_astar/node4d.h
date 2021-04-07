@@ -48,9 +48,9 @@ public:
 
 	// Constructor for successor nodes
 	Node4D(std::vector<float> xlist, std::vector<float> ylist, std::vector<float> yawlist, 
-		std::vector<float> yawtlist, std::vector<float> yawt,int dir, float steer, float cost, int ind, int parent_ind) {
+		std::vector<float> yawtlist, std::vector<float> yawt, int dir, float steer, float cost, int ind, int parent_ind) {
 
-		int n = xlist.capacity();
+		int n = xlist.size();
 		this->xlist.resize(n);
 		this->ylist.resize(n);
 		this->yawlist.resize(n);
@@ -98,7 +98,7 @@ public:
 
 	int get_child_ind() { return child_ind; }
 
-	int get_size() const { return xlist.capacity(); }
+	int get_size() const { return xlist.size(); }
 
 	// Set functions to set class data
 	void set_cost(float cost) { this->cost + cost; }

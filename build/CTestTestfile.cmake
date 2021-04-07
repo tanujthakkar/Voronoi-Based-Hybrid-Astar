@@ -5,12 +5,12 @@
 # This file includes the relevant testing commands required for 
 # testing this directory and lists subdirectories to be tested as well.
 subdirs("gtest")
-subdirs("aws-robomaker-hospital-world")
 subdirs("ridgeback_desktop/ridgeback_desktop")
 subdirs("ridgeback_simulator/ridgeback_simulator")
 subdirs("ridgeback_simulator/mecanum_gazebo_plugin")
 subdirs("ridgeback/ridgeback_msgs")
 subdirs("indoor_nav")
+subdirs("car_geometric_planner")
 subdirs("ridgeback/ridgeback_description")
 subdirs("ridgeback_simulator/ridgeback_gazebo")
 subdirs("ridgeback/ridgeback_navigation")
@@ -20,3 +20,4 @@ subdirs("ira_laser_tools")
 subdirs("ridgeback/ridgeback_control")
 subdirs("hybrid_astar")
 subdirs("universal_global_planner")
+subdirs("gazebo_ros_2Dmap_plugin")

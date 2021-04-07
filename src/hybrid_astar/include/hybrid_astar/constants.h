@@ -8,7 +8,7 @@ static const float MOVE_STEP = 0.1; // [m] Path interpolate resolution
 static const float PATH_LENGTH = 0.8; // [m] Length of the path create by each node
 static const int VECTOR_SIZE = ceil(PATH_LENGTH/MOVE_STEP);
 static const float MIN_SAFE_DIST = 0.10; // [m] Minimum safe distance between vehicle and obstacles
-static const int STEER_STEP = 2;
+static const int STEER_STEP = 16;
 
 // Path accuracy
 static const float XY_TOLERANCE = 0.8; // [m] Tolerance of error in goal position
@@ -25,8 +25,8 @@ static const float RB = 0.161; // [m] Distance from rear axle to back end
 // Trailer Configuration
 static const float TW = 0.643; // [m] Width of the trailer
 static const float TL = 1.0; // [m] Length of the trailer
-static const float RTR = 0.4; // [m] Distance from the rear axle (hitch position) of the tractor to rear axle of the trailer
-static const float RTF = 0.0; // [m] Distance from rear axle of tractor to trailer front end
+static const float RTR = 0.9; // [m] Distance from the rear axle (hitch position) of the tractor to rear axle of the trailer
+static const float RTF = 0.025; // [m] Distance from rear axle of tractor to trailer front end
 static const float RTB = 1.0; // [m] Distance from rear axle of tractor to trailer back end
 
 // Costs

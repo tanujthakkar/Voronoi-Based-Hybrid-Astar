@@ -1,9 +1,9 @@
 <launch>
 
 	<arg name="debug" default="false"/>
-	<arg name="gui" default="true"/>
+	<arg name="gui" default="false"/>
 	<arg name="pause" default="false"/>
-	<arg name="world" value="$(find indoor_nav)/world/hospital_04.world"/>
+	<arg name="world" value="$(find hybrid_astar)/worlds/hospital_04.world"/>
 
   	<include file="$(find gazebo_ros)/launch/empty_world.launch">
   		<arg name="world_name" default="$(arg world)"/>
@@ -15,14 +15,23 @@
 
 	<include file="$(find ridgeback_gazebo)/launch/spawn_ridgeback.launch">
 		<arg name="config" default="dual_hokuyo_lasers" />
-	    <arg name="x" default="0.0"/>
-	    <arg name="y" default="-17.5"/>
+	    <arg name="x" default="-17.0"/>
+	    <arg name="y" default="0.0"/>
 	    <arg name="z" default="0.025893"/>
-	    <arg name="yaw" default="1.57"/>
+	    <arg name="yaw" default="0.0"/>
 	</include>
 
 	<!-- AMCL -->
-	<include file="$(find ridgeback_navigation)/launch/amcl_demo.launch"/>
+	<arg name="scan_topic" default="front/scan" />
+    <arg name="initial_pose_x" default="4.63" />
+    <arg name="initial_pose_y" default="12.60" />
+    <arg name="initial_pose_a" default="0.0" />
+    <include file="$(find ridgeback_navigation)/launch/include/amcl.launch" >
+	    <arg name="scan_topic"     value="$(arg scan_topic)" />
+	    <arg name="initial_pose_x" value="$(arg initial_pose_x)" />
+	    <arg name="initial_pose_y" value="$(arg initial_pose_y)" />
+	    <arg name="initial_pose_a" value="$(arg initial_pose_a)" />
+    </include>
 
 	<!--- Move Base -->
   	<!-- <include file="$(find ridgeback_navigation)/launch/include/move_base.launch" /> -->
@@ -30,13 +39,13 @@
     <!-- <node pkg="map_server" name="map_server" type="map_server" args="$(find indoor_nav)/maps/dual_hoyuko_full_map.yaml"/> -->
 
     <!-- Hospital -->
-    <node pkg="map_server" name="map_server" type="map_server" args="$(find hybrid_astar)/maps/hospital_04_hector.yaml"/>
+    <node pkg="map_server" name="map_server" type="map_server" args="$(find hybrid_astar)/maps/hospital_04.yaml"/>
 
     <!-- Hybrid A* -->
     <node pkg="hybrid_astar" type="hybrid_astar" name="hybrid_astar" output="screen"/>
 
     <!-- Pure Pursuit -->
-    <node pkg="hybrid_astar" type="pure_pursuit" name="pure_pursuit" output="screen"/>
+    <!-- <node pkg="hybrid_astar" type="pure_pursuit" name="pure_pursuit" output="screen"/> -->
 
     <arg name="config" default="hybrid_astar" />
     <node name="rviz" pkg="rviz" type="rviz" args="-d $(find hybrid_astar)/rviz/$(arg config).rviz" />

@@ -782,6 +782,33 @@ src/pure_pursuit.cpp.s:
 	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/pure_pursuit.dir/build.make hybrid_astar/CMakeFiles/pure_pursuit.dir/src/pure_pursuit.cpp.s
 .PHONY : src/pure_pursuit.cpp.s
 
+src/reeds_shepp.o: src/reeds_shepp.cpp.o
+
+.PHONY : src/reeds_shepp.o
+
+# target to build an object file
+src/reeds_shepp.cpp.o:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/hybrid_astar.dir/build.make hybrid_astar/CMakeFiles/hybrid_astar.dir/src/reeds_shepp.cpp.o
+.PHONY : src/reeds_shepp.cpp.o
+
+src/reeds_shepp.i: src/reeds_shepp.cpp.i
+
+.PHONY : src/reeds_shepp.i
+
+# target to preprocess a source file
+src/reeds_shepp.cpp.i:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/hybrid_astar.dir/build.make hybrid_astar/CMakeFiles/hybrid_astar.dir/src/reeds_shepp.cpp.i
+.PHONY : src/reeds_shepp.cpp.i
+
+src/reeds_shepp.s: src/reeds_shepp.cpp.s
+
+.PHONY : src/reeds_shepp.s
+
+# target to generate assembly for a file
+src/reeds_shepp.cpp.s:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/hybrid_astar.dir/build.make hybrid_astar/CMakeFiles/hybrid_astar.dir/src/reeds_shepp.cpp.s
+.PHONY : src/reeds_shepp.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -842,6 +869,9 @@ help:
 	@echo "... src/pure_pursuit.o"
 	@echo "... src/pure_pursuit.i"
 	@echo "... src/pure_pursuit.s"
+	@echo "... src/reeds_shepp.o"
+	@echo "... src/reeds_shepp.i"
+	@echo "... src/reeds_shepp.s"
 .PHONY : help
 
 

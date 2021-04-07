@@ -193,6 +193,8 @@ node4d.h
 /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/node4d.h
 dubins.h
 /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/dubins.h
+reeds_shepp.h
+/home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/reeds_shepp.h
 pure_pursuit.h
 /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/pure_pursuit.h
 hybrid_astar/GlobalPath.h
@@ -266,6 +268,12 @@ helper.h
 hybrid_astar/GlobalPath.h
 /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/hybrid_astar/GlobalPath.h
 
+/home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/reeds_shepp.h
+boost/math/constants/constants.hpp
+-
+cassert
+-
+
 /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/src/dubins.cpp
 ../include/hybrid_astar/dubins.h
 /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/dubins.h
@@ -281,6 +289,12 @@ assert.h
 /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/src/node4d.cpp
 ../include/hybrid_astar/node4d.h
 /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/node4d.h
+
+/home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/src/reeds_shepp.cpp
+../include/hybrid_astar/reeds_shepp.h
+/home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/reeds_shepp.h
+boost/math/constants/constants.hpp
+-
 
 /opt/ros/melodic/include/geometry_msgs/Point.h
 string

@@ -28,6 +28,7 @@
 #include "helper.h"
 #include "node4d.h"
 #include "dubins.h"
+#include "reeds_shepp.h"
 #include "pure_pursuit.h"
 
 #include "hybrid_astar/GlobalPath.h"
@@ -40,6 +41,7 @@ extern ros::Publisher goal_pose_pub;
 extern ros::Publisher hybrid_path_pub;
 extern ros::Publisher global_path_pub;
 extern ros::Publisher dubins_path_pub;
+extern ros::Publisher reeds_shepp_path_pub;
 extern ros::Publisher visualize_nodes_pub;
 extern ros::Publisher robot_polygon_pub;
 extern ros::Publisher trailer_polygon_pub;

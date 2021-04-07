@@ -304,10 +304,10 @@
     <!-- <xacro:wheel_holder prefix="front" side="right" joint_type="fixed" location="0" s_location="-1"> -->
     <!-- </xacro:wheel_holder> -->
 
-    <xacro:wheel_holder prefix="rear" side="left" joint_type="fixed" location=".4" s_location="1">
+    <xacro:wheel_holder prefix="rear" side="left" joint_type="fixed" location="0.4" s_location="1">
     </xacro:wheel_holder>
 
-    <xacro:wheel_holder prefix="rear" side="right" joint_type="fixed" location=".4" s_location="-1">
+    <xacro:wheel_holder prefix="rear" side="right" joint_type="fixed" location="0.4" s_location="-1">
     </xacro:wheel_holder>
 
 </robot>

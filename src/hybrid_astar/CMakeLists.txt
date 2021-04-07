@@ -45,6 +45,7 @@ generate_messages(
 set(SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/node4d.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/dubins.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/reeds_shepp.cpp
     )
 
 set(HEADERS
@@ -52,11 +53,13 @@ set(HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/include/hybrid_astar/helper.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/hybrid_astar/node4d.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/hybrid_astar/dubins.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/hybrid_astar/reeds_shepp.h
     )
 
 # Declare a catkin package
 catkin_package(
   CATKIN_DEPENDS roscpp rospy message_runtime
+  DEPENDS Boost
 )
 
 ## OPEN MOTION PLANNING LIBRARY
@@ -65,7 +68,7 @@ if(NOT OMPL_FOUND)
     message(AUTHOR_WARNING,"Open Motion Planning Library not found")
 endif(NOT OMPL_FOUND)
 
-include_directories(include ${catkin_INCLUDE_DIRS})
+include_directories(include ${catkin_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS})
 
 # Hybrid A* Header and Source files
 add_executable(hybrid_astar src/hybrid_astar.cpp ${SOURCES} ${HEADERS})

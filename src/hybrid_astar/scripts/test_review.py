@@ -36,46 +36,38 @@ def main():
 	path.header.stamp = rospy.Time.now()
 	path.header.frame_id = "/map"
 		
-	df = pd.read_csv('20210329-234631.csv', usecols = ['sx', 'sy', 'syaw', 'syaw_t', 'gx', 'gy', 'gyaw', 'Solution', 'Path'])
+	df = pd.read_csv('20210329-234631.csv', usecols = ['sx', 'sy', 'syaw', 'syaw_t', 'gx', 'gy', 'gyaw', 'Solution', 'Iterations', 'Nodes', 'Execution Time'])
+	df_r = pd.DataFrame([], columns = ['sx', 'sy', 'syaw', 'syaw_t', 'gx', 'gy', 'gyaw', 'Solution', 'Iterations', 'Nodes', 'Execution Time'])
+	df_r.to_csv('20210329-234631_review.csv', mode = 'a')
 
-	row = df.loc[0]
-	for i in row[8]:
-		print(i)
-
-	# for x in range(len(row[8])):
-	# 	pose_stamped.header.stamp = rospy.Time.now()
-	# 	pose_stamped.header.frame_id = "/map"
-	# 	pose_stamped.pose.position.x = row[8]
-
-	# for i in range(1):
-	# 	try:
-	# 		row = df.loc[i]
-	# 		if(1):
-	# 			raw_input("Press Enter to continue...")
-	# 			print(row)
-	# 			start_pose.pose.position.x = row[0]
-	# 			start_pose.pose.position.y = row[1]
-	# 			quat = tf.transformations.quaternion_from_euler(0, 0, row[2])
-	# 			start_pose.pose.orientation.x = quat[0]
-	# 			start_pose.pose.orientation.y = quat[1]
-	# 			start_pose.pose.orientation.z = quat[2]
-	# 			start_pose.pose.orientation.w = quat[3]
-	# 			start_pose_pub.publish(start_pose)
-
-	# 			goal_pose.pose.position.x = row[4]
-	# 			goal_pose.pose.position.y = row[5]
-	# 			quat = tf.transformations.quaternion_from_euler(0, 0, row[6])
-	# 			goal_pose.pose.orientation.x = quat[0]
-	# 			goal_pose.pose.orientation.y = quat[1]
-	# 			goal_pose.pose.orientation.z = quat[2]
-	# 			goal_pose.pose.orientation.w = quat[3]
-	# 			goal_pose_pub.publish(goal_pose)
-
-	# 			for x in range(len(row[8][0])):
-	# 				pass
-	# 	except KeyboardInterrupt:
-	# 		print("Exiting...")
-	# 		sys.exit()
+	for i in range(len(df)):
+		row = df.loc[i]
+		if(not row[7]):
+			print(row)
+			start_pose.pose.position.x = row[0]
+			start_pose.pose.position.y = row[1]
+			quat = tf.transformations.quaternion_from_euler(0, 0, row[2])
+			start_pose.pose.orientation.x = quat[0]
+			start_pose.pose.orientation.y = quat[1]
+			start_pose.pose.orientation.z = quat[2]
+			start_pose.pose.orientation.w = quat[3]
+			start_pose_pub.publish(start_pose)
+			
+			goal_pose.pose.position.x = row[4]
+			goal_pose.pose.position.y = row[5]
+			quat = tf.transformations.quaternion_from_euler(0, 0, row[6])
+			goal_pose.pose.orientation.x = quat[0]
+			goal_pose.pose.orientation.y = quat[1]
+			goal_pose.pose.orientation.z = quat[2]
+			goal_pose.pose.orientation.w = quat[3]
+			goal_pose_pub.publish(goal_pose)
+			x = raw_input("Press Enter to continue...")
+			if(x == 'y'):
+				df_r = pd.DataFrame([[row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10]]], columns = ['sx', 'sy', 'syaw', 'syaw_t', 'gx', 'gy', 'gyaw', 'Solution', 'Iterations', 'Nodes', 'Execution Time'])
+				df_r.to_csv('20210329-234631_review.csv', mode = 'a', header = False)
+		else:
+			df_r = pd.DataFrame([[row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10]]], columns = ['sx', 'sy', 'syaw', 'syaw_t', 'gx', 'gy', 'gyaw', 'Solution', 'Iterations', 'Nodes', 'Execution Time'])
+			df_r.to_csv('20210329-234631_review.csv', mode = 'a', header = False)
 
 	rate.sleep()
 
