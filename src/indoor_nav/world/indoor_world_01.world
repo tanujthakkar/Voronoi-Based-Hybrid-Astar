@@ -1,5 +1,13 @@
 <sdf version='1.6'>
   <world name='default'>
+    <plugin name='gazebo_occupancy_map' filename='libgazebo_2Dmap_plugin.so'>
+      <map_resolution>0.05</map_resolution> <!-- in meters, optional, default 0.1 -->
+      <map_height>0.0</map_height>         <!-- in meters, optional, default 0.3 -->
+      <map_size_x>25</map_size_x>          <!-- in meters, optional, default 10 -->
+      <map_size_y>25</map_size_y>          <!-- in meters, optional, default 10 -->
+      <init_robot_x>0</init_robot_x>          <!-- x coordinate in meters, optional, default 0 -->
+      <init_robot_y>0</init_robot_y>          <!-- y coordinate in meters, optional, default 0 -->
+    </plugin>
     <light name='sun' type='directional'>
       <cast_shadows>1</cast_shadows>
       <pose frame=''>0 0 10 0 -0 0</pose>

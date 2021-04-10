@@ -65,6 +65,15 @@ Visualization Manager:
       Unreliable: false
       Use Timestamp: false
       Value: true
+    - Class: VoronoiGraph
+      Enabled: true
+      History Length: 1
+      Name: VoronoiGraph
+      Path Color: 50; 51; 204
+      Path Points Scale: 0.10000000149011612
+      Topic: /segments
+      Unreliable: false
+      Value: true
     - Class: rviz/TF
       Enabled: false
       Frame Timeout: 15
@@ -427,16 +436,16 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 15.290576934814453
+      Distance: 24.148468017578125
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 8.698486328125
-        Y: 13.521527290344238
-        Z: 1.1880772113800049
+        X: 11.348353385925293
+        Y: 11.336324691772461
+        Z: 1.1907397508621216
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
@@ -445,7 +454,7 @@ Visualization Manager:
       Pitch: 1.5697963237762451
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 3.1385908126831055
+      Yaw: 3.1435914039611816
     Saved: ~
 Window Geometry:
   Displays:

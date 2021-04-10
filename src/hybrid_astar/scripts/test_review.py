@@ -36,13 +36,13 @@ def main():
 	path.header.stamp = rospy.Time.now()
 	path.header.frame_id = "/map"
 		
-	df = pd.read_csv('20210329-234631.csv', usecols = ['sx', 'sy', 'syaw', 'syaw_t', 'gx', 'gy', 'gyaw', 'Solution', 'Iterations', 'Nodes', 'Execution Time'])
-	df_r = pd.DataFrame([], columns = ['sx', 'sy', 'syaw', 'syaw_t', 'gx', 'gy', 'gyaw', 'Solution', 'Iterations', 'Nodes', 'Execution Time'])
-	df_r.to_csv('20210329-234631_review.csv', mode = 'a')
+	df = pd.read_csv('20210408-221720.csv', usecols = ['sx', 'sy', 'syaw', 'syaw_t', 'gx', 'gy', 'gyaw', 'Solution', 'Iterations', 'Nodes', 'Execution Time', 'Path'])
+	# df_r = pd.DataFrame([], columns = ['sx', 'sy', 'syaw', 'syaw_t', 'gx', 'gy', 'gyaw', 'Solution', 'Iterations', 'Nodes', 'Execution Time'])
+	# df_r.to_csv('20210329-234631_review.csv', mode = 'a')
 
 	for i in range(len(df)):
 		row = df.loc[i]
-		if(not row[7]):
+		if(row[7]):
 			print(row)
 			start_pose.pose.position.x = row[0]
 			start_pose.pose.position.y = row[1]
@@ -62,12 +62,12 @@ def main():
 			goal_pose.pose.orientation.w = quat[3]
 			goal_pose_pub.publish(goal_pose)
 			x = raw_input("Press Enter to continue...")
-			if(x == 'y'):
-				df_r = pd.DataFrame([[row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10]]], columns = ['sx', 'sy', 'syaw', 'syaw_t', 'gx', 'gy', 'gyaw', 'Solution', 'Iterations', 'Nodes', 'Execution Time'])
-				df_r.to_csv('20210329-234631_review.csv', mode = 'a', header = False)
-		else:
-			df_r = pd.DataFrame([[row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10]]], columns = ['sx', 'sy', 'syaw', 'syaw_t', 'gx', 'gy', 'gyaw', 'Solution', 'Iterations', 'Nodes', 'Execution Time'])
-			df_r.to_csv('20210329-234631_review.csv', mode = 'a', header = False)
+			# if(x == 'y'):
+				# df_r = pd.DataFrame([[row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10]]], columns = ['sx', 'sy', 'syaw', 'syaw_t', 'gx', 'gy', 'gyaw', 'Solution', 'Iterations', 'Nodes', 'Execution Time'])
+				# df_r.to_csv('20210329-234631_review.csv', mode = 'a', header = False)
+		# else:
+			# df_r = pd.DataFrame([[row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10]]], columns = ['sx', 'sy', 'syaw', 'syaw_t', 'gx', 'gy', 'gyaw', 'Solution', 'Iterations', 'Nodes', 'Execution Time'])
+			# df_r.to_csv('20210329-234631_review.csv', mode = 'a', header = False)
 
 	rate.sleep()
 

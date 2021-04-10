@@ -29,6 +29,12 @@ find_package(catkin REQUIRED COMPONENTS
   tf
 )
 
+add_message_files(
+   FILES
+   Test.msg
+   TestSummary.msg
+)
+
 add_service_files(
   FILES
   GlobalPath.srv

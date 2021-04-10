@@ -6,6 +6,7 @@
 #include <cmath>
 #include <chrono>
 #include <queue>
+#include <unistd.h>
 
 #include <ros/ros.h>
 #include <tf/tf.h>

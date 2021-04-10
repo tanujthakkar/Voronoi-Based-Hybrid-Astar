@@ -38,6 +38,13 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/hybrid_astar/msg" TYPE FILE FILES
+    "/home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/msg/Test.msg"
+    "/home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/msg/TestSummary.msg"
+    )
+endif()
+
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/hybrid_astar/srv" TYPE FILE FILES
     "/home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/srv/GlobalPath.srv"
     "/home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/srv/MonteCarloSim.srv"
