@@ -36,20 +36,22 @@
 	<!--- Move Base -->
   	<!-- <include file="$(find ridgeback_navigation)/launch/include/move_base.launch" /> -->
 
-    <node pkg="map_server" name="map_server" type="map_server" args="$(find indoor_nav)/maps/dual_hoyuko_full_map.yaml"/>
+    <!-- <node pkg="map_server" name="map_server" type="map_server" args="$(find indoor_nav)/maps/dual_hoyuko_full_map.yaml"/> -->
 
     <!-- Hospital -->
-    <!-- <node pkg="map_server" name="map_server" type="map_server" args="$(find hybrid_astar)/maps/hospital_04.yaml"/> -->
+    <node pkg="map_server" name="map_server" type="map_server" args="$(find hybrid_astar)/maps/hospital_04.yaml"/>
 
     <!-- Hybrid A* -->
-    <node pkg="hybrid_astar" type="hybrid_astar" name="hybrid_astar" output="screen"/>
+    <node pkg="hybrid_astar" type="hybrid_astar" name="hybrid_astar" output="screen">
+        <param name="launch-prefix" value="gdb -ex run --args" />
+    </node>
 
     <!-- Voronoi Graph -->
-    <!-- <node pkg="tuw_voronoi_graph" type="tuw_voronoi_graph_node" name="graph_generator" output="screen">
+    <node pkg="tuw_voronoi_graph" type="tuw_voronoi_graph_node" name="graph_generator" output="screen">
         <param name="graph_cache_path" value="$(find hybrid_astar)/maps/voronoi/cache/" />
         <param name="custom_graph_path" value="" />
         <rosparam command="load" file="$(find hybrid_astar)/maps/voronoi/graph.yaml"/>
-    </node> -->
+    </node>
 
     <!-- Pure Pursuit -->
     <!-- <node pkg="hybrid_astar" type="pure_pursuit" name="pure_pursuit" output="screen"/> -->

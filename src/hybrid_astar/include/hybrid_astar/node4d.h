@@ -43,7 +43,6 @@ public:
 		this->cost = 0.0;
 		this->ind = ind;
 		this->parent_ind = NULL;
-		this->child_ind = NULL;
 	}
 
 	// Constructor for successor nodes
@@ -67,7 +66,6 @@ public:
 		this->cost = cost;
 		this->ind = ind;
 		this->parent_ind = parent_ind;
-		this->child_ind = NULL;
 	}
 	
 

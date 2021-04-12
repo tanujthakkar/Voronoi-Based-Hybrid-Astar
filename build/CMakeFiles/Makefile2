@@ -4398,24 +4398,6 @@ clean: car_geometric_planner/CMakeFiles/r_s_planner_node.dir/clean
 .PHONY : clean
 
 #=============================================================================
-# Directory level rules for directory rosbag_to_csv
-
-# Convenience name for "all" pass in the directory.
-rosbag_to_csv/all:
-
-.PHONY : rosbag_to_csv/all
-
-# Convenience name for "clean" pass in the directory.
-rosbag_to_csv/clean:
-
-.PHONY : rosbag_to_csv/clean
-
-# Convenience name for "preinstall" pass in the directory.
-rosbag_to_csv/preinstall:
-
-.PHONY : rosbag_to_csv/preinstall
-
-#=============================================================================
 # Directory level rules for directory ridgeback/ridgeback_description
 
 # Convenience name for "all" pass in the directory.

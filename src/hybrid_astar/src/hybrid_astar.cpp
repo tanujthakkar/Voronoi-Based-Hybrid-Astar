@@ -20,7 +20,7 @@ ros::Publisher robot_collision_check_pub;
 ros::Publisher trailer_collision_check_pub;
 
 bool visualization = false; // Visualization toggle
-bool visualization_final_node = false; // Final node visualization toggle
+bool visualization_final_node = true; // Final node visualization toggle
 
 geometry_msgs::PoseStamped start_pose; // Start pose msg
 bool valid_start; // Start pose validity check
@@ -55,8 +55,9 @@ int g_ind;
 Node4D* start_node_ptr; // Pointer to the start node
 Node4D* goal_node_ptr; // Pointer to the goal node
 
-int iterations; // total iterations of hybrid a* planning
-int total_nodes; // total nodes of hybrid a* planning
+unsigned int iterations; // total iterations of hybrid a* planning
+unsigned int total_nodes; // total nodes of hybrid a* planning
+unsigned int execution_time; // execution time of hybrid a* planning
 
 std::vector<int> steer; // Steering inputs for which the nodes have to be created
 std::vector<int> direction = {-1, 1}; // Direction inputs for which the nodes have to be created
@@ -440,7 +441,7 @@ void visualize_final_path(Node4D &current_node, Node4D &dubins_node, std::map<in
 		unsigned int sleep = 125000;
 
 		cin.get();
-		for (int i = 0; i < xlist.size(); ++i)
+		for (unsigned int i = 0; i < xlist.size(); ++i)
 		{	
 			usleep(sleep);
 
@@ -637,7 +638,8 @@ bool hybrid_astar_plan() {
 				ROS_INFO("SOLUTION DOESN'T EXIST - NO NODES FOUND IN OPEN LIST");
 				auto stop = high_resolution_clock::now(); // Reading end time of planning
 				auto duration = duration_cast<milliseconds>(stop-start);
-				std::cout << "Execution Time : " << duration.count() << " milliseconds (" << duration.count()/1000 << " seconds)" << endl;
+				ROS_INFO("Execution Time: %d milliseconds (%d seconds)", duration.count(), duration.count()/1000);
+				execution_time = duration.count();
 				visualize_nodes_pub.publish(nodes);
 				return false;
 			}
@@ -663,8 +665,9 @@ bool hybrid_astar_plan() {
 				ROS_INFO("SOLUTION FOUND - DUBINS NODE");
 				auto stop = high_resolution_clock::now(); // Reading end time of planning
 				auto duration = duration_cast<milliseconds>(stop-start);
-				ROS_INFO("Iterations: %d Nodes: %d \n", iterations, total_nodes);
-				std::cout << "Execution Time : " << duration.count() << " milliseconds (" << duration.count()/1000 << " seconds)" << endl;
+				ROS_INFO("Iterations: %d Nodes: %d", iterations, total_nodes);
+				ROS_INFO("Execution Time: %d milliseconds (%d seconds) \n", duration.count(), duration.count()/1000);
+				execution_time = duration.count();
 				visualize_final_path(current_node, new_node,closed_list);
 				visualize_nodes_pub.publish(nodes);
 				path_found = true;
@@ -838,16 +841,13 @@ bool callback_monte_carlo(hybrid_astar::MonteCarloSim::Request &req, hybrid_asta
 	gy = req.gy;
 	gyaw = req.gyaw;
 
-	auto start = high_resolution_clock::now(); // Reading start time of planning
 	res.solution_found = hybrid_astar_plan();
-	auto stop = high_resolution_clock::now(); // Reading end time of planning
-	auto execution_time = duration_cast<milliseconds>(stop-start);
 	res.valid_start = valid_start;
 	res.valid_goal = valid_goal;
 	res.path = path;
 	res.iterations = iterations;
 	res.nodes = total_nodes;
-	res.execution_time = execution_time.count();
+	res.execution_time = execution_time;
 
 	return true;
 }
@@ -884,13 +884,14 @@ int main(int argc, char **argv) {
 	// ros::ServiceServer pure_pursuit_service = nh.advertiseService("hybrid_astar_planner_service", callback_planner);
 	ros::ServiceServer monte_carlo_sim_service = nh.advertiseService("monte_carlo_sim_service", callback_monte_carlo);
 
-	ros::Rate loop_rate(10);
+	ros::spin();
+	// ros::Rate loop_rate(10);
 
-	while(ros::ok()) {
+	// while(ros::ok()) {
 
-		ros::spinOnce();
-		loop_rate.sleep();
-	}
+	// 	ros::spinOnce();
+	// 	loop_rate.sleep();
+	// }
 
 	return 0;
 }
