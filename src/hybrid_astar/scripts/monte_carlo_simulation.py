@@ -7,6 +7,10 @@ import pandas as pd
 from random import uniform
 from datetime import datetime
 from time import sleep
+from matplotlib import pyplot as plt
+import numpy as np
+import seaborn as sns
+import statistics
 
 import rospy
 import rosbag
@@ -212,6 +216,9 @@ def review():
 
 	rospy.init_node('test_review')
 
+	rospy.wait_for_service("monte_carlo_sim_service")
+	test_call = rospy.ServiceProxy("monte_carlo_sim_service", hybrid_astar.srv.MonteCarloSim)
+
 	start_pose_pub = rospy.Publisher('start_pose', PoseStamped, queue_size = 1)
 	goal_pose_pub = rospy.Publisher('goal_pose', PoseStamped, queue_size = 1)
 	path_pub = rospy.Publisher('global_path', Path, queue_size = 1)
@@ -235,17 +242,19 @@ def review():
 	path.header.stamp = rospy.Time.now()
 	path.header.frame_id = "/map"
 
-	bag = rosbag.Bag('../rosbags/20210414-172117.bag')
-	# bag = rosbag.Bag('../rosbags/hospital_04/20210412-230907/20210412-230907.bag')
+	# bag = rosbag.Bag('../rosbags/20210414-172117.bag')
+	bag = rosbag.Bag('../rosbags/hospital_04/20210414-172117/20210414-172117.bag')
 	# bag = rosbag.Bag('../rosbags/iteration_limits_bag.bag')
 	
+	i = 0
 	for topic, msg, t in bag.read_messages(topics=['tests']):
-		if(1):
+		i = i + 1
+		if(msg.solution_found):
+		# if(i in [13, 16, 23, 34, 106, 133, 134]):
+			print("Test", i)
 			print([msg.sx, msg.sy, msg.syaw, msg.syaw_t, msg.gx, msg.gy, msg.gyaw, msg.solution_found, msg.iterations, msg.nodes, msg.execution_time])
-			x = raw_input("Press Enter to continue...")
-			if(x == 'q'):
-				break
-
+			sleep(0.5)
+			
 			start_pose.pose.position.x = msg.sx
 			start_pose.pose.position.y = msg.sy
 			quat = tf.transformations.quaternion_from_euler(0, 0, msg.syaw)
@@ -266,61 +275,85 @@ def review():
 
 			path_pub.publish(msg.path)
 
-			# if(x == 'y'):
-			# 	deltar = (RF - RB) / 2.0
-			# 	deltat = (RTF - RTB) / 2.0
-
-			# 	robot_center = PointStamped()
-			# 	robot_center.header.stamp = rospy.Time.now()
-			# 	robot_center.header.frame_id = "/map"
-			# 	robot_center.point.x = msg.sx
-			# 	robot_center.point.y = msg.sy
-			# 	robot_center_pub.publish(robot_center)
-
-			# 	cx = robot_center.point.x
-			# 	cy = robot_center.point.y
-			# 	yaw = msg.syaw
-			# 	robot_polygon_pub.publish(create_polygon(RL, RW, cx, cy, yaw))
-
-			# 	yawt = syaw_t
-			# 	trailer_center = PointStamped()
-			# 	trailer_center.header.stamp = rospy.Time.now()
-			# 	trailer_center.header.frame_id = "/map"
-			# 	trailer_center.point.x = (msg.sx - deltar * cos(yaw)) + deltat * cos(yawt)
-			# 	trailer_center.point.y = (msg.sy - deltar * sin(yaw)) + deltat * sin(yawt)
-			# 	trailer_center_pub.publish(trailer_center)
-
-			# 	ctx = trailer_center.point.x
-			# 	cty = trailer_center.point.y
-			# 	trailer_polygon_pub.publish(create_polygon(TL, TW, ctx, cty, yawt))
-
-			# 	for pose in range(len(msg.path.poses)):
-			# 		sleep(0.05)
-			# 		robot_center.point.x = msg.path.poses[pose].pose.position.x
-			# 		robot_center.point.y = msg.path.poses[pose].pose.position.y
-			# 		robot_center_pub.publish(robot_center)
-
-			# 		cx = msg.path.poses[pose].pose.position.x
-			# 		cy = msg.path.poses[pose].pose.position.y
-			# 		quat = (msg.path.poses[pose].pose.orientation.x,
-			# 				msg.path.poses[pose].pose.orientation.y,
-			# 				msg.path.poses[pose].pose.orientation.z,
-			# 				msg.path.poses[pose].pose.orientation.w)
-			# 		yaw = tf.transformations.euler_from_quaternion(quat)[2]
-			# 		robot_polygon_pub.publish(create_polygon(RL, RW, cx, cy, yaw))
-
-			# 		yawt = pi_2_pi(node.get_yaw_t(n-1) + (dir * MOVE_STEP / RTR) * sin(node.get_yaw(0) - node.get_yaw_t(0)))
-			# 		trailer_center.point.x = (msg.path.poses[0].pose.position.x - deltar * cos(yawlist[i])) + deltat * cos(yawt[i])
-			# 		trailer_center.point.y = (msg.path.poses[0].pose.position.y - deltar * sin(yawlist[i])) + deltat * sin(yawt[i])
-			# 		trailer_center_pub.publish(trailer_center)
-
-			# 		trailer_center.point.x = trailer_center.point.x
-			# 		trailer_center.point.y = trailer_center.point.y
-			# 		trailer_center_pub.publish(create_polygon(TL, TW, ctx, cty, yawt))
+			x = raw_input("Press Enter to visualize...")
+			if(x == 'q'):
+				break
+			if(x == 'y'):
+				test_response = test_call(msg.sx, msg.sy, msg.syaw, msg.syaw_t, msg.gx, msg.gy, msg.gyaw)
+			raw_input("Press Enter to continue...")
 
 	rate.sleep()
 
+def graphs():
+
+	bag = rosbag.Bag('../rosbags/hospital_04/hospital_env_monte_carlo_results/hospital_env_monte_carlo_results.bag')
+
+	iterations = []
+	nodes = []
+	lengths = []
+	execution_times = []
+
+	i = 0
+	for topic, msg, t in bag.read_messages(topics=['tests']):
+		i = i + 1
+		if(msg.solution_found):
+			# print("Test", i)
+			# print([msg.sx, msg.sy, msg.syaw, msg.syaw_t, msg.gx, msg.gy, msg.gyaw, msg.solution_found, msg.iterations, msg.nodes, msg.execution_time])
+			iterations.append(msg.iterations)
+			nodes.append(msg.nodes * 0.000001)
+			lengths.append(len(msg.path.poses) * 0.1)
+			execution_times.append(msg.execution_time/1000)
+
+	# nodes = list(map(float, nodes))
+
+	plt.subplot(1,1,1)
+	# counts, edges, plot = plt.hist(np.array(iterations), bins=[0, 25000, 50000, 75000, 100000, 125000, 150000, 175000, 200000, 225000, 250000, 300000, 350000], alpha=0.5, color='r', label='Iterations')
+	counts, edges, plot = plt.hist(np.array(iterations), bins=[0, 25000], alpha=0.5, color='r', label='Iterations')
+	plt.xlabel('Iterations')
+	plt.ylabel('Count')
+	print(counts)
+	print(sum(counts))
+	print(statistics.median(iterations))
+	print(edges)
+
+	plt.subplot(1,1,1)
+	# counts, edges, plot = plt.hist(np.array(iterations), bins=[0, 0.5, 1.5, 2, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5, 6.0, 6.5, 7.0, 7.5], alpha=0.5, color='r', label='Iterations')
+	counts, edges, plot = plt.hist(np.array(nodes), bins=[0, 0.197197], alpha=0.5, color='g', label='Nodes')
+	plt.xlabel('Nodes [10^6]')
+	plt.ylabel('Count')
+	print(counts)
+	print(sum(counts))
+	print(statistics.median(nodes))
+	print(edges)
+
+	# plt.subplot(1,1,1)
+	# # plt.hist(np.array(lengths), bins=20, alpha=0.5, color='b', label='Lengths')
+	# counts, edges, plot = plt.hist(np.array(lengths), alpha=0.5, color='black', label='Length')
+	# plt.xlabel('Length [m]')
+	# plt.ylabel('Count')
+	# print(counts)
+	# print(sum(counts))
+	# print(statistics.median(lengths))
+	# print(edges)
+
+	plt.subplot(1,1,1)
+	# plt.hist(np.array(execution_times), bins=20, alpha=0.5, color='black', label='Execution Times')
+	counts, edges, plot = plt.hist(np.array(execution_times), bins=[0, 109], alpha=0.5, color='b', label='Execution Times')
+	plt.xlabel('Execution Time [s]')
+	plt.ylabel('Count')
+	print(counts)
+	print(sum(counts))
+	print(statistics.median(execution_times))
+	print(edges)
+
+	# sns.set_style('darkgrid')
+	# sns.distplot(a)
+
+	# plt.savefig("test.png",bbox_inches='tight')
+	# plt.show()
+
 
 if __name__ == '__main__':
-	monte_carlo_sim()
-	# review()
+	# monte_carlo_sim()
+	review()
+	# graphs()

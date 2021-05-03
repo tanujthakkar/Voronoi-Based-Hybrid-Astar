@@ -2,6 +2,7 @@
 
 using namespace std;
 
+jsk_recognition_msgs::PolygonArray system_polygons;
 
 /*
 	Function to check path collision
@@ -103,10 +104,10 @@ bool Node4D::check_collision(nav_msgs::OccupancyGrid::Ptr grid, bool** bin_map, 
 			geometry_msgs::PointStamped robot_center;
 			robot_center.header.stamp = ros::Time::now();
 			robot_center.header.frame_id = "/map";
-			robot_center.point.x = cx;
-			robot_center.point.y = cy;
+			robot_center.point.x = xlist[i];
+			robot_center.point.y = ylist[i];
 			robot_center_pub.publish(robot_center);
-			robot_polygon_pub.publish(this->create_polygon(RL, RW, cx, cy, yawlist[i]));
+			robot_polygon_pub.publish(create_polygon(RL, RW, cx, cy, yawlist[i]));
 		}
 
 		if(xlist[i] >= grid->info.width || xlist[i]<0 || ylist[i] >= grid->info.height || ylist[i] < 0) {
@@ -217,7 +218,7 @@ bool Node4D::check_collision(nav_msgs::OccupancyGrid::Ptr grid, bool** bin_map, 
 			trailer_center.point.x = ctx;
 			trailer_center.point.y = cty;
 			trailer_center_pub.publish(trailer_center);
-			trailer_polygon_pub.publish(this->create_polygon(TL, TW, ctx, cty, yawt[i]));
+			trailer_polygon_pub.publish(create_polygon(TL, TW, ctx, cty, yawt[i]));
 		}
 
 		max_x =  (ctx + TL * (cos(yawt[i]))/2 + TW * (sin(yawt[i]))/2) + MIN_SAFE_DIST;
@@ -243,7 +244,7 @@ bool Node4D::check_collision(nav_msgs::OccupancyGrid::Ptr grid, bool** bin_map, 
 		// }
 
 		// Checking the trailer polygon/rectangle
-		for(float k = -TL/2 - MIN_SAFE_DIST; k <= TL/2; k += TL/4) {
+		for(float k = -TL/2 - MIN_SAFE_DIST; k <= TL/2 + MIN_SAFE_DIST; k += TL/4) {
 			for(float j = -TW/2 - MIN_SAFE_DIST; j <= TW/2 + MIN_SAFE_DIST; j += TW/4) {
 
 				// Top Right
@@ -318,7 +319,7 @@ bool Node4D::check_collision(nav_msgs::OccupancyGrid::Ptr grid, bool** bin_map, 
 }
 
 
-geometry_msgs::PolygonStamped Node4D::create_polygon(float l, float w, float cx, float cy, float yaw) {
+geometry_msgs::PolygonStamped create_polygon(float l, float w, float cx, float cy, float yaw) {
 
 	geometry_msgs::PolygonStamped polygon;
 	polygon.header.stamp = ros::Time::now();

@@ -11,5 +11,6 @@ bool valid_goal
 bool solution_found
 nav_msgs/Path path
 uint64 iterations
+bool iteration_limit
 uint64 nodes
 uint64 execution_time

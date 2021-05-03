@@ -1,9 +1,9 @@
 <launch>
 
 	<!-- <arg name="debug" default="false"/>
-	<arg name="gui" default="true"/>
+	<arg name="gui" default="false"/>
 	<arg name="pause" default="false"/>
-	<arg name="world" value="$(find indoor_nav)/world/indoor_world_01.world"/>
+	<arg name="world" value="$(find hybrid_astar)/world/hospital_04.world"/>
 
   	<include file="$(find gazebo_ros)/launch/empty_world.launch">
   		<arg name="world_name" default="$(arg world)"/>
@@ -39,24 +39,23 @@
     <!-- <node pkg="map_server" name="map_server" type="map_server" args="$(find indoor_nav)/maps/dual_hoyuko_full_map.yaml"/> -->
 
     <!-- Hospital -->
+    <!-- <node pkg="map_server" name="map_server" type="map_server" args="$(find hybrid_astar)/maps/test.yaml"/> -->
     <node pkg="map_server" name="map_server" type="map_server" args="$(find hybrid_astar)/maps/hospital_04.yaml"/>
 
     <!-- Hybrid A* -->
-    <node pkg="hybrid_astar" type="hybrid_astar" name="hybrid_astar" output="screen">
-        <param name="launch-prefix" value="gdb -ex run --args" />
-    </node>
+    <node pkg="hybrid_astar" type="hybrid_astar" name="hybrid_astar" output="screen" />
 
     <!-- Voronoi Graph -->
-    <node pkg="tuw_voronoi_graph" type="tuw_voronoi_graph_node" name="graph_generator" output="screen">
+    <!-- <node pkg="tuw_voronoi_graph" type="tuw_voronoi_graph_node" name="graph_generator" output="screen">
         <param name="graph_cache_path" value="$(find hybrid_astar)/maps/voronoi/cache/" />
         <param name="custom_graph_path" value="" />
         <rosparam command="load" file="$(find hybrid_astar)/maps/voronoi/graph.yaml"/>
-    </node>
+    </node> -->
 
     <!-- Pure Pursuit -->
     <!-- <node pkg="hybrid_astar" type="pure_pursuit" name="pure_pursuit" output="screen"/> -->
 
-    <arg name="config" default="hybrid_astar" />
+    <arg name="config" default="visualization" />
     <node name="rviz" pkg="rviz" type="rviz" args="-d $(find hybrid_astar)/rviz/$(arg config).rviz" />
 
 </launch>

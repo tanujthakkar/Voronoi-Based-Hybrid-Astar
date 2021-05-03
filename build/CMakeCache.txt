@@ -1377,6 +1377,12 @@ joint_limits_interface_DIR:PATH=/opt/ros/melodic/share/joint_limits_interface/cm
 //The directory containing a CMake configuration file for joint_state_publisher.
 joint_state_publisher_DIR:PATH=/opt/ros/melodic/share/joint_state_publisher/cmake
 
+//The directory containing a CMake configuration file for jsk_footstep_msgs.
+jsk_footstep_msgs_DIR:PATH=/opt/ros/melodic/share/jsk_footstep_msgs/cmake
+
+//The directory containing a CMake configuration file for jsk_recognition_msgs.
+jsk_recognition_msgs_DIR:PATH=/opt/ros/melodic/share/jsk_recognition_msgs/cmake
+
 //The directory containing a CMake configuration file for jsoncpp.
 jsoncpp_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/jsoncpp
 

@@ -113,9 +113,6 @@ public:
 	// Function to check tractor-trailer collision
 	bool check_collision(nav_msgs::OccupancyGrid::Ptr grid, bool** bin_map,  int** acc_obs_map);
 
-	// Function to create a polygon for the robot and the trailer
-	geometry_msgs::PolygonStamped create_polygon(float l, float w, float cx, float cy, float yaw);
-	
 private:
 	// Private node variables
 	std::vector<float> xlist; // x coords of path points
@@ -132,5 +129,8 @@ private:
 	int parent_ind;
 	int child_ind;
 };
+
+// Function to create a polygon for the robot and the trailer
+geometry_msgs::PolygonStamped create_polygon(float l, float w, float cx, float cy, float yaw);
 
 #endif

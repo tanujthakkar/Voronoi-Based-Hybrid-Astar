@@ -1,6 +1,8 @@
 #ifndef CONSTANTS
 #define CONSTANTS
 
+#include<cmath>
+
 // Environment Constants
 static const float XY_RESOLUTION = 0.05; // [m] Grid resolution of the map
 static const float YAW_RESOLUTION = (15 * (M_PI / 180)); // [rad] Yaw resolution
@@ -21,13 +23,15 @@ static const float RW = 0.793; // [m] Width of the tractor
 static const float RL = 0.960; // [m] Length of the robot/tractor
 static const float RF = 0.799; // [m] Distance from rear axle to front end
 static const float RB = 0.161; // [m] Distance from rear axle to back end
+static const float DELTAR = (RF - RB) / 2.0;
 
 // Trailer Configuration
 static const float TW = 0.643; // [m] Width of the trailer
 static const float TL = 1.0; // [m] Length of the trailer
 static const float RTR = 0.9; // [m] Distance from the rear axle (hitch position) of the tractor to rear axle of the trailer
 static const float RTF = 0.025; // [m] Distance from rear axle of tractor to trailer front end
-static const float RTB = 1.0; // [m] Distance from rear axle of tractor to trailer back end
+static const float RTB = 0.975; // [m] Distance from rear axle of tractor to trailer back end
+static const float DELTAT = (RTF - RTB) / 2.0;
 
 // Costs
 static const float DIRECTION_CHANGE_COST = 100.0;
