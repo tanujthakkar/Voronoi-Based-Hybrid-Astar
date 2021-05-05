@@ -608,6 +608,33 @@ src/hybrid_astar_planner.cpp.s:
 	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/hybrid_astar_planner_lib.dir/build.make hybrid_astar/CMakeFiles/hybrid_astar_planner_lib.dir/src/hybrid_astar_planner.cpp.s
 .PHONY : src/hybrid_astar_planner.cpp.s
 
+src/node2d.o: src/node2d.cpp.o
+
+.PHONY : src/node2d.o
+
+# target to build an object file
+src/node2d.cpp.o:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/hybrid_astar.dir/build.make hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node2d.cpp.o
+.PHONY : src/node2d.cpp.o
+
+src/node2d.i: src/node2d.cpp.i
+
+.PHONY : src/node2d.i
+
+# target to preprocess a source file
+src/node2d.cpp.i:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/hybrid_astar.dir/build.make hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node2d.cpp.i
+.PHONY : src/node2d.cpp.i
+
+src/node2d.s: src/node2d.cpp.s
+
+.PHONY : src/node2d.s
+
+# target to generate assembly for a file
+src/node2d.cpp.s:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/hybrid_astar.dir/build.make hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node2d.cpp.s
+.PHONY : src/node2d.cpp.s
+
 src/node4d.o: src/node4d.cpp.o
 
 .PHONY : src/node4d.o
@@ -762,6 +789,9 @@ help:
 	@echo "... src/hybrid_astar_planner.o"
 	@echo "... src/hybrid_astar_planner.i"
 	@echo "... src/hybrid_astar_planner.s"
+	@echo "... src/node2d.o"
+	@echo "... src/node2d.i"
+	@echo "... src/node2d.s"
 	@echo "... src/node4d.o"
 	@echo "... src/node4d.i"
 	@echo "... src/node4d.s"

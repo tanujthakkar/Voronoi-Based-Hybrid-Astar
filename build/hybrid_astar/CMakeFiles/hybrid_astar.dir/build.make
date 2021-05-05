@@ -81,9 +81,33 @@ hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o.provides: hybrid
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o.provides.build: hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o
 
 
+hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node2d.cpp.o: hybrid_astar/CMakeFiles/hybrid_astar.dir/flags.make
+hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node2d.cpp.o: /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/src/node2d.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/tanujthakkar/ROS/catkin_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node2d.cpp.o"
+	cd /home/tanujthakkar/ROS/catkin_ws/build/hybrid_astar && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/hybrid_astar.dir/src/node2d.cpp.o -c /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/src/node2d.cpp
+
+hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node2d.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/hybrid_astar.dir/src/node2d.cpp.i"
+	cd /home/tanujthakkar/ROS/catkin_ws/build/hybrid_astar && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/src/node2d.cpp > CMakeFiles/hybrid_astar.dir/src/node2d.cpp.i
+
+hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node2d.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/hybrid_astar.dir/src/node2d.cpp.s"
+	cd /home/tanujthakkar/ROS/catkin_ws/build/hybrid_astar && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/src/node2d.cpp -o CMakeFiles/hybrid_astar.dir/src/node2d.cpp.s
+
+hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node2d.cpp.o.requires:
+
+.PHONY : hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node2d.cpp.o.requires
+
+hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node2d.cpp.o.provides: hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node2d.cpp.o.requires
+	$(MAKE) -f hybrid_astar/CMakeFiles/hybrid_astar.dir/build.make hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node2d.cpp.o.provides.build
+.PHONY : hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node2d.cpp.o.provides
+
+hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node2d.cpp.o.provides.build: hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node2d.cpp.o
+
+
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o: hybrid_astar/CMakeFiles/hybrid_astar.dir/flags.make
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o: /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/src/node4d.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/tanujthakkar/ROS/catkin_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/tanujthakkar/ROS/catkin_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o"
 	cd /home/tanujthakkar/ROS/catkin_ws/build/hybrid_astar && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o -c /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/src/node4d.cpp
 
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.i: cmake_force
@@ -107,7 +131,7 @@ hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o.provides.build: hybrid
 
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/dubins.cpp.o: hybrid_astar/CMakeFiles/hybrid_astar.dir/flags.make
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/dubins.cpp.o: /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/src/dubins.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/tanujthakkar/ROS/catkin_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object hybrid_astar/CMakeFiles/hybrid_astar.dir/src/dubins.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/tanujthakkar/ROS/catkin_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object hybrid_astar/CMakeFiles/hybrid_astar.dir/src/dubins.cpp.o"
 	cd /home/tanujthakkar/ROS/catkin_ws/build/hybrid_astar && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/hybrid_astar.dir/src/dubins.cpp.o -c /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/src/dubins.cpp
 
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/dubins.cpp.i: cmake_force
@@ -131,7 +155,7 @@ hybrid_astar/CMakeFiles/hybrid_astar.dir/src/dubins.cpp.o.provides.build: hybrid
 
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/reeds_shepp.cpp.o: hybrid_astar/CMakeFiles/hybrid_astar.dir/flags.make
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/reeds_shepp.cpp.o: /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/src/reeds_shepp.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/tanujthakkar/ROS/catkin_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object hybrid_astar/CMakeFiles/hybrid_astar.dir/src/reeds_shepp.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/tanujthakkar/ROS/catkin_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object hybrid_astar/CMakeFiles/hybrid_astar.dir/src/reeds_shepp.cpp.o"
 	cd /home/tanujthakkar/ROS/catkin_ws/build/hybrid_astar && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/hybrid_astar.dir/src/reeds_shepp.cpp.o -c /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/src/reeds_shepp.cpp
 
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/reeds_shepp.cpp.i: cmake_force
@@ -155,7 +179,7 @@ hybrid_astar/CMakeFiles/hybrid_astar.dir/src/reeds_shepp.cpp.o.provides.build: h
 
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/voronoi.cpp.o: hybrid_astar/CMakeFiles/hybrid_astar.dir/flags.make
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/voronoi.cpp.o: /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/src/voronoi.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/tanujthakkar/ROS/catkin_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object hybrid_astar/CMakeFiles/hybrid_astar.dir/src/voronoi.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/tanujthakkar/ROS/catkin_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object hybrid_astar/CMakeFiles/hybrid_astar.dir/src/voronoi.cpp.o"
 	cd /home/tanujthakkar/ROS/catkin_ws/build/hybrid_astar && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/hybrid_astar.dir/src/voronoi.cpp.o -c /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/src/voronoi.cpp
 
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/voronoi.cpp.i: cmake_force
@@ -180,6 +204,7 @@ hybrid_astar/CMakeFiles/hybrid_astar.dir/src/voronoi.cpp.o.provides.build: hybri
 # Object files for target hybrid_astar
 hybrid_astar_OBJECTS = \
 "CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o" \
+"CMakeFiles/hybrid_astar.dir/src/node2d.cpp.o" \
 "CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o" \
 "CMakeFiles/hybrid_astar.dir/src/dubins.cpp.o" \
 "CMakeFiles/hybrid_astar.dir/src/reeds_shepp.cpp.o" \
@@ -189,6 +214,7 @@ hybrid_astar_OBJECTS = \
 hybrid_astar_EXTERNAL_OBJECTS =
 
 /home/tanujthakkar/ROS/catkin_ws/devel/lib/hybrid_astar/hybrid_astar: hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o
+/home/tanujthakkar/ROS/catkin_ws/devel/lib/hybrid_astar/hybrid_astar: hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node2d.cpp.o
 /home/tanujthakkar/ROS/catkin_ws/devel/lib/hybrid_astar/hybrid_astar: hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o
 /home/tanujthakkar/ROS/catkin_ws/devel/lib/hybrid_astar/hybrid_astar: hybrid_astar/CMakeFiles/hybrid_astar.dir/src/dubins.cpp.o
 /home/tanujthakkar/ROS/catkin_ws/devel/lib/hybrid_astar/hybrid_astar: hybrid_astar/CMakeFiles/hybrid_astar.dir/src/reeds_shepp.cpp.o
@@ -232,7 +258,7 @@ hybrid_astar_EXTERNAL_OBJECTS =
 /home/tanujthakkar/ROS/catkin_ws/devel/lib/hybrid_astar/hybrid_astar: /usr/lib/x86_64-linux-gnu/libconsole_bridge.so.0.4
 /home/tanujthakkar/ROS/catkin_ws/devel/lib/hybrid_astar/hybrid_astar: /opt/ros/melodic/lib/libompl.so
 /home/tanujthakkar/ROS/catkin_ws/devel/lib/hybrid_astar/hybrid_astar: hybrid_astar/CMakeFiles/hybrid_astar.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/tanujthakkar/ROS/catkin_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable /home/tanujthakkar/ROS/catkin_ws/devel/lib/hybrid_astar/hybrid_astar"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/tanujthakkar/ROS/catkin_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX executable /home/tanujthakkar/ROS/catkin_ws/devel/lib/hybrid_astar/hybrid_astar"
 	cd /home/tanujthakkar/ROS/catkin_ws/build/hybrid_astar && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/hybrid_astar.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -241,6 +267,7 @@ hybrid_astar/CMakeFiles/hybrid_astar.dir/build: /home/tanujthakkar/ROS/catkin_ws
 .PHONY : hybrid_astar/CMakeFiles/hybrid_astar.dir/build
 
 hybrid_astar/CMakeFiles/hybrid_astar.dir/requires: hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o.requires
+hybrid_astar/CMakeFiles/hybrid_astar.dir/requires: hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node2d.cpp.o.requires
 hybrid_astar/CMakeFiles/hybrid_astar.dir/requires: hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o.requires
 hybrid_astar/CMakeFiles/hybrid_astar.dir/requires: hybrid_astar/CMakeFiles/hybrid_astar.dir/src/dubins.cpp.o.requires
 hybrid_astar/CMakeFiles/hybrid_astar.dir/requires: hybrid_astar/CMakeFiles/hybrid_astar.dir/src/reeds_shepp.cpp.o.requires

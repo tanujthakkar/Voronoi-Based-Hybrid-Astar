@@ -49,6 +49,7 @@ generate_messages(
 )
 
 set(SOURCES
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/node2d.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/node4d.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/dubins.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/reeds_shepp.cpp
@@ -58,6 +59,7 @@ set(SOURCES
 set(HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/include/hybrid_astar/constants.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/hybrid_astar/helper.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/hybrid_astar/node2d.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/hybrid_astar/node4d.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/hybrid_astar/dubins.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/hybrid_astar/reeds_shepp.h
