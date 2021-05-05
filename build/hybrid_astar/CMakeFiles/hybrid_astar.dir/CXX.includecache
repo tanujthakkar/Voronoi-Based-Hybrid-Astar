@@ -247,6 +247,8 @@ reeds_shepp.h
 /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/reeds_shepp.h
 pure_pursuit.h
 /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/pure_pursuit.h
+voronoi.h
+/home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/voronoi.h
 hybrid_astar/GlobalPath.h
 /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/hybrid_astar/GlobalPath.h
 hybrid_astar/MonteCarloSim.h
@@ -326,6 +328,14 @@ boost/math/constants/constants.hpp
 cassert
 -
 
+/home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/voronoi.h
+constants.h
+/home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/constants.h
+helper.h
+/home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/helper.h
+hybrid_astar.h
+/home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/hybrid_astar.h
+
 /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/src/dubins.cpp
 ../include/hybrid_astar/dubins.h
 /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/dubins.h
@@ -347,6 +357,10 @@ assert.h
 /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/reeds_shepp.h
 boost/math/constants/constants.hpp
 -
+
+/home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/src/voronoi.cpp
+../include/hybrid_astar/voronoi.h
+/home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/voronoi.h
 
 /opt/ros/melodic/include/geometry_msgs/Point.h
 string

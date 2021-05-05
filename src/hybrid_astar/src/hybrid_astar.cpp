@@ -40,7 +40,6 @@ int** acc_obs_map;
 
 bool voronoi_graph_received = false; // Flag to stop computing voronoi graph
 tuw_multi_robot_msgs::Graph voronoi_graph; // Voronoi graph representing the voronoi nodes
-std::vector<geometry_msgs::Point> voronoi_nodes; // Vector of Voronoi nodes from the voronoi graph
 
 typedef pair<float, int> pi;
 
@@ -579,47 +578,6 @@ void visualize_final_path(Node4D &current_node, Node4D &dubins_node, std::map<in
 // }
 
 
-void calc_voronoi_path() {
-
-	float deltar = (RF - RB) / 2.0;
-	syaw = tf::getYaw(start_pose.pose.orientation);
-	syaw_t = tf::getYaw(start_pose.pose.orientation);
-	sx = start_pose.pose.position.x - deltar * cos(syaw);
-	sy = start_pose.pose.position.y - deltar * sin(syaw);
-
-	deltar = (RF - RB) / 2.0;
-	gyaw = tf::getYaw(goal_pose.pose.orientation);
-	gx = goal_pose.pose.position.x - deltar * cos(gyaw);
-	gy = goal_pose.pose.position.y - deltar * sin(gyaw);
-
-	geometry_msgs::PointStamped voronoi_start;
-	float nearest_voronoi_start = hypot(voronoi_nodes[0].x  - sx, voronoi_nodes[0].y - sy);
-	geometry_msgs::PointStamped voronoi_goal;
-	float nearest_voronoi_goal = hypot(voronoi_nodes[0].x  - gx, voronoi_nodes[0].y - gy);
-
-	voronoi_start.header.stamp = ros::Time::now();
-	voronoi_start.header.frame_id = "/map";
-	voronoi_goal.header.stamp = ros::Time::now();
-	voronoi_goal.header.frame_id = "/map";
-
-	ROS_INFO("voronoi_nodes: %d", voronoi_nodes.size());
-	for (int i = 0; i < voronoi_nodes.size(); ++i) {
-		// printf("%f %f\n", hypot(voronoi_nodes[i].x - sx, voronoi_nodes[i].y - sy), nearest_voronoi_start);
-		// printf("%f %f\n", hypot(voronoi_nodes[i].x - gx, voronoi_nodes[i].y - gy), nearest_voronoi_goal);
-		if(nearest_voronoi_start >= hypot(voronoi_nodes[i].x - sx, voronoi_nodes[i].y - sy)) {
-			nearest_voronoi_start = hypot(voronoi_nodes[i].x - sx, voronoi_nodes[i].y - sy);
-			voronoi_start.point = voronoi_nodes[i];
-			robot_center_pub.publish(voronoi_start);
-		}
-		if(nearest_voronoi_goal >= hypot(voronoi_nodes[i].x - gx, voronoi_nodes[i].y - gy)) {
-			nearest_voronoi_goal = hypot(voronoi_nodes[i].x - gx, voronoi_nodes[i].y - gy);
-			voronoi_goal.point = voronoi_nodes[i];
-			trailer_center_pub.publish(voronoi_goal);
-		}
-	}
-}
-
-
 /*
 	Computes the Hybrid A* path
 */
@@ -852,7 +810,7 @@ bool hybrid_astar_plan() {
 							p.z = 0;
 							nodes.points.push_back(p);
 						}
-						// visualize_nodes_pub.publish(nodes);
+						visualize_nodes_pub.publish(nodes);
 					}
 
 					total_nodes++;
@@ -882,43 +840,61 @@ bool hybrid_astar_plan() {
 			}
 		}
 
-		Node4D new_node_;
-		current_node = start_node;
+		// Node4D new_node_;
+		// current_node = start_node;
 
-		for (unsigned int d = 0; d < direction.size(); ++d) {
-			for(unsigned int i = 0; i < steer.size() + 1; ++i) {
+		// for (unsigned int d = 0; d < direction.size(); ++d) {
+		// 	for(unsigned int i = 0; i < steer.size() + 1; ++i) {
 				
-				new_node = create_successor(current_node, steer[i], direction[d]);
+		// 		new_node = create_successor(current_node, steer[i], direction[d]);
 
-				for(int j=0;j<ceil(PATH_LENGTH/MOVE_STEP);j++) {
-					p.x = new_node.get_x(j);
-					p.y = new_node.get_y(j);
-					p.z = 0;
-					nodes.points.push_back(p);
-				}
-				visualize_nodes_pub.publish(nodes);
+		// 		for(int j=0;j<ceil(PATH_LENGTH/MOVE_STEP);j++) {
+		// 			p.x = new_node.get_x(j);
+		// 			p.y = new_node.get_y(j);
+		// 			p.z = 0;
+		// 			nodes.points.push_back(p);
+		// 		}
+		// 		visualize_nodes_pub.publish(nodes);
 
-				for (unsigned int d_ = 0; d_ < direction.size(); ++d_) {
-					for(unsigned int i_ = 0; i_ < steer.size() + 1; ++i_) {
-						new_node_ = create_successor(new_node, steer[i_], direction[d_]);
+		// 		for (unsigned int d_ = 0; d_ < direction.size(); ++d_) {
+		// 			for(unsigned int i_ = 0; i_ < steer.size() + 1; ++i_) {
+		// 				new_node_ = create_successor(new_node, steer[i_], direction[d_]);
 
-						for(int j=0;j<ceil(PATH_LENGTH/MOVE_STEP);j++) {
-							p.x = new_node_.get_x(j);
-							p.y = new_node_.get_y(j);
-							p.z = 0;
-							nodes.points.push_back(p);
-						}
-						visualize_nodes_pub.publish(nodes);
-					}
-				}
-			}
-		}
+		// 				for(int j=0;j<ceil(PATH_LENGTH/MOVE_STEP);j++) {
+		// 					p.x = new_node_.get_x(j);
+		// 					p.y = new_node_.get_y(j);
+		// 					p.z = 0;
+		// 					nodes.points.push_back(p);
+		// 				}
+		// 				visualize_nodes_pub.publish(nodes);
+		// 			}
+		// 		}
+		// 	}
+		// }
 
 		iteration_limit_flag = true;
 		ROS_INFO("Iteration limit reached!\n");
 		return false;
 	}
 }
+
+
+// void plan_global_path() {
+
+// 	std::vector<std::vector<float>> sub_goals;
+
+// 	for (int i = 0; i < sub_goals.size(); ++i)
+// 	{
+// 		// sx = fx;
+// 		// sy = fy;
+// 		// syaw = fyaw;
+// 		// syaw_t = fyaw_t;
+
+// 		gx = sub_goals[i][0];
+// 		gy = sub_goals[i][1];
+// 		gyaw = sub_goals[i][2];
+// 	}
+// }
 
 
 /*
@@ -955,8 +931,8 @@ void callback_goal_pose(const geometry_msgs::PoseStamped::ConstPtr& pose) {
 
 	goal_pose_pub.publish(goal_pose);
 
-	// calc_voronoi_path();
-	hybrid_astar_plan();
+	voronoi_path();
+	// hybrid_astar_plan();
 }
 
 
@@ -1016,38 +992,7 @@ void callback_voronoi_graph(const tuw_multi_robot_msgs::Graph &vg) {
 	voronoi_graph = vg;
 	voronoi_graph_received = true;
 
-	visualization_msgs::Marker voronoi_nodes_points;
-	voronoi_nodes_points.header.stamp = ros::Time::now();
-	voronoi_nodes_points.header.frame_id = "/map";
-	voronoi_nodes_points.ns = "voronoi_nodes_points";
-	voronoi_nodes_points.action = visualization_msgs::Marker::ADD;
-	voronoi_nodes_points.id = 0;
-	voronoi_nodes_points.type = visualization_msgs::Marker::POINTS;
-	voronoi_nodes_points.scale.x = 0.2;
-	voronoi_nodes_points.scale.y = 0.2;
-	voronoi_nodes_points.color.r = 1.0;
-	voronoi_nodes_points.color.g = 0.0;
-	voronoi_nodes_points.color.b = 0.0;
-	voronoi_nodes_points.color.a = 1.0;
-
-	for(int i = 0; i < voronoi_graph.vertices.size(); ++i)
-	{	
-		if(count(voronoi_nodes.begin(), voronoi_nodes.end(), voronoi_graph.vertices[i].path[0])) {
-			continue;
-		} else {
-			voronoi_nodes.push_back(voronoi_graph.vertices[i].path[0]);
-		}
-		// voronoi_nodes_points.points.push_back(voronoi_graph.vertices[i].path[0]);
-		// if(count(voronoi_nodes.begin(), voronoi_nodes.end(), voronoi_graph.vertices[i].path[voronoi_graph.vertices[i].path.size()-1])) {
-		// 	continue;
-		// } else {
-		// 	voronoi_nodes.push_back(voronoi_graph.vertices[i].path[voronoi_graph.vertices[i].path.size()-1]);
-		// 	voronoi_nodes_points.points.push_back(voronoi_graph.vertices[i].path[voronoi_graph.vertices[i].path.size()-1]);
-		// }
-	}
-
-	voronoi_nodes_points.points = voronoi_nodes;
-	voronoi_nodes_points_pub.publish(voronoi_nodes_points);
+	voronoi_map();
 
 	voronoi_graph_sub.shutdown();
 }

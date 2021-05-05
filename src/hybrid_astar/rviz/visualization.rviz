@@ -230,13 +230,13 @@ Visualization Manager:
           Unreliable: false
           Value: false
         - Class: rviz/Marker
-          Enabled: true
+          Enabled: false
           Marker Topic: /nodes
           Name: Nodes
           Namespaces:
             {}
           Queue Size: 100
-          Value: true
+          Value: false
         - Alpha: 1
           Class: rviz/PointStamped
           Color: 25; 255; 0
@@ -250,11 +250,11 @@ Visualization Manager:
         - Alpha: 1
           Class: rviz/Polygon
           Color: 0; 255; 0
-          Enabled: true
+          Enabled: false
           Name: Robot Polygon
           Topic: /robot_polygon
           Unreliable: false
-          Value: true
+          Value: false
         - Alpha: 0.5
           Class: jsk_rviz_plugin/PolygonArray
           Color: 239; 41; 41
@@ -269,13 +269,13 @@ Visualization Manager:
           only border: false
           show normal: false
         - Class: rviz/Marker
-          Enabled: true
+          Enabled: false
           Marker Topic: /robot_collision_check
           Name: Robot Collision Check
           Namespaces:
             {}
           Queue Size: 100
-          Value: true
+          Value: false
         - Alpha: 1
           Class: rviz/PointStamped
           Color: 114; 159; 207
@@ -289,11 +289,11 @@ Visualization Manager:
         - Alpha: 1
           Class: rviz/Polygon
           Color: 32; 74; 135
-          Enabled: true
+          Enabled: false
           Name: Trailer Polygon
           Topic: /trailer_polygon
           Unreliable: false
-          Value: true
+          Value: false
         - Alpha: 0.699999988079071
           Class: jsk_rviz_plugin/PolygonArray
           Color: 32; 74; 135
@@ -308,13 +308,13 @@ Visualization Manager:
           only border: false
           show normal: false
         - Class: rviz/Marker
-          Enabled: true
+          Enabled: false
           Marker Topic: /trailer_collision_check
           Name: Trailer Collision Check
           Namespaces:
             {}
           Queue Size: 100
-          Value: true
+          Value: false
       Enabled: true
       Name: Hybrid A*
     - Class: rviz/Group
@@ -357,22 +357,22 @@ Visualization Manager:
     - Class: rviz/Group
       Displays:
         - Class: VoronoiGraph
-          Enabled: false
+          Enabled: true
           History Length: 1
           Name: VoronoiGraph
           Path Color: 50; 51; 204
           Path Points Scale: 0.10000000149011612
           Topic: /segments
           Unreliable: false
-          Value: false
+          Value: true
         - Class: rviz/Marker
-          Enabled: false
+          Enabled: true
           Marker Topic: /voronoi_nodes_points
           Name: Voronoi Nodes
           Namespaces:
-            {}
+            voronoi_neighbours: true
           Queue Size: 100
-          Value: false
+          Value: true
       Enabled: true
       Name: Voronoi
     - Class: rviz/Group
@@ -477,16 +477,16 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 21.6686954498291
+      Distance: 27.207338333129883
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 10.777069091796875
-        Y: 26.203203201293945
-        Z: 1.2043416500091553
+        X: 15.523825645446777
+        Y: 24.97130584716797
+        Z: 1.2018828392028809
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
@@ -495,7 +495,7 @@ Visualization Manager:
       Pitch: 1.5697963237762451
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 1.5700000524520874
+      Yaw: 3.140000104904175
     Saved: ~
 Window Geometry:
   Displays:

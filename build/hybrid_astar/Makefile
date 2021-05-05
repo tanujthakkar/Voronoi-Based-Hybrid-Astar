@@ -689,6 +689,33 @@ src/reeds_shepp.cpp.s:
 	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/hybrid_astar.dir/build.make hybrid_astar/CMakeFiles/hybrid_astar.dir/src/reeds_shepp.cpp.s
 .PHONY : src/reeds_shepp.cpp.s
 
+src/voronoi.o: src/voronoi.cpp.o
+
+.PHONY : src/voronoi.o
+
+# target to build an object file
+src/voronoi.cpp.o:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/hybrid_astar.dir/build.make hybrid_astar/CMakeFiles/hybrid_astar.dir/src/voronoi.cpp.o
+.PHONY : src/voronoi.cpp.o
+
+src/voronoi.i: src/voronoi.cpp.i
+
+.PHONY : src/voronoi.i
+
+# target to preprocess a source file
+src/voronoi.cpp.i:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/hybrid_astar.dir/build.make hybrid_astar/CMakeFiles/hybrid_astar.dir/src/voronoi.cpp.i
+.PHONY : src/voronoi.cpp.i
+
+src/voronoi.s: src/voronoi.cpp.s
+
+.PHONY : src/voronoi.s
+
+# target to generate assembly for a file
+src/voronoi.cpp.s:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/hybrid_astar.dir/build.make hybrid_astar/CMakeFiles/hybrid_astar.dir/src/voronoi.cpp.s
+.PHONY : src/voronoi.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -744,6 +771,9 @@ help:
 	@echo "... src/reeds_shepp.o"
 	@echo "... src/reeds_shepp.i"
 	@echo "... src/reeds_shepp.s"
+	@echo "... src/voronoi.o"
+	@echo "... src/voronoi.i"
+	@echo "... src/voronoi.s"
 .PHONY : help
 
 

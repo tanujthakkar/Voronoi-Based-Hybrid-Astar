@@ -33,6 +33,7 @@
 #include "dubins.h"
 #include "reeds_shepp.h"
 #include "pure_pursuit.h"
+#include "voronoi.h"
 
 #include "hybrid_astar/GlobalPath.h"
 #include "hybrid_astar/MonteCarloSim.h"
@@ -55,11 +56,14 @@ extern ros::Publisher robot_center_pub;
 extern ros::Publisher trailer_center_pub;
 extern ros::Publisher robot_collision_check_pub;
 extern ros::Publisher trailer_collision_check_pub;
+extern ros::Publisher voronoi_nodes_points_pub;
 
 extern geometry_msgs::PoseStamped start_pose;
+extern geometry_msgs::PoseStamped goal_pose;
 extern nav_msgs::Path path;
 extern bool visualization;
 extern jsk_recognition_msgs::PolygonArray robot_polygon_array;
 extern jsk_recognition_msgs::PolygonArray trailer_polygon_array;
+extern tuw_multi_robot_msgs::Graph voronoi_graph;
 
 #endif
