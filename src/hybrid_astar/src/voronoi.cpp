@@ -153,7 +153,7 @@ std::vector<std::vector<float>> voronoi_path() {
 		}
 	}
 
-	ROS_INFO("Voronoi Start ID: %u \t Vornoi Goal ID: %u", voronoi_start_id, voronoi_goal_id);
+	// ROS_INFO("Voronoi Start ID: %u \t Vornoi Goal ID: %u", voronoi_start_id, voronoi_goal_id);
 
 	visualization_msgs::Marker voronoi_path_points;
 	voronoi_path_points.header.stamp = ros::Time::now();
@@ -262,21 +262,23 @@ std::vector<std::vector<float>> voronoi_path() {
 	std::vector<std::vector<float>> sub_goals;
 	std::vector<geometry_msgs::Point> redundunt_nodes;
 
+	sub_goals.push_back({gx, gy, gyaw});
+
 	float yaw;
 	geometry_msgs::Pose p;
-	p.position.x = voronoi_graph.vertices[current_id.second].path[0].x;
-	p.position.y = voronoi_graph.vertices[current_id.second].path[0].y;
-	yaw = calc_yaw(voronoi_graph.vertices[current_id.second].path[0].x, voronoi_graph.vertices[current_id.second].path[0].y, gx, gy);
-	tf::Quaternion quat = tf::createQuaternionFromYaw(yaw);
-	p.orientation.x = quat.x();
-	p.orientation.y = quat.y();
-	p.orientation.z = quat.z();
-	p.orientation.w = quat.w();
-	voronoi_sub_goal.pose = p;
-	voronoi_sub_goals.markers.push_back(voronoi_sub_goal);
-	sub_goals.push_back({p.position.x, p.position.y, yaw});
+	// p.position.x = voronoi_graph.vertices[current_id.second].path[0].x;
+	// p.position.y = voronoi_graph.vertices[current_id.second].path[0].y;
+	// yaw = calc_yaw(voronoi_graph.vertices[current_id.second].path[0].x, voronoi_graph.vertices[current_id.second].path[0].y, gx, gy);
+	// tf::Quaternion quat = tf::createQuaternionFromYaw(yaw);
+	// p.orientation.x = quat.x();
+	// p.orientation.y = quat.y();
+	// p.orientation.z = quat.z();
+	// p.orientation.w = quat.w();
+	// voronoi_sub_goal.pose = p;
+	// voronoi_sub_goals.markers.push_back(voronoi_sub_goal);
+	// sub_goals.push_back({p.position.x, p.position.y, yaw});
 
-	voronoi_path_points.points.push_back(voronoi_graph.vertices[current_id.second].path[0]);
+	// voronoi_path_points.points.push_back(voronoi_graph.vertices[current_id.second].path[0]);
 	while(current_node.get_pind() != NULL) {
 		if(count(redundunt_nodes.begin(), redundunt_nodes.end(), voronoi_graph.vertices[current_node.get_pind()].path[0])) {
 			current_node = closed_list[current_node.get_pind()];
@@ -299,6 +301,8 @@ std::vector<std::vector<float>> voronoi_path() {
 	}
 	voronoi_sub_goals_pub.publish(voronoi_sub_goals);
 	voronoi_path_pub.publish(voronoi_path_points);
+
+	reverse(sub_goals.begin(), sub_goals.end());
 
 	return sub_goals;
 }
