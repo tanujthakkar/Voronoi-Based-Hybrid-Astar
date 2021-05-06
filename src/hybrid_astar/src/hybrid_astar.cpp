@@ -20,7 +20,8 @@ ros::Publisher robot_center_pub;
 ros::Publisher trailer_center_pub;
 ros::Publisher robot_collision_check_pub;
 ros::Publisher trailer_collision_check_pub;
-ros::Publisher voronoi_nodes_points_pub;
+ros::Publisher voronoi_path_pub;
+ros::Publisher voronoi_sub_goals_pub;
 
 ros::Subscriber voronoi_graph_sub;
 
@@ -62,6 +63,12 @@ float gx; // x coordinate of goal pose of the rear axle/hitch point of the vehic
 float gy; // y coordinate of goal pose of the rear axle/hitch point of the vehicle
 float gyaw; // yaw coordinate of goal pose of the rear axle/hitch point of the vehicle
 int g_ind;
+
+float fx;
+float fy;
+float fyaw;
+float fyaw_t;
+int f_ind;
 
 Node4D* start_node_ptr; // Pointer to the start node
 Node4D* goal_node_ptr; // Pointer to the goal node
@@ -879,22 +886,125 @@ bool hybrid_astar_plan() {
 }
 
 
-// void plan_global_path() {
+bool plan_global_path() {
 
-// 	std::vector<std::vector<float>> sub_goals;
+	std::vector<std::vector<float>> sub_goals = voronoi_path();
 
-// 	for (int i = 0; i < sub_goals.size(); ++i)
-// 	{
-// 		// sx = fx;
-// 		// sy = fy;
-// 		// syaw = fyaw;
-// 		// syaw_t = fyaw_t;
+	float cx;
+	float cy;
+	float ctx;
+	float cty;
 
-// 		gx = sub_goals[i][0];
-// 		gy = sub_goals[i][1];
-// 		gyaw = sub_goals[i][2];
-// 	}
-// }
+	syaw = tf::getYaw(start_pose.pose.orientation);
+	syaw_t = tf::getYaw(start_pose.pose.orientation);
+	sx = start_pose.pose.position.x - DELTAR * cos(syaw);
+	sy = start_pose.pose.position.y - DELTAR * sin(syaw);
+	s_ind = (int)(round(syaw/YAW_RESOLUTION) * grid_width * grid_height + round(sy/XY_RESOLUTION) * grid_width + round(sx/XY_RESOLUTION));
+
+	start_pose.header.stamp = ros::Time::now();
+	start_pose.header.frame_id = "map";
+	start_pose.pose.position.x = sx;
+	start_pose.pose.position.y = sy;
+	tf::Quaternion quat = tf::createQuaternionFromYaw(syaw);
+	start_pose.pose.orientation.x = quat.x();
+	start_pose.pose.orientation.y = quat.y();
+	start_pose.pose.orientation.z = quat.z();
+	start_pose.pose.orientation.w = quat.w();
+	start_pose_pub.publish(start_pose);
+
+	cx = (sx + DELTAR * cos(syaw));
+	cy = (sy + DELTAR * sin(syaw));
+
+	robot_polygon_array.header.stamp = ros::Time::now();
+	robot_polygon_array.header.frame_id = "map";
+	robot_polygon_array.polygons.clear();
+	robot_polygon_array.polygons.push_back(create_polygon(RL, RW, cx, cy, syaw));
+	robot_polyogn_array_pub.publish(robot_polygon_array);
+
+	ctx = (sx + DELTAT * cos(syaw));
+	cty = (sy + DELTAT * sin(syaw));
+
+	trailer_polygon_array.header.stamp = ros::Time::now();
+	trailer_polygon_array.header.frame_id = "map";
+	trailer_polygon_array.polygons.clear();
+	trailer_polygon_array.polygons.push_back(create_polygon(TL, TW, ctx, cty, syaw));
+	trailer_polyogn_array_pub.publish(trailer_polygon_array);
+
+	Node4D start_node = Node4D(sx, sy, syaw, 0, syaw_t, s_ind);
+	if(start_node.check_collision(grid, bin_map, acc_obs_map)) {
+		ROS_INFO("INVALID START");
+		valid_start = false;
+		return false;
+	}
+	// ROS_INFO("VALID START - sx: %f sy: %f syaw: %f", sx, sy, syaw);
+	valid_start = true;
+
+	// Computing rear-axle/hitch-point pose for goal node
+	gyaw = tf::getYaw(goal_pose.pose.orientation);
+	gx = goal_pose.pose.position.x - DELTAR * cos(gyaw);
+	gy = goal_pose.pose.position.y - DELTAR * sin(gyaw);
+	g_ind = (int)(round(gyaw/YAW_RESOLUTION) * grid_width * grid_height + round(gy/XY_RESOLUTION) * grid_width + round(gx/XY_RESOLUTION));
+
+	goal_pose.header.stamp = ros::Time::now();
+	goal_pose.header.frame_id = "map";
+	goal_pose.pose.position.x = gx;
+	goal_pose.pose.position.y = gy;
+	quat = tf::createQuaternionFromYaw(gyaw);
+	goal_pose.pose.orientation.x = quat.x();
+	goal_pose.pose.orientation.y = quat.y();
+	goal_pose.pose.orientation.z = quat.z();
+	goal_pose.pose.orientation.w = quat.w();
+	goal_pose_pub.publish(goal_pose);
+
+	cx = (gx + DELTAR * cos(gyaw));
+	cy = (gy + DELTAR * sin(gyaw));
+
+	robot_polygon_array.header.stamp = ros::Time::now();
+	robot_polygon_array.header.frame_id = "map";
+	robot_polygon_array.polygons.push_back(create_polygon(RL, RW, cx, cy, gyaw));
+	robot_polyogn_array_pub.publish(robot_polygon_array);
+
+	ctx = (gx + DELTAT * cos(gyaw));
+	cty = (gy + DELTAT * sin(gyaw));
+
+	trailer_polygon_array.header.stamp = ros::Time::now();
+	trailer_polygon_array.header.frame_id = "map";
+	trailer_polygon_array.polygons.push_back(create_polygon(TL, TW, ctx, cty, gyaw));
+	trailer_polyogn_array_pub.publish(trailer_polygon_array);
+
+	Node4D goal_node = Node4D(gx, gy, gyaw, 0, gyaw, g_ind);
+	if(goal_node.check_collision(grid, bin_map, acc_obs_map)) {
+		ROS_INFO("INVALID GOAL");
+		valid_goal = false;
+		return false;
+	}
+	// ROS_INFO("VALID GOAL - gx: %f gy: %f gyaw: %f", gx, gy, gyaw);
+	valid_goal = true;
+
+	Node4D current_node; // Object to store the current node
+	Node4D new_node; // Object to store the next node
+
+	current_node = start_node;
+
+	while(true) {
+
+		new_node = create_dubins_node(current_node, goal_node);
+		if(!new_node.check_collision(grid, bin_map, acc_obs_map)) {
+			ROS_INFO("SOLUTION FOUND - DUBINS NODE");
+			return true;
+		}
+
+		for (int i = sub_goals.size(); i > 0; --i) {
+			new_node = create_dubins_node(current_node, Node4D(sub_goals[i][0], sub_goals[i][1], sub_goals[i][2], 0, sub_goals[i][2], -1));
+			if(!new_node.check_collision(grid, bin_map, acc_obs_map)) {
+				current_node = new_node;
+				break;
+			}
+		}
+
+		hybrid_astar_plan();
+	}
+}
 
 
 /*
@@ -931,7 +1041,8 @@ void callback_goal_pose(const geometry_msgs::PoseStamped::ConstPtr& pose) {
 
 	goal_pose_pub.publish(goal_pose);
 
-	voronoi_path();
+	plan_global_path();
+	// voronoi_path();
 	// hybrid_astar_plan();
 }
 
@@ -1093,7 +1204,8 @@ int main(int argc, char **argv) {
 	trailer_center_pub = nh.advertise<geometry_msgs::PointStamped>("trailer_center", 10);
 	robot_collision_check_pub = nh.advertise<visualization_msgs::Marker>("robot_collision_check", 10);
 	trailer_collision_check_pub = nh.advertise<visualization_msgs::Marker>("trailer_collision_check", 10);
-	voronoi_nodes_points_pub = nh.advertise<visualization_msgs::Marker>("voronoi_nodes_points", 10);
+	voronoi_path_pub = nh.advertise<visualization_msgs::Marker>("voronoi_path", 10);
+	voronoi_sub_goals_pub = nh.advertise<visualization_msgs::MarkerArray>("voronoi_sub_goals", 10);
 
 	// Subscribers
 	ros::Subscriber start_pose_sub = nh.subscribe("initialpose", 10, callback_start_pose);

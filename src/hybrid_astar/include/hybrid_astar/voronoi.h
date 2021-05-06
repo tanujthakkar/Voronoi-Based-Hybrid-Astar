@@ -8,7 +8,7 @@
 
 extern std::map<uint, std::vector<uint>> voronoi_nodes; // Map of voronoi nodes with their respective neighbours
 
-void voronoi_path();
+std::vector<std::vector<float>> voronoi_path();
 void voronoi_map();
 
 #endif

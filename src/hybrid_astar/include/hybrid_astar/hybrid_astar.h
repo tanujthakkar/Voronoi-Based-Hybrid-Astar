@@ -19,6 +19,7 @@
 #include <geometry_msgs/Quaternion.h>
 #include <geometry_msgs/PolygonStamped.h>
 #include <visualization_msgs/Marker.h>
+#include <visualization_msgs/MarkerArray.h>
 #include <jsk_recognition_msgs/PolygonArray.h>
 #include "std_msgs/String.h"
 #include "std_msgs/Int32.h"
@@ -56,7 +57,8 @@ extern ros::Publisher robot_center_pub;
 extern ros::Publisher trailer_center_pub;
 extern ros::Publisher robot_collision_check_pub;
 extern ros::Publisher trailer_collision_check_pub;
-extern ros::Publisher voronoi_nodes_points_pub;
+extern ros::Publisher voronoi_path_pub;
+extern ros::Publisher voronoi_sub_goals_pub;
 
 extern geometry_msgs::PoseStamped start_pose;
 extern geometry_msgs::PoseStamped goal_pose;

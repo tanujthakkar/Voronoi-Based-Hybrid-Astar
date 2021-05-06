@@ -223,6 +223,8 @@ geometry_msgs/PolygonStamped.h
 -
 visualization_msgs/Marker.h
 -
+visualization_msgs/MarkerArray.h
+-
 jsk_recognition_msgs/PolygonArray.h
 -
 std_msgs/String.h
@@ -2012,6 +2014,24 @@ std_msgs/ColorRGBA.h
 geometry_msgs/Point.h
 -
 std_msgs/ColorRGBA.h
+-
+
+/opt/ros/melodic/include/visualization_msgs/MarkerArray.h
+string
+-
+vector
+-
+map
+-
+ros/types.h
+-
+ros/serialization.h
+-
+ros/builtin_message_traits.h
+-
+ros/message_operations.h
+-
+visualization_msgs/Marker.h
 -
 
 /opt/ros/melodic/include/xmlrpcpp/XmlRpcDecl.h

@@ -46,6 +46,53 @@ float calc_node_cost(float x, float y, float gx, float gy, float cost_so_far) {
 	return cost_so_far + (hypot(x - gx, y - gy));
 }
 
+float calc_yaw(float x_1, float y_1, float x_2, float y_2) {
+
+	if(y_2 - y_1 > 0 && x_2 - x_1 > 0) {
+		// ROS_INFO("Case 1");
+		// ROS_INFO("x_1: %f y_1: %f x_2: %f y_2: %f", x_1, y_1, x_2, y_2);
+		return asin((y_2 - y_1)/hypot(x_2 - x_1, y_2 - y_1));
+	}
+
+	if(y_2 - y_1 > 0 && x_2 - x_1 < 0) {
+		// ROS_INFO("Case 2");
+		// ROS_INFO("x_1: %f y_1: %f x_2: %f y_2: %f", x_1, y_1, x_2, y_2);
+		return (3.14 - asin((y_2 - y_1)/hypot(x_2 - x_1, y_2 - y_1)));
+	}
+
+	if(y_2 - y_1 < 0 && x_2 - x_1 > 0) {
+		// ROS_INFO("Case 3");
+		// ROS_INFO("x_1: %f y_1: %f x_2: %f y_2: %f", x_1, y_1, x_2, y_2);
+		return asin((y_2 - y_1)/hypot(x_2 - x_1, y_2 - y_1));
+	}
+
+	if(y_2 - y_1 < 0 && x_2 - x_1 < 0) {
+		// ROS_INFO("Case 4");
+		// ROS_INFO("x_1: %f y_1: %f x_2: %f y_2: %f", x_1, y_1, x_2, y_2);
+		return (-3.14 - asin((y_2 - y_1)/hypot(x_2 - x_1, y_2 - y_1)));
+	}
+
+	if(y_2 - y_1 == 0) {
+		// ROS_INFO("Case 5");
+		// ROS_INFO("x_1: %f y_1: %f x_2: %f y_2: %f", x_1, y_1, x_2, y_2);
+		if(x_2 > x_1) {
+			return 0.0;
+		} else {
+			return 3.14;
+		}
+	}
+
+	if(x_2 - x_1 == 0) {
+		// ROS_INFO("Case 6");
+		// ROS_INFO("x_1: %f y_1: %f x_2: %f y_2: %f", x_1, y_1, x_2, y_2);
+		if(y_2 > y_1) {
+			return 1.57;
+		} else {
+			return -1.57;
+		}
+	}
+}
+
 void display_map(std::map<uint, Node2D> m) {
 	std::map<uint, Node2D>::iterator itr;
 	for (itr = m.begin(); itr != m.end(); ++itr) {
@@ -68,16 +115,16 @@ void display_pq(priority_queue<pi, vector<pi>, greater<pi>> gq)
 	cout << endl;
 }
 
-void voronoi_path() {
+std::vector<std::vector<float>> voronoi_path() {
 
 	float syaw = tf::getYaw(start_pose.pose.orientation);
 	float syaw_t = tf::getYaw(start_pose.pose.orientation);
-	float sx = start_pose.pose.position.x - DELTAR * cos(syaw);
-	float sy = start_pose.pose.position.y - DELTAR * sin(syaw);
+	float sx = start_pose.pose.position.x;
+	float sy = start_pose.pose.position.y;
 
 	float gyaw = tf::getYaw(goal_pose.pose.orientation);
-	float gx = goal_pose.pose.position.x - DELTAR * cos(gyaw);
-	float gy = goal_pose.pose.position.y - DELTAR * sin(gyaw);
+	float gx = goal_pose.pose.position.x;
+	float gy = goal_pose.pose.position.y;
 
 	geometry_msgs::PointStamped voronoi_start;
 	float nearest_voronoi_start = hypot(voronoi_graph.vertices[0].path[0].x  - sx, voronoi_graph.vertices[0].path[0].y - sy);
@@ -108,20 +155,40 @@ void voronoi_path() {
 
 	ROS_INFO("Voronoi Start ID: %u \t Vornoi Goal ID: %u", voronoi_start_id, voronoi_goal_id);
 
-	visualization_msgs::Marker voronoi_neighbours;
-	voronoi_neighbours.header.stamp = ros::Time::now();
-	voronoi_neighbours.header.frame_id = "/map";
-	voronoi_neighbours.ns = "voronoi_neighbours";
-	voronoi_neighbours.action = visualization_msgs::Marker::ADD;
-	voronoi_neighbours.id = 0;
-	voronoi_neighbours.type = visualization_msgs::Marker::POINTS;
-	voronoi_neighbours.scale.x = 0.2;
-	voronoi_neighbours.scale.y = 0.2;
-	voronoi_neighbours.color.r = 1.0;
-	voronoi_neighbours.color.g = 0.0;
-	voronoi_neighbours.color.b = 0.0;
-	voronoi_neighbours.color.a = 1.0;
-	voronoi_neighbours.points.clear();
+	visualization_msgs::Marker voronoi_path_points;
+	voronoi_path_points.header.stamp = ros::Time::now();
+	voronoi_path_points.header.frame_id = "/map";
+	voronoi_path_points.ns = "voronoi_path_points";
+	voronoi_path_points.action = visualization_msgs::Marker::ADD;
+	voronoi_path_points.id = 0;
+	voronoi_path_points.type = visualization_msgs::Marker::POINTS;
+	voronoi_path_points.scale.x = 0.2;
+	voronoi_path_points.scale.y = 0.2;
+	voronoi_path_points.color.r = 1.0;
+	voronoi_path_points.color.g = 0.0;
+	voronoi_path_points.color.b = 0.0;
+	voronoi_path_points.color.a = 1.0;
+	voronoi_path_points.points.clear();
+
+	visualization_msgs::MarkerArray voronoi_sub_goals;
+	voronoi_sub_goals.markers.clear();
+
+	visualization_msgs::Marker voronoi_sub_goal;
+	voronoi_sub_goal.header.stamp = ros::Time::now();
+	voronoi_sub_goal.header.frame_id = "/map";
+	voronoi_sub_goal.ns = "voronoi_sub_goal";
+	voronoi_sub_goal.action = visualization_msgs::Marker::ADD;
+	voronoi_sub_goal.id = 0;
+	voronoi_sub_goal.type = visualization_msgs::Marker::ARROW;
+	voronoi_sub_goal.scale.x = 1.0;
+	voronoi_sub_goal.scale.y = 0.05;
+	voronoi_sub_goal.color.r = 1.0;
+	voronoi_sub_goal.color.g = 0.0;
+	voronoi_sub_goal.color.b = 0.0;
+	voronoi_sub_goal.color.a = 1.0;
+	voronoi_sub_goal.lifetime = ros::Duration(100);
+	voronoi_sub_goal.frame_locked = true;
+	// voronoi_sub_goal.points.clear();
 	geometry_msgs::Point voronoi_neighbour;
 		
 	Node2D current_node;
@@ -135,12 +202,12 @@ void voronoi_path() {
 	std::map<uint, Node2D> closed_list;
 
 	open_list[voronoi_start_id] = Node2D(voronoi_graph.vertices[voronoi_start_id].path[0].x, voronoi_graph.vertices[voronoi_start_id].path[0].y, 0, NULL);
-	cout << "Open List - " << endl;
-	display_map(open_list);
+	// cout << "Open List - " << endl;
+	// display_map(open_list);
 
 	priority_queue<pi, vector<pi>, greater<pi>> pq;
 	pq.push(make_pair(0, voronoi_start_id));
-	display_pq(pq);
+	// display_pq(pq);
 
 	while(true) {
 
@@ -151,7 +218,7 @@ void voronoi_path() {
 			break;
 		}
 
-		display_pq(pq);
+		// display_pq(pq);
 
 		current_id = pq.top();
 		pq.pop();
@@ -160,29 +227,22 @@ void voronoi_path() {
 		cost_so_far = cost_so_far + current_node.get_cost();
 		closed_list[current_id.second] = current_node;
 		open_list.erase(current_id.second);
-		cout << "Open List - " << endl;
-		display_map(open_list);
-
-		voronoi_neighbours.points.push_back(voronoi_graph.vertices[current_id.second].path[0]);
-		voronoi_nodes_points_pub.publish(voronoi_neighbours);
+		// cout << "Open List - " << endl;
+		// display_map(open_list);
 
 		if(current_id.second == voronoi_goal_id) {
 			ROS_INFO("VORONOI PATH FOUND");
 			break;
 		}
-
-		voronoi_neighbours.points.clear();
 		
 		for (int i = 0; i < voronoi_nodes[current_id.second].size(); ++i) {	
 			// cin.get();
 
 			node_cost = calc_node_cost(voronoi_graph.vertices[voronoi_nodes[current_id.second][i]].path[0].x, voronoi_graph.vertices[voronoi_nodes[current_id.second][i]].path[0].y, gx, gy, cost_so_far);
+			node_cost = node_cost + hypot(voronoi_graph.vertices[voronoi_nodes[current_id.second][i]].path[0].x - voronoi_graph.vertices[current_id.second].path[0].x, voronoi_graph.vertices[voronoi_nodes[current_id.second][i]].path[0].y - voronoi_graph.vertices[current_id.second].path[0].y);
 			new_node = Node2D(voronoi_graph.vertices[voronoi_nodes[current_id.second][i]].path[0].x, voronoi_graph.vertices[voronoi_nodes[current_id.second][i]].path[0].y, node_cost, current_id.second);
 
 			new_id = voronoi_nodes[current_id.second][i];
-
-			voronoi_neighbours.points.push_back(voronoi_graph.vertices[new_id].path[0]);
-			voronoi_nodes_points_pub.publish(voronoi_neighbours);
 
 			if(closed_list.count(new_id)) {
 				continue;
@@ -199,12 +259,46 @@ void voronoi_path() {
 		}
 	}
 
-	voronoi_neighbours.points.clear();
+	std::vector<std::vector<float>> sub_goals;
+	std::vector<geometry_msgs::Point> redundunt_nodes;
 
-	voronoi_neighbours.points.push_back(voronoi_graph.vertices[current_id.second].path[0]);
+	float yaw;
+	geometry_msgs::Pose p;
+	p.position.x = voronoi_graph.vertices[current_id.second].path[0].x;
+	p.position.y = voronoi_graph.vertices[current_id.second].path[0].y;
+	yaw = calc_yaw(voronoi_graph.vertices[current_id.second].path[0].x, voronoi_graph.vertices[current_id.second].path[0].y, gx, gy);
+	tf::Quaternion quat = tf::createQuaternionFromYaw(yaw);
+	p.orientation.x = quat.x();
+	p.orientation.y = quat.y();
+	p.orientation.z = quat.z();
+	p.orientation.w = quat.w();
+	voronoi_sub_goal.pose = p;
+	voronoi_sub_goals.markers.push_back(voronoi_sub_goal);
+	sub_goals.push_back({p.position.x, p.position.y, yaw});
+
+	voronoi_path_points.points.push_back(voronoi_graph.vertices[current_id.second].path[0]);
 	while(current_node.get_pind() != NULL) {
-		voronoi_neighbours.points.push_back(voronoi_graph.vertices[current_node.get_pind()].path[0]);
+		if(count(redundunt_nodes.begin(), redundunt_nodes.end(), voronoi_graph.vertices[current_node.get_pind()].path[0])) {
+			current_node = closed_list[current_node.get_pind()];
+			continue;
+		}
+		voronoi_path_points.points.push_back(voronoi_graph.vertices[current_node.get_pind()].path[0]);
+		p.position.x = voronoi_graph.vertices[current_node.get_pind()].path[0].x;
+		p.position.y = voronoi_graph.vertices[current_node.get_pind()].path[0].y;
+		yaw = calc_yaw(voronoi_graph.vertices[current_node.get_pind()].path[0].x, voronoi_graph.vertices[current_node.get_pind()].path[0].y, current_node.get_x(), current_node.get_y());
+		tf::Quaternion quat = tf::createQuaternionFromYaw(yaw);
+		p.orientation.x = quat.x();
+		p.orientation.y = quat.y();
+		p.orientation.z = quat.z();
+		p.orientation.w = quat.w();
+		voronoi_sub_goal.pose = p;
+		voronoi_sub_goals.markers.push_back(voronoi_sub_goal);
+		redundunt_nodes.push_back(voronoi_graph.vertices[current_node.get_pind()].path[0]);
+		sub_goals.push_back({p.position.x, p.position.y, yaw});
 		current_node = closed_list[current_node.get_pind()];
 	}
-	voronoi_nodes_points_pub.publish(voronoi_neighbours);
+	voronoi_sub_goals_pub.publish(voronoi_sub_goals);
+	voronoi_path_pub.publish(voronoi_path_points);
+
+	return sub_goals;
 }

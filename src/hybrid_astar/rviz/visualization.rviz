@@ -9,6 +9,8 @@ Panels:
         - /Hybrid A*1
         - /Global Planner1
         - /Voronoi1
+        - /Voronoi1/Voronoi Nodes1
+        - /Voronoi1/Voronoi Sub Goals1
         - /Local Planner1
         - /Pure Pursuit1
       Splitter Ratio: 0.5
@@ -367,10 +369,18 @@ Visualization Manager:
           Value: true
         - Class: rviz/Marker
           Enabled: true
-          Marker Topic: /voronoi_nodes_points
+          Marker Topic: /voronoi_path
           Name: Voronoi Nodes
           Namespaces:
-            voronoi_neighbours: true
+            {}
+          Queue Size: 100
+          Value: true
+        - Class: rviz/MarkerArray
+          Enabled: true
+          Marker Topic: /voronoi_sub_goals
+          Name: Voronoi Sub Goals
+          Namespaces:
+            {}
           Queue Size: 100
           Value: true
       Enabled: true
@@ -477,16 +487,16 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 27.207338333129883
+      Distance: 27.856840133666992
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 15.523825645446777
-        Y: 24.97130584716797
-        Z: 1.2018828392028809
+        X: 15.432191848754883
+        Y: 25.031312942504883
+        Z: 1.2017910480499268
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
