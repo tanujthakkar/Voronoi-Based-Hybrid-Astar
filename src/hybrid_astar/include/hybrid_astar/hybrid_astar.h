@@ -35,6 +35,7 @@
 #include "reeds_shepp.h"
 #include "pure_pursuit.h"
 #include "voronoi.h"
+#include "astar.h"
 
 #include "hybrid_astar/GlobalPath.h"
 #include "hybrid_astar/MonteCarloSim.h"
@@ -59,6 +60,12 @@ extern ros::Publisher robot_collision_check_pub;
 extern ros::Publisher trailer_collision_check_pub;
 extern ros::Publisher voronoi_path_pub;
 extern ros::Publisher voronoi_sub_goals_pub;
+extern ros::Publisher astar_nodes_pub;
+extern ros::Publisher astar_path_pub;
+
+extern int grid_height;
+extern int grid_width;
+extern bool** bin_map; // 2D Binary map of the grid 
 
 extern geometry_msgs::PoseStamped start_pose;
 extern geometry_msgs::PoseStamped goal_pose;

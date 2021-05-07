@@ -54,6 +54,7 @@ set(SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/dubins.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/reeds_shepp.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/voronoi.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/astar.cpp
     )
 
 set(HEADERS
@@ -64,6 +65,7 @@ set(HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/include/hybrid_astar/dubins.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/hybrid_astar/reeds_shepp.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/hybrid_astar/voronoi.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/hybrid_astar/astar.h
     )
 
 # Declare a catkin package

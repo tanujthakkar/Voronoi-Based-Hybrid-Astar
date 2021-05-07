@@ -6,13 +6,8 @@ Panels:
       Expanded:
         - /Global Options1
         - /Map1
-        - /Hybrid A*1
-        - /Global Planner1
-        - /Voronoi1
-        - /Voronoi1/Voronoi Nodes1
-        - /Voronoi1/Voronoi Sub Goals1
-        - /Local Planner1
-        - /Pure Pursuit1
+        - /A*1
+        - /A*1/A* Nodes1
       Splitter Ratio: 0.5
     Tree Height: 719
   - Class: rviz/Selection
@@ -189,7 +184,7 @@ Visualization Manager:
           Buffer Length: 1
           Class: rviz/Path
           Color: 0; 255; 0
-          Enabled: true
+          Enabled: false
           Head Diameter: 0.30000001192092896
           Head Length: 0.20000000298023224
           Length: 0.30000001192092896
@@ -207,11 +202,11 @@ Visualization Manager:
           Shaft Length: 0.10000000149011612
           Topic: /dubins_path
           Unreliable: false
-          Value: true
+          Value: false
         - Alpha: 1
           Buffer Length: 1
           Class: rviz/Path
-          Color: 245; 121; 0
+          Color: 0; 255; 0
           Enabled: false
           Head Diameter: 0.30000001192092896
           Head Length: 0.20000000298023224
@@ -271,39 +266,39 @@ Visualization Manager:
           only border: false
           show normal: false
         - Class: rviz/Marker
-          Enabled: false
+          Enabled: true
           Marker Topic: /robot_collision_check
           Name: Robot Collision Check
           Namespaces:
             {}
           Queue Size: 100
-          Value: false
+          Value: true
         - Alpha: 1
           Class: rviz/PointStamped
           Color: 114; 159; 207
-          Enabled: true
+          Enabled: false
           History Length: 1
           Name: Trailer Center
           Radius: 0.20000000298023224
           Topic: /trailer_center
           Unreliable: false
-          Value: true
+          Value: false
         - Alpha: 1
           Class: rviz/Polygon
           Color: 32; 74; 135
-          Enabled: false
+          Enabled: true
           Name: Trailer Polygon
           Topic: /trailer_polygon
           Unreliable: false
-          Value: false
+          Value: true
         - Alpha: 0.699999988079071
           Class: jsk_rviz_plugin/PolygonArray
           Color: 32; 74; 135
-          Enabled: true
+          Enabled: false
           Name: Trailer Polygon Array
           Topic: /trailer_polygon_array
           Unreliable: false
-          Value: true
+          Value: false
           coloring: Flat color
           enable lighting: true
           normal length: 0.10000000149011612
@@ -319,6 +314,18 @@ Visualization Manager:
           Value: false
       Enabled: true
       Name: Hybrid A*
+    - Class: rviz/Group
+      Displays:
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /astar_nodes
+          Name: A* Nodes
+          Namespaces:
+            {}
+          Queue Size: 100
+          Value: true
+      Enabled: true
+      Name: A*
     - Class: rviz/Group
       Displays:
         - Alpha: 0.699999988079071
@@ -372,17 +379,17 @@ Visualization Manager:
           Marker Topic: /voronoi_path
           Name: Voronoi Nodes
           Namespaces:
-            voronoi_path_points: true
+            {}
           Queue Size: 100
           Value: true
         - Class: rviz/MarkerArray
-          Enabled: true
+          Enabled: false
           Marker Topic: /voronoi_sub_goals
           Name: Voronoi Sub Goals
           Namespaces:
-            voronoi_sub_goal: true
+            {}
           Queue Size: 100
-          Value: true
+          Value: false
       Enabled: true
       Name: Voronoi
     - Class: rviz/Group
@@ -487,16 +494,16 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 18.98365592956543
+      Distance: 25.932981491088867
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 14.137277603149414
-        Y: 24.610830307006836
-        Z: 1.2004961967468262
+        X: 14.994156837463379
+        Y: 24.951478958129883
+        Z: 1.1952831745147705
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
@@ -505,7 +512,7 @@ Visualization Manager:
       Pitch: 1.5697963237762451
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 3.140000104904175
+      Yaw: 3.144998550415039
     Saved: ~
 Window Geometry:
   Displays:

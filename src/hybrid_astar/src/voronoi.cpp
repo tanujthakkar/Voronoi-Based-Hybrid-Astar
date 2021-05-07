@@ -231,7 +231,7 @@ std::vector<std::vector<float>> voronoi_path() {
 		// display_map(open_list);
 
 		if(current_id.second == voronoi_goal_id) {
-			ROS_INFO("VORONOI PATH FOUND");
+			// ROS_INFO("VORONOI PATH FOUND");
 			break;
 		}
 		
@@ -261,8 +261,6 @@ std::vector<std::vector<float>> voronoi_path() {
 
 	std::vector<std::vector<float>> sub_goals;
 	std::vector<geometry_msgs::Point> redundunt_nodes;
-
-	sub_goals.push_back({gx, gy, gyaw});
 
 	float yaw;
 	geometry_msgs::Pose p;
@@ -299,10 +297,13 @@ std::vector<std::vector<float>> voronoi_path() {
 		sub_goals.push_back({p.position.x, p.position.y, yaw});
 		current_node = closed_list[current_node.get_pind()];
 	}
+	voronoi_path_points.points.erase(voronoi_path_points.points.begin());
 	voronoi_sub_goals_pub.publish(voronoi_sub_goals);
 	voronoi_path_pub.publish(voronoi_path_points);
 
 	reverse(sub_goals.begin(), sub_goals.end());
+	sub_goals.erase(sub_goals.end());
+	sub_goals.push_back({gx, gy, gyaw});
 
 	return sub_goals;
 }

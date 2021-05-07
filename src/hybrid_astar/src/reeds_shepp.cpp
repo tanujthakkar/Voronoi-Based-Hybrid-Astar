@@ -563,7 +563,7 @@ std::vector<int> ReedsSheppStateSpace::sample(double q0[3], double q1[3], double
     ReedsSheppPath path = reedsShepp(q0, q1);
     length = rho_ * path.length();
 
-    printf("%f, %f\n", path.length(), length);
+    // printf("%f, %f\n", path.length(), length);
 
     std::vector<int> directions;
     // directions.resize(round(path.length()/step_size));
@@ -581,7 +581,7 @@ std::vector<int> ReedsSheppStateSpace::sample(double q0[3], double q1[3], double
             }
             count++;
         }
-        printf("count: %d\n", count);
+        // printf("count: %d\n", count);
     }
 
 
@@ -592,11 +592,11 @@ std::vector<int> ReedsSheppStateSpace::sample(double q0[3], double q1[3], double
         points.push_back(v);
     }
     
-    for (auto i = directions.begin(); i != directions.end(); ++i) {
-        printf(" %d ", *i);
-    }
-    printf("\n");
-    printf("directions size: %d\n", directions.size());
+    // for (auto i = directions.begin(); i != directions.end(); ++i) {
+    //     printf(" %d ", *i);
+    // }
+    // printf("\n");
+    // printf("directions size: %d\n", directions.size());
 
     return directions;
 }

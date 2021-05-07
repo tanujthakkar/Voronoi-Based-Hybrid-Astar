@@ -527,6 +527,33 @@ hybrid_astar_generate_messages_lisp/fast:
 	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_lisp.dir/build.make hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_lisp.dir/build
 .PHONY : hybrid_astar_generate_messages_lisp/fast
 
+src/astar.o: src/astar.cpp.o
+
+.PHONY : src/astar.o
+
+# target to build an object file
+src/astar.cpp.o:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/hybrid_astar.dir/build.make hybrid_astar/CMakeFiles/hybrid_astar.dir/src/astar.cpp.o
+.PHONY : src/astar.cpp.o
+
+src/astar.i: src/astar.cpp.i
+
+.PHONY : src/astar.i
+
+# target to preprocess a source file
+src/astar.cpp.i:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/hybrid_astar.dir/build.make hybrid_astar/CMakeFiles/hybrid_astar.dir/src/astar.cpp.i
+.PHONY : src/astar.cpp.i
+
+src/astar.s: src/astar.cpp.s
+
+.PHONY : src/astar.s
+
+# target to generate assembly for a file
+src/astar.cpp.s:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/hybrid_astar.dir/build.make hybrid_astar/CMakeFiles/hybrid_astar.dir/src/astar.cpp.s
+.PHONY : src/astar.cpp.s
+
 src/dubins.o: src/dubins.cpp.o
 
 .PHONY : src/dubins.o
@@ -780,6 +807,9 @@ help:
 	@echo "... _hybrid_astar_generate_messages_check_deps_TestSummary"
 	@echo "... hybrid_astar_gencpp"
 	@echo "... hybrid_astar_generate_messages_lisp"
+	@echo "... src/astar.o"
+	@echo "... src/astar.i"
+	@echo "... src/astar.s"
 	@echo "... src/dubins.o"
 	@echo "... src/dubins.i"
 	@echo "... src/dubins.s"

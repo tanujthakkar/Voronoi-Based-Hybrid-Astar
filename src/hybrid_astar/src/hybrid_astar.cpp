@@ -22,6 +22,8 @@ ros::Publisher robot_collision_check_pub;
 ros::Publisher trailer_collision_check_pub;
 ros::Publisher voronoi_path_pub;
 ros::Publisher voronoi_sub_goals_pub;
+ros::Publisher astar_nodes_pub;
+ros::Publisher astar_path_pub;
 
 ros::Subscriber voronoi_graph_sub;
 
@@ -179,10 +181,10 @@ Node4D create_dubins_node(Node4D &start, Node4D &goal) {
 	std::vector<float> dubins_yawtlist;
 	std::vector<float> dubins_yawt;
 
-	dubins_path.header.stamp = ros::Time::now();
-	dubins_path.header.frame_id = "/map";
-	dubins_path.poses.clear();
-	geometry_msgs::PoseStamped pose_stamped;
+	// dubins_path.header.stamp = ros::Time::now();
+	// dubins_path.header.frame_id = "/map";
+	// dubins_path.poses.clear();
+	// geometry_msgs::PoseStamped pose_stamped;
 
 	// Sampling the dubins path with the MOVE_STEP
 	double q[3];
@@ -209,13 +211,13 @@ Node4D create_dubins_node(Node4D &start, Node4D &goal) {
 		dubins_yawtlist.push_back(pi_2_pi(dubins_yawtlist[i-1] + (dir * MOVE_STEP / RTR) * sin(dubins_yawlist[i-1] - dubins_yawtlist[i-1])));
 		dubins_yawt.push_back(pi_2_pi(dubins_yawt[i-1] + (dir * MOVE_STEP / RTR) * sin(dubins_yawlist[i-1] - dubins_yawt[i-1])));
 
-		pose_stamped.header.stamp = ros::Time::now();
-		pose_stamped.header.frame_id = "map";
-		pose_stamped.pose.position.x = q[0];
-		pose_stamped.pose.position.y = q[1];
-		pose_stamped.pose.position.z = 0;
-		pose_stamped.pose.orientation.w = pi_2_pi(q[2]);
-		dubins_path.poses.push_back(pose_stamped);
+		// pose_stamped.header.stamp = ros::Time::now();
+		// pose_stamped.header.frame_id = "map";
+		// pose_stamped.pose.position.x = q[0];
+		// pose_stamped.pose.position.y = q[1];
+		// pose_stamped.pose.position.z = 0;
+		// pose_stamped.pose.orientation.w = pi_2_pi(q[2]);
+		// dubins_path.poses.push_back(pose_stamped);
 
 		x += MOVE_STEP;
 		i++;
@@ -226,41 +228,41 @@ Node4D create_dubins_node(Node4D &start, Node4D &goal) {
 
 	int nlist = dubins_xlist.size();
 	int ind = (int)(round(dubins_yawlist[nlist-1]/YAW_RESOLUTION) * grid_width * grid_height + round(dubins_ylist[nlist-1]/XY_RESOLUTION) * grid_width + round(dubins_xlist[nlist-1]/XY_RESOLUTION));
-	dubins_path_pub.publish(dubins_path);
+	// dubins_path_pub.publish(dubins_path);
 	// std::cout << "Dubins Node created" << "\n";
 
-	robot_polygon_array.header.stamp = ros::Time::now();
-	robot_polygon_array.header.frame_id = "map";
-	robot_polygon_array.polygons.clear();
-	robot_polygon_array.polygons.push_back(create_polygon(RL, RW, dubins_xlist[0], dubins_ylist[0], dubins_yawlist[0]));
-	robot_polyogn_array_pub.publish(robot_polygon_array);
+	// robot_polygon_array.header.stamp = ros::Time::now();
+	// robot_polygon_array.header.frame_id = "map";
+	// robot_polygon_array.polygons.clear();
+	// robot_polygon_array.polygons.push_back(create_polygon(RL, RW, dubins_xlist[0], dubins_ylist[0], dubins_yawlist[0]));
+	// robot_polyogn_array_pub.publish(robot_polygon_array);
 
-	robot_polygon_array.header.stamp = ros::Time::now();
-	robot_polygon_array.header.frame_id = "map";
-	robot_polygon_array.polygons.push_back(create_polygon(RL, RW, dubins_xlist[nlist-1], dubins_ylist[nlist-1], dubins_yawlist[nlist-1]));
-	robot_polyogn_array_pub.publish(robot_polygon_array);
+	// robot_polygon_array.header.stamp = ros::Time::now();
+	// robot_polygon_array.header.frame_id = "map";
+	// robot_polygon_array.polygons.push_back(create_polygon(RL, RW, dubins_xlist[nlist-1], dubins_ylist[nlist-1], dubins_yawlist[nlist-1]));
+	// robot_polyogn_array_pub.publish(robot_polygon_array);
 
-	float deltar = (RF - RB) / 2.0;
-	float deltat = (RTF - RTB) / 2.0;
-	float ctx;
-	float cty;
+	// float deltar = (RF - RB) / 2.0;
+	// float deltat = (RTF - RTB) / 2.0;
+	// float ctx;
+	// float cty;
 
-	ctx = (dubins_xlist[0] - deltar * cos(dubins_yawlist[0])) + deltat * cos(dubins_yawt[0]);
-	cty = (dubins_ylist[0] - deltar * sin(dubins_yawlist[0])) + deltat * sin(dubins_yawt[0]);
+	// ctx = (dubins_xlist[0] - deltar * cos(dubins_yawlist[0])) + deltat * cos(dubins_yawt[0]);
+	// cty = (dubins_ylist[0] - deltar * sin(dubins_yawlist[0])) + deltat * sin(dubins_yawt[0]);
 
-	trailer_polygon_array.header.stamp = ros::Time::now();
-	trailer_polygon_array.header.frame_id = "map";
-	trailer_polygon_array.polygons.clear();
-	trailer_polygon_array.polygons.push_back(create_polygon(TL, TW, ctx, cty, dubins_yawt[0]));
-	trailer_polyogn_array_pub.publish(trailer_polygon_array);
+	// trailer_polygon_array.header.stamp = ros::Time::now();
+	// trailer_polygon_array.header.frame_id = "map";
+	// trailer_polygon_array.polygons.clear();
+	// trailer_polygon_array.polygons.push_back(create_polygon(TL, TW, ctx, cty, dubins_yawt[0]));
+	// trailer_polyogn_array_pub.publish(trailer_polygon_array);
 
-	ctx = (dubins_xlist[nlist-1] - deltar * cos(dubins_yawlist[nlist-1])) + deltat * cos(dubins_yawt[nlist-1]);
-	cty = (dubins_ylist[nlist-1] - deltar * sin(dubins_yawlist[nlist-1])) + deltat * sin(dubins_yawt[nlist-1]);
+	// ctx = (dubins_xlist[nlist-1] - deltar * cos(dubins_yawlist[nlist-1])) + deltat * cos(dubins_yawt[nlist-1]);
+	// cty = (dubins_ylist[nlist-1] - deltar * sin(dubins_yawlist[nlist-1])) + deltat * sin(dubins_yawt[nlist-1]);
 
-	trailer_polygon_array.header.stamp = ros::Time::now();
-	trailer_polygon_array.header.frame_id = "map";
-	trailer_polygon_array.polygons.push_back(create_polygon(TL, TW, ctx, cty, dubins_yawt[nlist-1]));
-	trailer_polyogn_array_pub.publish(trailer_polygon_array);
+	// trailer_polygon_array.header.stamp = ros::Time::now();
+	// trailer_polygon_array.header.frame_id = "map";
+	// trailer_polygon_array.polygons.push_back(create_polygon(TL, TW, ctx, cty, dubins_yawt[nlist-1]));
+	// trailer_polyogn_array_pub.publish(trailer_polygon_array);
 
 	return Node4D(dubins_xlist, dubins_ylist, dubins_yawlist, dubins_yawtlist, dubins_yawt, 1, -1, 0.0, ind, start.get_ind());
 }
@@ -274,10 +276,10 @@ Node4D create_dubins_node(Node4D &start, Node4D &goal) {
 
 	Returns a pointer to the new node
 */
-Node4D create_reeds_shepp_node(Node4D &start, Node4D &goal) {
+Node4D create_reeds_shepp_node(Node4D &start, Node4D &goal, float steer) {
 
 	std::vector<int> directions;
-	double steer_radius = tan(to_deg(55))/WHEELBASE;
+	double steer_radius = steer;
 	ReedsSheppStateSpace rs_planner(steer_radius);
 
 	int n = start.get_size();
@@ -313,7 +315,7 @@ Node4D create_reeds_shepp_node(Node4D &start, Node4D &goal) {
 		reeds_shepp_xlist.push_back(point_itr[0]);
 		reeds_shepp_ylist.push_back(point_itr[1]);
 		reeds_shepp_yawlist.push_back(point_itr[2]);
-		printf("%d ", directions[i]);
+		// printf("%d ", directions[i]);
 		reeds_shepp_yawtlist.push_back(pi_2_pi(reeds_shepp_yawtlist[i-1] + (directions[i] * MOVE_STEP / RTR) * sin(reeds_shepp_yawlist[i-1] - reeds_shepp_yawtlist[i-1])));
 		reeds_shepp_yawt.push_back(pi_2_pi(reeds_shepp_yawt[i-1] + (directions[i] * MOVE_STEP / RTR) * sin(reeds_shepp_yawlist[i-1] - reeds_shepp_yawt[i-1])));
 		i++;
@@ -327,7 +329,7 @@ Node4D create_reeds_shepp_node(Node4D &start, Node4D &goal) {
 	reeds_shepp_yawtlist.erase(reeds_shepp_yawtlist.begin());
 	reeds_shepp_yawt.erase(reeds_shepp_yawt.begin());
 
-	printf("%d\n", i);
+	// printf("%d\n", i);
 	reeds_shepp_path_pub.publish(reeds_shepp_path);
 
 	int nlist = reeds_shepp_xlist.capacity();
@@ -617,8 +619,8 @@ bool hybrid_astar_plan() {
 
 		syaw = tf::getYaw(start_pose.pose.orientation);
 		syaw_t = tf::getYaw(start_pose.pose.orientation);
-		sx = start_pose.pose.position.x - DELTAR * cos(syaw);
-		sy = start_pose.pose.position.y - DELTAR * sin(syaw);
+		sx = (round((start_pose.pose.position.x - DELTAR * cos(syaw)) * 20) * 0.05);
+		sy = (round((start_pose.pose.position.y - DELTAR * sin(syaw)) * 20) * 0.05);
 
 		// tf::StampedTransform transform_robot;
 		// tf::StampedTransform transform_trailer;
@@ -676,8 +678,8 @@ bool hybrid_astar_plan() {
 
 		// Computing rear-axle/hitch-point pose for goal node
 		gyaw = tf::getYaw(goal_pose.pose.orientation);
-		gx = goal_pose.pose.position.x - DELTAR * cos(gyaw);
-		gy = goal_pose.pose.position.y - DELTAR * sin(gyaw);
+		gx = (round((goal_pose.pose.position.x - DELTAR * cos(gyaw)) * 20) * 0.05);
+		gy = (round((goal_pose.pose.position.y - DELTAR * sin(gyaw)) * 20) * 0.05);
 
 		g_ind = (int)(round(gyaw/YAW_RESOLUTION) * grid_width * grid_height + round(gy/XY_RESOLUTION) * grid_width + round(gx/XY_RESOLUTION));
 
@@ -736,7 +738,9 @@ bool hybrid_astar_plan() {
 		int sub_ind;
 
 		// new_node = create_dubins_node(start_node, goal_node);
-		// new_node.check_collision(grid, bin_map, acc_obs_map);
+		// if(!new_node.check_collision(grid, bin_map, acc_obs_map)) {
+		// 	ROS_INFO("Ye");
+		// }
 
 		std::map<int, Node4D> open_list; // Creating the open_list using a map
 		std::map<int, Node4D> closed_list; // Creating the closed_list using a map
@@ -792,7 +796,7 @@ bool hybrid_astar_plan() {
 			// display_map(open_list);
 
 			valid_sub_goal = false;
-			for (int i = sub_goals.size() - 1; i >= sub_goal_counter; --i) {
+			for (int i = sub_goals.size() - 1; i > sub_goal_counter; --i) {
 				// ROS_INFO("DUBINS");
 				// cin.get();
 				sub_ind = (int)(round(sub_goals[i][2]/YAW_RESOLUTION) * grid_width * grid_height + round(sub_goals[i][1]/XY_RESOLUTION) * grid_width + round(sub_goals[i][0]/XY_RESOLUTION));
@@ -800,35 +804,27 @@ bool hybrid_astar_plan() {
 				new_node = create_dubins_node(current_node, sub_goal_node);
 				if(!new_node.check_collision(grid, bin_map, acc_obs_map)) {
 					// ROS_INFO("Sub goal found");
-					pq.push(make_pair(0.0, new_node.get_ind()));
+					pq.push(make_pair(calc_heuristic_cost(new_node), new_node.get_ind()));
 					// display_pq(pq);
 					open_list[new_node.get_ind()] = new_node;
 					// cout << "Open List - (Add sub goal node)" << endl;
 					// display_map(open_list);
 					sub_goal_counter = i;
 					valid_sub_goal = true;
+					total_nodes++;
 					if(sub_goal_counter == sub_goals.size() - 1) {
 						ROS_INFO("SOLUTION FOUND - DUBINS NODE");
+						auto stop = high_resolution_clock::now(); // Reading end time of planning
+						auto duration = duration_cast<milliseconds>(stop-start);
+						ROS_INFO("Iterations: %d Nodes: %d", iterations, total_nodes);
+						ROS_INFO("Execution Time: %d milliseconds (%d seconds) \n", duration.count(), duration.count()/1000);
+						execution_time = duration.count();
 						visualize_final_path(current_node, new_node, closed_list);
 						return true;
 					}
 					break;
 				}
 			}
-
-			// new_node = create_dubins_node(current_node, goal_node);
-			// if(!new_node.check_collision(grid, bin_map, acc_obs_map)) {
-			// 	ROS_INFO("SOLUTION FOUND - DUBINS NODE");
-			// 	auto stop = high_resolution_clock::now(); // Reading end time of planning
-			// 	auto duration = duration_cast<milliseconds>(stop-start);
-			// 	ROS_INFO("Iterations: %d Nodes: %d", iterations, total_nodes);
-			// 	ROS_INFO("Execution Time: %d milliseconds (%d seconds) \n", duration.count(), duration.count()/1000);
-			// 	execution_time = duration.count();
-			// 	// visualize_final_path(current_node, new_node,closed_list);
-			// 	// visualize_nodes_pub.publish(nodes);
-			// 	path_found = true;
-			// 	return true;
-			// }
 
 			if(valid_sub_goal) {
 				continue;
@@ -924,146 +920,6 @@ bool hybrid_astar_plan() {
 }
 
 
-bool plan_global_path() {
-
-	std::vector<std::vector<float>> sub_goals = voronoi_path();
-
-	float cx;
-	float cy;
-	float ctx;
-	float cty;
-
-	syaw = tf::getYaw(start_pose.pose.orientation);
-	syaw_t = tf::getYaw(start_pose.pose.orientation);
-	sx = start_pose.pose.position.x - DELTAR * cos(syaw);
-	sy = start_pose.pose.position.y - DELTAR * sin(syaw);
-	s_ind = (int)(round(syaw/YAW_RESOLUTION) * grid_width * grid_height + round(sy/XY_RESOLUTION) * grid_width + round(sx/XY_RESOLUTION));
-
-	start_pose.header.stamp = ros::Time::now();
-	start_pose.header.frame_id = "map";
-	start_pose.pose.position.x = sx;
-	start_pose.pose.position.y = sy;
-	tf::Quaternion quat = tf::createQuaternionFromYaw(syaw);
-	start_pose.pose.orientation.x = quat.x();
-	start_pose.pose.orientation.y = quat.y();
-	start_pose.pose.orientation.z = quat.z();
-	start_pose.pose.orientation.w = quat.w();
-	start_pose_pub.publish(start_pose);
-
-	cx = (sx + DELTAR * cos(syaw));
-	cy = (sy + DELTAR * sin(syaw));
-
-	robot_polygon_array.header.stamp = ros::Time::now();
-	robot_polygon_array.header.frame_id = "map";
-	robot_polygon_array.polygons.clear();
-	robot_polygon_array.polygons.push_back(create_polygon(RL, RW, cx, cy, syaw));
-	robot_polyogn_array_pub.publish(robot_polygon_array);
-
-	ctx = (sx + DELTAT * cos(syaw));
-	cty = (sy + DELTAT * sin(syaw));
-
-	trailer_polygon_array.header.stamp = ros::Time::now();
-	trailer_polygon_array.header.frame_id = "map";
-	trailer_polygon_array.polygons.clear();
-	trailer_polygon_array.polygons.push_back(create_polygon(TL, TW, ctx, cty, syaw));
-	trailer_polyogn_array_pub.publish(trailer_polygon_array);
-
-	Node4D start_node = Node4D(sx, sy, syaw, 0, syaw_t, s_ind);
-	if(start_node.check_collision(grid, bin_map, acc_obs_map)) {
-		ROS_INFO("INVALID START");
-		valid_start = false;
-		return false;
-	}
-	// ROS_INFO("VALID START - sx: %f sy: %f syaw: %f", sx, sy, syaw);
-	valid_start = true;
-
-	// Computing rear-axle/hitch-point pose for goal node
-	gyaw = tf::getYaw(goal_pose.pose.orientation);
-	gx = goal_pose.pose.position.x - DELTAR * cos(gyaw);
-	gy = goal_pose.pose.position.y - DELTAR * sin(gyaw);
-	g_ind = (int)(round(gyaw/YAW_RESOLUTION) * grid_width * grid_height + round(gy/XY_RESOLUTION) * grid_width + round(gx/XY_RESOLUTION));
-
-	goal_pose.header.stamp = ros::Time::now();
-	goal_pose.header.frame_id = "map";
-	goal_pose.pose.position.x = gx;
-	goal_pose.pose.position.y = gy;
-	quat = tf::createQuaternionFromYaw(gyaw);
-	goal_pose.pose.orientation.x = quat.x();
-	goal_pose.pose.orientation.y = quat.y();
-	goal_pose.pose.orientation.z = quat.z();
-	goal_pose.pose.orientation.w = quat.w();
-	goal_pose_pub.publish(goal_pose);
-
-	cx = (gx + DELTAR * cos(gyaw));
-	cy = (gy + DELTAR * sin(gyaw));
-
-	robot_polygon_array.header.stamp = ros::Time::now();
-	robot_polygon_array.header.frame_id = "map";
-	robot_polygon_array.polygons.push_back(create_polygon(RL, RW, cx, cy, gyaw));
-	robot_polyogn_array_pub.publish(robot_polygon_array);
-
-	ctx = (gx + DELTAT * cos(gyaw));
-	cty = (gy + DELTAT * sin(gyaw));
-
-	trailer_polygon_array.header.stamp = ros::Time::now();
-	trailer_polygon_array.header.frame_id = "map";
-	trailer_polygon_array.polygons.push_back(create_polygon(TL, TW, ctx, cty, gyaw));
-	trailer_polyogn_array_pub.publish(trailer_polygon_array);
-
-	Node4D goal_node = Node4D(gx, gy, gyaw, 0, gyaw, g_ind);
-	if(goal_node.check_collision(grid, bin_map, acc_obs_map)) {
-		ROS_INFO("INVALID GOAL");
-		valid_goal = false;
-		return false;
-	}
-	// ROS_INFO("VALID GOAL - gx: %f gy: %f gyaw: %f", gx, gy, gyaw);
-	valid_goal = true;
-
-	Node4D current_node; // Object to store the current node
-	Node4D new_node; // Object to store the next node
-	Node4D sub_goal_node;
-
-	int sub_goal_counter = 0; // Tracks the sub goals
-	bool valid_sub_goal = false;
-
-	current_node = start_node;
-
-	while(true) {
-
-		ROS_INFO("DUBINS GOAL");
-		cin.get();
-		new_node = create_dubins_node(current_node, goal_node);
-		if(!new_node.check_collision(grid, bin_map, acc_obs_map)) {
-			ROS_INFO("SOLUTION FOUND");
-			return true;
-		}
-
-		ROS_INFO("sub_goal size: %d", sub_goals.size());
-		valid_sub_goal = false;
-		for (int i = sub_goals.size() - 1; i >= sub_goal_counter; --i) {
-			ROS_INFO("DUBINS SUB");
-			cin.get();
-			sub_goal_node = Node4D(sub_goals[i][0], sub_goals[i][1], sub_goals[i][2], 0, sub_goals[i][2], -1);
-			new_node = create_dubins_node(current_node, sub_goal_node);
-			if(!new_node.check_collision(grid, bin_map, acc_obs_map)) {
-				current_node = new_node;
-				sub_goal_counter = i;
-				valid_sub_goal = true;
-				break;
-			}
-		}
-
-		if(!valid_sub_goal) {
-			ROS_INFO("Hybrid");
-			ROS_INFO("sub_goal_counter: %d", sub_goal_counter);
-			cin.get();
-			sub_goal_node = Node4D(sub_goals[sub_goal_counter][0], sub_goals[sub_goal_counter][1], sub_goals[sub_goal_counter][2], 0, sub_goals[sub_goal_counter][2], -1);
-			// hybrid_astar_plan(current_node, sub_goal_node);
-		}
-	}
-}
-
-
 /*
 	Subcribes/callback: /initial_pose
 	Publishes: /start_pose
@@ -1098,9 +954,8 @@ void callback_goal_pose(const geometry_msgs::PoseStamped::ConstPtr& pose) {
 
 	goal_pose_pub.publish(goal_pose);
 
-	// plan_global_path();
-	// voronoi_path();
-	hybrid_astar_plan();
+	// hybrid_astar_plan();
+	astar(start_pose.pose.position.x, start_pose.pose.position.y, goal_pose.pose.position.x, goal_pose.pose.position.y);
 }
 
 
@@ -1190,7 +1045,7 @@ bool callback_monte_carlo(hybrid_astar::MonteCarloSim::Request &req, hybrid_asta
 	gy = req.gy;
 	gyaw = req.gyaw;
 
-	// res.solution_found = hybrid_astar_plan();
+	res.solution_found = hybrid_astar_plan();
 	res.valid_start = valid_start;
 	res.valid_goal = valid_goal;
 	res.path = path;
@@ -1263,6 +1118,8 @@ int main(int argc, char **argv) {
 	trailer_collision_check_pub = nh.advertise<visualization_msgs::Marker>("trailer_collision_check", 10);
 	voronoi_path_pub = nh.advertise<visualization_msgs::Marker>("voronoi_path", 10);
 	voronoi_sub_goals_pub = nh.advertise<visualization_msgs::MarkerArray>("voronoi_sub_goals", 10);
+	astar_nodes_pub = nh.advertise<visualization_msgs::Marker>("astar_nodes", 10);
+	astar_path_pub = nh.advertise<nav_msgs::Path>("astar_path", 10);
 
 	// Subscribers
 	ros::Subscriber start_pose_sub = nh.subscribe("initialpose", 10, callback_start_pose);
