@@ -6,7 +6,7 @@ Panels:
       Expanded:
         - /Global Options1
         - /Map1
-        - /A*1
+        - /Hybrid A*1
         - /A*1/A* Nodes1
       Splitter Ratio: 0.5
     Tree Height: 719
@@ -237,13 +237,13 @@ Visualization Manager:
         - Alpha: 1
           Class: rviz/PointStamped
           Color: 25; 255; 0
-          Enabled: true
+          Enabled: false
           History Length: 1
           Name: Robot Center
           Radius: 0.20000000298023224
           Topic: /robot_center
           Unreliable: false
-          Value: true
+          Value: false
         - Alpha: 1
           Class: rviz/Polygon
           Color: 0; 255; 0
@@ -266,13 +266,13 @@ Visualization Manager:
           only border: false
           show normal: false
         - Class: rviz/Marker
-          Enabled: true
+          Enabled: false
           Marker Topic: /robot_collision_check
           Name: Robot Collision Check
           Namespaces:
             {}
           Queue Size: 100
-          Value: true
+          Value: false
         - Alpha: 1
           Class: rviz/PointStamped
           Color: 114; 159; 207
@@ -286,19 +286,19 @@ Visualization Manager:
         - Alpha: 1
           Class: rviz/Polygon
           Color: 32; 74; 135
-          Enabled: true
+          Enabled: false
           Name: Trailer Polygon
           Topic: /trailer_polygon
           Unreliable: false
-          Value: true
+          Value: false
         - Alpha: 0.699999988079071
           Class: jsk_rviz_plugin/PolygonArray
           Color: 32; 74; 135
-          Enabled: false
+          Enabled: true
           Name: Trailer Polygon Array
           Topic: /trailer_polygon_array
           Unreliable: false
-          Value: false
+          Value: true
           coloring: Flat color
           enable lighting: true
           normal length: 0.10000000149011612
@@ -324,7 +324,7 @@ Visualization Manager:
             {}
           Queue Size: 100
           Value: true
-      Enabled: true
+      Enabled: false
       Name: A*
     - Class: rviz/Group
       Displays:
@@ -379,7 +379,7 @@ Visualization Manager:
           Marker Topic: /voronoi_path
           Name: Voronoi Nodes
           Namespaces:
-            {}
+            voronoi_path_points: true
           Queue Size: 100
           Value: true
         - Class: rviz/MarkerArray
@@ -494,16 +494,16 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 25.932981491088867
+      Distance: 36.4339714050293
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 14.994156837463379
-        Y: 24.951478958129883
-        Z: 1.1952831745147705
+        X: 18.71704864501953
+        Y: 25.76182746887207
+        Z: 1.1990083456039429
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false

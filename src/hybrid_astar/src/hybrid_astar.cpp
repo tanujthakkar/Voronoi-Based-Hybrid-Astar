@@ -22,7 +22,6 @@ ros::Publisher robot_collision_check_pub;
 ros::Publisher trailer_collision_check_pub;
 ros::Publisher voronoi_path_pub;
 ros::Publisher voronoi_sub_goals_pub;
-ros::Publisher astar_nodes_pub;
 ros::Publisher astar_path_pub;
 
 ros::Subscriber voronoi_graph_sub;
@@ -368,7 +367,8 @@ void create_steer_inputs(float max_steer) {
 */
 float calc_heuristic_cost(Node4D n) {
 	int size = n.get_size();
-	return (n.get_cost() + sqrt(pow((n.get_x(size-1) - gx),2) + pow((n.get_y(size-1) - gy), 2) + pow((n.get_yaw(size-1) - gyaw), 2)) * H_COST);
+	return n.get_cost() + (astar(n.get_x(size-1), n.get_y(size-1), gx, gy) * H_COST);
+	// return n.get_cost() + (sqrt(pow((n.get_x(size-1) - gx),2) + pow((n.get_y(size-1) - gy), 2) + pow((n.get_yaw(size-1) - gyaw), 2)) * H_COST);
 }
 
 
@@ -617,10 +617,10 @@ bool hybrid_astar_plan() {
 		float ctx;
 		float cty;
 
-		syaw = tf::getYaw(start_pose.pose.orientation);
-		syaw_t = tf::getYaw(start_pose.pose.orientation);
-		sx = (round((start_pose.pose.position.x - DELTAR * cos(syaw)) * 20) * 0.05);
-		sy = (round((start_pose.pose.position.y - DELTAR * sin(syaw)) * 20) * 0.05);
+		// syaw = tf::getYaw(start_pose.pose.orientation);
+		// syaw_t = tf::getYaw(start_pose.pose.orientation);
+		// sx = (round((start_pose.pose.position.x - DELTAR * cos(syaw)) * 20) * 0.05);
+		// sy = (round((start_pose.pose.position.y - DELTAR * sin(syaw)) * 20) * 0.05);
 
 		// tf::StampedTransform transform_robot;
 		// tf::StampedTransform transform_trailer;
@@ -677,9 +677,9 @@ bool hybrid_astar_plan() {
 		valid_start = true;
 
 		// Computing rear-axle/hitch-point pose for goal node
-		gyaw = tf::getYaw(goal_pose.pose.orientation);
-		gx = (round((goal_pose.pose.position.x - DELTAR * cos(gyaw)) * 20) * 0.05);
-		gy = (round((goal_pose.pose.position.y - DELTAR * sin(gyaw)) * 20) * 0.05);
+		// gyaw = tf::getYaw(goal_pose.pose.orientation);
+		// gx = (round((goal_pose.pose.position.x - DELTAR * cos(gyaw)) * 20) * 0.05);
+		// gy = (round((goal_pose.pose.position.y - DELTAR * sin(gyaw)) * 20) * 0.05);
 
 		g_ind = (int)(round(gyaw/YAW_RESOLUTION) * grid_width * grid_height + round(gy/XY_RESOLUTION) * grid_width + round(gx/XY_RESOLUTION));
 
@@ -954,8 +954,8 @@ void callback_goal_pose(const geometry_msgs::PoseStamped::ConstPtr& pose) {
 
 	goal_pose_pub.publish(goal_pose);
 
-	// hybrid_astar_plan();
-	astar(start_pose.pose.position.x, start_pose.pose.position.y, goal_pose.pose.position.x, goal_pose.pose.position.y);
+	hybrid_astar_plan();
+	// astar(start_pose.pose.position.x, start_pose.pose.position.y, goal_pose.pose.position.x, goal_pose.pose.position.y);
 }
 
 
@@ -1118,7 +1118,6 @@ int main(int argc, char **argv) {
 	trailer_collision_check_pub = nh.advertise<visualization_msgs::Marker>("trailer_collision_check", 10);
 	voronoi_path_pub = nh.advertise<visualization_msgs::Marker>("voronoi_path", 10);
 	voronoi_sub_goals_pub = nh.advertise<visualization_msgs::MarkerArray>("voronoi_sub_goals", 10);
-	astar_nodes_pub = nh.advertise<visualization_msgs::Marker>("astar_nodes", 10);
 	astar_path_pub = nh.advertise<nav_msgs::Path>("astar_path", 10);
 
 	// Subscribers

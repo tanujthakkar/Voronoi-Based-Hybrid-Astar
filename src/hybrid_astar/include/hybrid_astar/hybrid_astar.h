@@ -60,7 +60,6 @@ extern ros::Publisher robot_collision_check_pub;
 extern ros::Publisher trailer_collision_check_pub;
 extern ros::Publisher voronoi_path_pub;
 extern ros::Publisher voronoi_sub_goals_pub;
-extern ros::Publisher astar_nodes_pub;
 extern ros::Publisher astar_path_pub;
 
 extern int grid_height;

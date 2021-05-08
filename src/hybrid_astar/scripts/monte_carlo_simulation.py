@@ -59,12 +59,15 @@ def monte_carlo_sim():
 	now = datetime.now()
 	dt_string = now.strftime("%Y%m%d-%H%M%S")
 
-	bag = rosbag.Bag('../rosbags/' + dt_string + '.bag', 'w')
-	iteration_limits_bag = rosbag.Bag('../rosbags/iteration_limits_bag.bag', 'a')
-	# bag = rosbag.Bag('../rosbags/20210414-172117.bag', 'a')
+	# bag = rosbag.Bag('../rosbags/' + dt_string + '.bag', 'w')
+	iteration_limits_bag = rosbag.Bag('../rosbags/iteration_limits_bag_voronoi.bag', 'a')
+	bag = rosbag.Bag('../rosbags/20210508-010746.bag', 'a')
+
+	r_bag = rosbag.Bag('../rosbags/hospital_04/hospital_env_monte_carlo_results/hospital_env_monte_carlo_results.bag')
 
 	try:
-		while(valid_tests < 1000):
+		# while(valid_tests < 1000):
+		for topic, msg, t in r_bag.read_messages(topics=['tests']):
 			total_tests = total_tests + 1
 				
 			# Indoor Environment
@@ -83,10 +86,10 @@ def monte_carlo_sim():
 			# else:
 			# 	sx = uniform(34.15, 45.75)
 			# 	sy = uniform(19.92, 30.02)
-			sx = uniform(4.13, 45.71)
-			sy = uniform(13.13, 36.80)
-			syaw = uniform(-3.14, 3.14)
-			syaw_t = uniform(min(pi_to_pi(syaw - 1.395), pi_to_pi(syaw + 1.395)), max(pi_to_pi(syaw - 1.395), pi_to_pi(syaw + 1.395)))
+			# sx = uniform(4.13, 45.71)
+			# sy = uniform(13.13, 36.80)
+			# syaw = uniform(-3.14, 3.14)
+			# syaw_t = uniform(min(pi_to_pi(syaw - 1.395), pi_to_pi(syaw + 1.395)), max(pi_to_pi(syaw - 1.395), pi_to_pi(syaw + 1.395)))
 			
 			# if(uniform(0.0, 1.0) >= 0.5):
 			# 	gx = uniform(4.13, 33.75)
@@ -94,9 +97,21 @@ def monte_carlo_sim():
 			# else:
 			# 	gx = uniform(34.15, 45.75)
 			# 	gy = uniform(19.92, 30.02)
-			gx = uniform(4.13, 45.71)
-			gy = uniform(13.13, 36.80)
-			gyaw = uniform(-3.14, 3.14)
+			# gx = uniform(4.13, 45.71)
+			# gy = uniform(13.13, 36.80)
+			# gyaw = uniform(-3.14, 3.14)
+
+
+			if(total_tests < 161):
+				continue
+
+			sx = msg.sx
+			sy = msg.sy
+			syaw = msg.syaw
+			syaw_t = msg.syaw_t
+			gx = msg.gx
+			gy = msg.gy
+			gyaw = msg.gyaw
 
 			test_response = test_call(sx, sy, syaw, syaw_t, gx, gy, gyaw)
 
@@ -146,7 +161,7 @@ def monte_carlo_sim():
 				# print("Iterations: ", test_response.iterations)
 				# print("Nodes: ", test_response.nodes + 1)
 				# print("Execution Time: ", test_response.execution_time)
-	except (KeyboardInterrupt, rospy.service.ServiceException):
+	except:
 		test_summary = TestSummary()
 		test_summary.successful_tests = successful_tests
 		test_summary.unsuccessful_tests = unsuccessful_tests
@@ -160,6 +175,8 @@ def monte_carlo_sim():
 		print("Total Tests: ", total_tests)
 		bag.close()
 		iteration_limits_bag.close()
+		sys.exit("EXITING")
+
 
 	test_summary = TestSummary()
 	test_summary.successful_tests = successful_tests
@@ -243,13 +260,13 @@ def review():
 	path.header.frame_id = "/map"
 
 	# bag = rosbag.Bag('../rosbags/20210414-172117.bag')
-	bag = rosbag.Bag('../rosbags/hospital_04/20210414-172117/20210414-172117.bag')
+	bag = rosbag.Bag('../rosbags/hospital_04/hospital_env_monte_carlo_results/hospital_env_monte_carlo_results.bag')
 	# bag = rosbag.Bag('../rosbags/iteration_limits_bag.bag')
 	
 	i = 0
 	for topic, msg, t in bag.read_messages(topics=['tests']):
 		i = i + 1
-		if(msg.solution_found):
+		if(i == 110):
 		# if(i in [13, 16, 23, 34, 106, 133, 134]):
 			print("Test", i)
 			print([msg.sx, msg.sy, msg.syaw, msg.syaw_t, msg.gx, msg.gy, msg.gyaw, msg.solution_found, msg.iterations, msg.nodes, msg.execution_time])
@@ -354,6 +371,8 @@ def graphs():
 
 
 if __name__ == '__main__':
-	# monte_carlo_sim()
-	review()
+	iteration_limits_bag = rosbag.Bag('../rosbags/iteration_limits_bag_voronoi.bag', 'w')
+	iteration_limits_bag.close()
+	monte_carlo_sim()
+	# review()
 	# graphs()
