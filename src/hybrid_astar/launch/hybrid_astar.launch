@@ -1,7 +1,7 @@
 <launch>
 
 	<!-- <arg name="debug" default="false"/>
-	<arg name="gui" default="false"/>
+	<arg name="gui" default="true"/>
 	<arg name="pause" default="false"/>
 	<arg name="world" value="$(find hybrid_astar)/world/hospital_04.world"/>
 
@@ -11,9 +11,9 @@
 	    <arg name="gui" value="$(arg gui)"/>
 	  	<arg name="paused" value="$(arg pause)"/>
 	    <arg name="use_sim_time" value="true"/>
-  	</include> -->
+  	</include>
 
-	<!-- <include file="$(find ridgeback_gazebo)/launch/spawn_ridgeback.launch">
+	<include file="$(find ridgeback_gazebo)/launch/spawn_ridgeback.launch">
 		<arg name="config" default="dual_hokuyo_lasers" />
 	    <arg name="x" default="-17.0"/>
 	    <arg name="y" default="0.0"/>

@@ -74,4 +74,15 @@ extern jsk_recognition_msgs::PolygonArray robot_polygon_array;
 extern jsk_recognition_msgs::PolygonArray trailer_polygon_array;
 extern tuw_multi_robot_msgs::Graph voronoi_graph;
 
+extern float sx;
+extern float sy;
+extern float syaw;
+extern float syaw_t;
+extern int s_ind;
+
+extern float gx;
+extern float gy;
+extern float gyaw;
+extern int g_ind;
+
 #endif

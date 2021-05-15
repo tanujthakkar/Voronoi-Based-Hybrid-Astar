@@ -9,7 +9,7 @@ void voronoi_map() {
 	std::vector<geometry_msgs::Point> redundunt_nodes;
 
 	for(int i = 0; i < voronoi_graph.vertices.size(); ++i)
-	{
+	{	
 		if(!voronoi_nodes.count(voronoi_graph.vertices[i].id)) {
 			neighbours.clear();
 			redundunt_nodes.clear();
@@ -116,15 +116,6 @@ void display_pq(priority_queue<pi, vector<pi>, greater<pi>> gq)
 }
 
 std::vector<std::vector<float>> voronoi_path() {
-
-	float syaw = tf::getYaw(start_pose.pose.orientation);
-	float syaw_t = tf::getYaw(start_pose.pose.orientation);
-	float sx = start_pose.pose.position.x;
-	float sy = start_pose.pose.position.y;
-
-	float gyaw = tf::getYaw(goal_pose.pose.orientation);
-	float gx = goal_pose.pose.position.x;
-	float gy = goal_pose.pose.position.y;
 
 	geometry_msgs::PointStamped voronoi_start;
 	float nearest_voronoi_start = hypot(voronoi_graph.vertices[0].path[0].x  - sx, voronoi_graph.vertices[0].path[0].y - sy);
@@ -278,6 +269,10 @@ std::vector<std::vector<float>> voronoi_path() {
 
 	// voronoi_path_points.points.push_back(voronoi_graph.vertices[current_id.second].path[0]);
 	while(current_node.get_pind() != NULL) {
+		if(voronoi_graph.vertices[current_node.get_pind()].predecessors.size() < 2) {
+			current_node = closed_list[current_node.get_pind()];
+			continue;
+		}
 		if(count(redundunt_nodes.begin(), redundunt_nodes.end(), voronoi_graph.vertices[current_node.get_pind()].path[0])) {
 			current_node = closed_list[current_node.get_pind()];
 			continue;
@@ -296,13 +291,14 @@ std::vector<std::vector<float>> voronoi_path() {
 		redundunt_nodes.push_back(voronoi_graph.vertices[current_node.get_pind()].path[0]);
 		sub_goals.push_back({p.position.x, p.position.y, yaw});
 		current_node = closed_list[current_node.get_pind()];
+		voronoi_path_pub.publish(voronoi_path_points);
 	}
-	voronoi_path_points.points.erase(voronoi_path_points.points.begin());
+	// voronoi_path_points.points.erase(voronoi_path_points.points.begin());
 	voronoi_sub_goals_pub.publish(voronoi_sub_goals);
 	voronoi_path_pub.publish(voronoi_path_points);
 
+	// sub_goals.erase(sub_goals.begin());
 	reverse(sub_goals.begin(), sub_goals.end());
-	sub_goals.erase(sub_goals.end());
 	sub_goals.push_back({gx, gy, gyaw});
 
 	return sub_goals;

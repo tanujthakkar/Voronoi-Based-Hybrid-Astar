@@ -59,17 +59,57 @@ def monte_carlo_sim():
 	now = datetime.now()
 	dt_string = now.strftime("%Y%m%d-%H%M%S")
 
-	# bag = rosbag.Bag('../rosbags/' + dt_string + '.bag', 'w')
-	iteration_limits_bag = rosbag.Bag('../rosbags/iteration_limits_bag_voronoi.bag', 'a')
-	bag = rosbag.Bag('../rosbags/20210508-010746.bag', 'a')
+	bag = rosbag.Bag('../rosbags/' + dt_string + '.bag', 'w')
+	# bag = rosbag.Bag('../rosbags/hybrid_astar.bag', 'a')
+	iteration_limits_bag = rosbag.Bag('../rosbags/iteration_limits.bag', 'a')
 
-	r_bag = rosbag.Bag('../rosbags/hospital_04/hospital_env_monte_carlo_results/hospital_env_monte_carlo_results.bag')
+	read_bag = rosbag.Bag('../rosbags/dubins_hybrid_astar_voronoi.bag')
+
+	i = 0
+	for topic, msg, t in read_bag.read_messages(topics=['tests']):
+		i = i + 1
+
+		if(i < 51):
+			if(msg.solution_found):
+					test = [msg.sx, msg.sy, msg.syaw, msg.syaw_t, msg.gx, msg.gy, msg.gyaw]
+					tests.append(test)
+				
+	# read_bag = rosbag.Bag('../rosbags/20210514-003802.bag')
+
+	# i = 0
+	# for topic, msg, t in read_bag.read_messages(topics=['tests']):
+	# 	i = i + 1
+
+	# 	if([msg.sx, msg.sy, msg.syaw, msg.syaw_t, msg.gx, msg.gy, msg.gyaw] in tests):
+	# 			# test = [msg.sx, msg.sy, msg.syaw, msg.syaw_t, msg.gx, msg.gy, msg.gyaw]
+	# 			# tests.append(test)
+
+	# 			test = Test()
+	# 			test.sx = msg.sx
+	# 			test.sy = msg.sy
+	# 			test.syaw = msg.syaw
+	# 			test.syaw_t = msg.syaw_t
+	# 			test.gx = msg.gx
+	# 			test.gy = msg.gy
+	# 			test.gyaw = msg.gyaw
+	# 			test.solution_found = msg.solution_found
+	# 			test.iterations = msg.iterations
+	# 			test.nodes = msg.nodes
+	# 			test.execution_time = msg.execution_time
+	# 			test.path = msg.path
+	# 			bag.write('tests', test)
+
+	# read_bag.close();
+	# bag.close();
+
+	# return
 
 	try:
-		# while(valid_tests < 1000):
-		for topic, msg, t in r_bag.read_messages(topics=['tests']):
+		# while(valid_tests < 1):
+		for sx, sy, syaw, syaw_t, gx, gy, gyaw in tests:
+
 			total_tests = total_tests + 1
-				
+
 			# Indoor Environment
 			# sx = uniform(1.5 ,20.0)
 			# sy = uniform(2.0 ,20.0)
@@ -90,7 +130,7 @@ def monte_carlo_sim():
 			# sy = uniform(13.13, 36.80)
 			# syaw = uniform(-3.14, 3.14)
 			# syaw_t = uniform(min(pi_to_pi(syaw - 1.395), pi_to_pi(syaw + 1.395)), max(pi_to_pi(syaw - 1.395), pi_to_pi(syaw + 1.395)))
-			
+
 			# if(uniform(0.0, 1.0) >= 0.5):
 			# 	gx = uniform(4.13, 33.75)
 			# 	gy = uniform(13.13, 36.80)
@@ -100,18 +140,6 @@ def monte_carlo_sim():
 			# gx = uniform(4.13, 45.71)
 			# gy = uniform(13.13, 36.80)
 			# gyaw = uniform(-3.14, 3.14)
-
-
-			if(total_tests < 161):
-				continue
-
-			sx = msg.sx
-			sy = msg.sy
-			syaw = msg.syaw
-			syaw_t = msg.syaw_t
-			gx = msg.gx
-			gy = msg.gy
-			gyaw = msg.gyaw
 
 			test_response = test_call(sx, sy, syaw, syaw_t, gx, gy, gyaw)
 
@@ -161,7 +189,7 @@ def monte_carlo_sim():
 				# print("Iterations: ", test_response.iterations)
 				# print("Nodes: ", test_response.nodes + 1)
 				# print("Execution Time: ", test_response.execution_time)
-	except:
+	except(KeyboardInterrupt, rospy.service.ServiceException):
 		test_summary = TestSummary()
 		test_summary.successful_tests = successful_tests
 		test_summary.unsuccessful_tests = unsuccessful_tests
@@ -193,42 +221,6 @@ def monte_carlo_sim():
 	iteration_limits_bag.close()
 
 
-def create_polygon(l, w, cx, cy, yaw):
-
-	polygon = PolygonStamped()
-	polygon.header.stamp = rospy.Time.now()
-	polygon.header.frame_id = "/map"
-	# del polygon.polygon.points[:]
-
-	length = l
-	width = w
-
-	p = Point32()
-	p.z = 0.0
-	
-	# Top Right
-	p.x = cx + ((length/2) * cos(yaw)) - ((width/2) * sin(yaw))
-	p.y = cy + ((length/2) * sin(yaw)) + ((width/2) * cos(yaw))
-	polygon.polygon.points.append(p)
-
-	# Top Left
-	p.x = cx - ((length/2) * cos(yaw)) - ((width/2) * sin(yaw))
-	p.y = cy - ((length/2) * sin(yaw)) + ((width/2) * cos(yaw))
-	polygon.polygon.points.append(p)
-
-	# Bottom Left
-	p.x = cx - ((length/2) * cos(yaw)) + ((width/2) * sin(yaw))
-	p.y = cy - ((length/2) * sin(yaw)) - ((width/2) * cos(yaw))
-	polygon.polygon.points.append(p)
-
-	# Bottom Right
-	p.x = cx + ((length/2) * cos(yaw)) + ((width/2) * sin(yaw))
-	p.y = cy + ((length/2) * sin(yaw)) - ((width/2) * cos(yaw))
-	polygon.polygon.points.append(p)
-
-	return polygon
-
-
 def review():
 
 	rospy.init_node('test_review')
@@ -239,11 +231,6 @@ def review():
 	start_pose_pub = rospy.Publisher('start_pose', PoseStamped, queue_size = 1)
 	goal_pose_pub = rospy.Publisher('goal_pose', PoseStamped, queue_size = 1)
 	path_pub = rospy.Publisher('global_path', Path, queue_size = 1)
-
-	robot_center_pub = rospy.Publisher('robot_center', PointStamped, queue_size = 1)
-	robot_polygon_pub = rospy.Publisher('robot_polygon', PolygonStamped, queue_size = 1)
-	trailer_center_pub = rospy.Publisher('trailer_center', PointStamped, queue_size = 1)
-	trailer_polygon_pub = rospy.Publisher('trailer_polygon', PolygonStamped, queue_size = 1)
 
 	rate = rospy.Rate(10)
 
@@ -259,15 +246,16 @@ def review():
 	path.header.stamp = rospy.Time.now()
 	path.header.frame_id = "/map"
 
-	# bag = rosbag.Bag('../rosbags/20210414-172117.bag')
-	bag = rosbag.Bag('../rosbags/hospital_04/hospital_env_monte_carlo_results/hospital_env_monte_carlo_results.bag')
-	# bag = rosbag.Bag('../rosbags/iteration_limits_bag.bag')
+	# bag = rosbag.Bag('../rosbags/20210509-181116.bag')
+	bag = rosbag.Bag('../rosbags/20210515-004933.bag')
+	# bag = rosbag.Bag('../rosbags/hospital_04/hospital_env_monte_carlo_results/hospital_env_monte_carlo_results.bag')
+	# bag = rosbag.Bag('../rosbags/iteration_limits_bag_voronoi.bag')
 	
 	i = 0
 	for topic, msg, t in bag.read_messages(topics=['tests']):
 		i = i + 1
-		if(i == 110):
-		# if(i in [13, 16, 23, 34, 106, 133, 134]):
+		# if(not msg.solution_found):
+		if(True):
 			print("Test", i)
 			print([msg.sx, msg.sy, msg.syaw, msg.syaw_t, msg.gx, msg.gy, msg.gyaw, msg.solution_found, msg.iterations, msg.nodes, msg.execution_time])
 			sleep(0.5)
@@ -371,8 +359,6 @@ def graphs():
 
 
 if __name__ == '__main__':
-	iteration_limits_bag = rosbag.Bag('../rosbags/iteration_limits_bag_voronoi.bag', 'w')
-	iteration_limits_bag.close()
-	monte_carlo_sim()
-	# review()
+	# monte_carlo_sim()
+	review()
 	# graphs()
