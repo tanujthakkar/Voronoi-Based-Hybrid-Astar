@@ -103,6 +103,7 @@ hybrid_astar/CMakeFiles/hybrid_astar.dir/src/astar.cpp.o: /opt/ros/melodic/inclu
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/astar.cpp.o: /opt/ros/melodic/include/ros/wall_timer_options.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/astar.cpp.o: /opt/ros/melodic/include/rosconsole/macros_generated.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/astar.cpp.o: /opt/ros/melodic/include/sensor_msgs/ChannelFloat32.h
+hybrid_astar/CMakeFiles/hybrid_astar.dir/src/astar.cpp.o: /opt/ros/melodic/include/sensor_msgs/JointState.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/astar.cpp.o: /opt/ros/melodic/include/sensor_msgs/PointCloud.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/astar.cpp.o: /opt/ros/melodic/include/std_msgs/ColorRGBA.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/astar.cpp.o: /opt/ros/melodic/include/std_msgs/Empty.h
@@ -247,6 +248,7 @@ hybrid_astar/CMakeFiles/hybrid_astar.dir/src/dubins.cpp.o: /opt/ros/melodic/incl
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/dubins.cpp.o: /opt/ros/melodic/include/ros/wall_timer_options.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/dubins.cpp.o: /opt/ros/melodic/include/rosconsole/macros_generated.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/dubins.cpp.o: /opt/ros/melodic/include/sensor_msgs/ChannelFloat32.h
+hybrid_astar/CMakeFiles/hybrid_astar.dir/src/dubins.cpp.o: /opt/ros/melodic/include/sensor_msgs/JointState.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/dubins.cpp.o: /opt/ros/melodic/include/sensor_msgs/PointCloud.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/dubins.cpp.o: /opt/ros/melodic/include/std_msgs/ColorRGBA.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/dubins.cpp.o: /opt/ros/melodic/include/std_msgs/Empty.h
@@ -391,6 +393,7 @@ hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o: /opt/ros/melodi
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o: /opt/ros/melodic/include/ros/wall_timer_options.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o: /opt/ros/melodic/include/rosconsole/macros_generated.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o: /opt/ros/melodic/include/sensor_msgs/ChannelFloat32.h
+hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o: /opt/ros/melodic/include/sensor_msgs/JointState.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o: /opt/ros/melodic/include/sensor_msgs/PointCloud.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o: /opt/ros/melodic/include/std_msgs/ColorRGBA.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/hybrid_astar.cpp.o: /opt/ros/melodic/include/std_msgs/Empty.h
@@ -535,6 +538,7 @@ hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node2d.cpp.o: /opt/ros/melodic/incl
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node2d.cpp.o: /opt/ros/melodic/include/ros/wall_timer_options.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node2d.cpp.o: /opt/ros/melodic/include/rosconsole/macros_generated.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node2d.cpp.o: /opt/ros/melodic/include/sensor_msgs/ChannelFloat32.h
+hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node2d.cpp.o: /opt/ros/melodic/include/sensor_msgs/JointState.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node2d.cpp.o: /opt/ros/melodic/include/sensor_msgs/PointCloud.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node2d.cpp.o: /opt/ros/melodic/include/std_msgs/ColorRGBA.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node2d.cpp.o: /opt/ros/melodic/include/std_msgs/Empty.h
@@ -679,6 +683,7 @@ hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o: /opt/ros/melodic/incl
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o: /opt/ros/melodic/include/ros/wall_timer_options.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o: /opt/ros/melodic/include/rosconsole/macros_generated.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o: /opt/ros/melodic/include/sensor_msgs/ChannelFloat32.h
+hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o: /opt/ros/melodic/include/sensor_msgs/JointState.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o: /opt/ros/melodic/include/sensor_msgs/PointCloud.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o: /opt/ros/melodic/include/std_msgs/ColorRGBA.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/node4d.cpp.o: /opt/ros/melodic/include/std_msgs/Empty.h
@@ -826,6 +831,7 @@ hybrid_astar/CMakeFiles/hybrid_astar.dir/src/voronoi.cpp.o: /opt/ros/melodic/inc
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/voronoi.cpp.o: /opt/ros/melodic/include/ros/wall_timer_options.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/voronoi.cpp.o: /opt/ros/melodic/include/rosconsole/macros_generated.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/voronoi.cpp.o: /opt/ros/melodic/include/sensor_msgs/ChannelFloat32.h
+hybrid_astar/CMakeFiles/hybrid_astar.dir/src/voronoi.cpp.o: /opt/ros/melodic/include/sensor_msgs/JointState.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/voronoi.cpp.o: /opt/ros/melodic/include/sensor_msgs/PointCloud.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/voronoi.cpp.o: /opt/ros/melodic/include/std_msgs/ColorRGBA.h
 hybrid_astar/CMakeFiles/hybrid_astar.dir/src/voronoi.cpp.o: /opt/ros/melodic/include/std_msgs/Empty.h

@@ -2,7 +2,7 @@
 
 # Importing libraries
 import sys
-from math import pi, sin, cos, tan
+from math import pi, sin, cos, tan, hypot
 import pandas as pd
 from random import uniform
 from datetime import datetime
@@ -63,61 +63,22 @@ def monte_carlo_sim():
 	# bag = rosbag.Bag('../rosbags/hybrid_astar.bag', 'a')
 	iteration_limits_bag = rosbag.Bag('../rosbags/iteration_limits.bag', 'a')
 
-	read_bag = rosbag.Bag('../rosbags/dubins_hybrid_astar_voronoi.bag')
+	read_bag = rosbag.Bag('../rosbags/dubins_hybrid_astar_voronoi/dubins_hybrid_astar_voronoi.bag')
 
 	i = 0
 	for topic, msg, t in read_bag.read_messages(topics=['tests']):
 		i = i + 1
 
-		if(i < 51):
+		if(i < 11):
 			if(msg.solution_found):
-					test = [msg.sx, msg.sy, msg.syaw, msg.syaw_t, msg.gx, msg.gy, msg.gyaw]
-					tests.append(test)
-				
-	# read_bag = rosbag.Bag('../rosbags/20210514-003802.bag')
-
-	# i = 0
-	# for topic, msg, t in read_bag.read_messages(topics=['tests']):
-	# 	i = i + 1
-
-	# 	if([msg.sx, msg.sy, msg.syaw, msg.syaw_t, msg.gx, msg.gy, msg.gyaw] in tests):
-	# 			# test = [msg.sx, msg.sy, msg.syaw, msg.syaw_t, msg.gx, msg.gy, msg.gyaw]
-	# 			# tests.append(test)
-
-	# 			test = Test()
-	# 			test.sx = msg.sx
-	# 			test.sy = msg.sy
-	# 			test.syaw = msg.syaw
-	# 			test.syaw_t = msg.syaw_t
-	# 			test.gx = msg.gx
-	# 			test.gy = msg.gy
-	# 			test.gyaw = msg.gyaw
-	# 			test.solution_found = msg.solution_found
-	# 			test.iterations = msg.iterations
-	# 			test.nodes = msg.nodes
-	# 			test.execution_time = msg.execution_time
-	# 			test.path = msg.path
-	# 			bag.write('tests', test)
-
-	# read_bag.close();
-	# bag.close();
-
-	# return
+				test = [msg.sx, msg.sy, msg.syaw, msg.syaw_t, msg.gx, msg.gy, msg.gyaw]
+				tests.append(test)
 
 	try:
 		# while(valid_tests < 1):
 		for sx, sy, syaw, syaw_t, gx, gy, gyaw in tests:
 
 			total_tests = total_tests + 1
-
-			# Indoor Environment
-			# sx = uniform(1.5 ,20.0)
-			# sy = uniform(2.0 ,20.0)
-			# syaw = uniform(-3.14, 3.14)
-			# syaw_t = uniform(min(pi_to_pi(syaw - 1.395), pi_to_pi(syaw + 1.395)), max(pi_to_pi(syaw - 1.395), pi_to_pi(syaw + 1.395)))
-			# gx = uniform(1.5 ,20.0)
-			# gy = uniform(2.0 ,20.0)
-			# gyaw = uniform(-3.14, 3.14)
 
 			# Hospital_04
 			# if(uniform(0.0, 1.0) >= 0.5):
@@ -140,8 +101,9 @@ def monte_carlo_sim():
 			# gx = uniform(4.13, 45.71)
 			# gy = uniform(13.13, 36.80)
 			# gyaw = uniform(-3.14, 3.14)
+			gyaw_t = uniform(min(pi_to_pi(gyaw - 1.395), pi_to_pi(gyaw + 1.395)), max(pi_to_pi(gyaw - 1.395), pi_to_pi(gyaw + 1.395)))
 
-			test_response = test_call(sx, sy, syaw, syaw_t, gx, gy, gyaw)
+			test_response = test_call(sx, sy, syaw, syaw_t, gx, gy, gyaw, gyaw_t)
 
 			if(test_response.valid_start and test_response.valid_goal):
 				if(test_response.iteration_limit):
@@ -154,12 +116,13 @@ def monte_carlo_sim():
 					test.gx = gx
 					test.gy = gy
 					test.gyaw = gyaw
+					test.gyaw_t = gyaw_t
 					iteration_limits_bag.write('tests', test)
 					continue
 
 				valid_tests = valid_tests + 1
 				print("Test ", valid_tests)
-				# print([sx, sy, syaw, syaw_t, gx, gy, gyaw])
+				print([sx, sy, syaw, syaw_t, gx, gy, gyaw, gyaw_t])
 				if(test_response.solution_found):
 					successful_tests = successful_tests + 1
 				else:
@@ -176,6 +139,7 @@ def monte_carlo_sim():
 				test.gx = gx
 				test.gy = gy
 				test.gyaw = gyaw
+				test.gyaw_t = gyaw_t
 				test.solution_found = test_response.solution_found
 				test.iterations = test_response.iterations
 				test.nodes = test_response.nodes
@@ -223,133 +187,213 @@ def monte_carlo_sim():
 
 def review():
 
-	rospy.init_node('test_review')
+	# rospy.init_node('test_review')
 
-	rospy.wait_for_service("monte_carlo_sim_service")
-	test_call = rospy.ServiceProxy("monte_carlo_sim_service", hybrid_astar.srv.MonteCarloSim)
+	# rospy.wait_for_service("monte_carlo_sim_service")
+	# test_call = rospy.ServiceProxy("monte_carlo_sim_service", hybrid_astar.srv.MonteCarloSim)
 
-	start_pose_pub = rospy.Publisher('start_pose', PoseStamped, queue_size = 1)
-	goal_pose_pub = rospy.Publisher('goal_pose', PoseStamped, queue_size = 1)
-	path_pub = rospy.Publisher('global_path', Path, queue_size = 1)
+	# start_pose_pub = rospy.Publisher('start_pose', PoseStamped, queue_size = 1)
+	# goal_pose_pub = rospy.Publisher('goal_pose', PoseStamped, queue_size = 1)
+	# path_pub = rospy.Publisher('global_path', Path, queue_size = 1)
 
-	rate = rospy.Rate(10)
+	# rate = rospy.Rate(10)
 
-	start_pose = PoseStamped()
-	goal_pose = PoseStamped()
-	path = Path()
-	pose_stamped = PoseStamped()
+	# start_pose = PoseStamped()
+	# goal_pose = PoseStamped()
+	# path = Path()
+	# pose_stamped = PoseStamped()
 
-	start_pose.header.stamp = rospy.Time.now()
-	start_pose.header.frame_id = "/map"
-	goal_pose.header.stamp = rospy.Time.now()
-	goal_pose.header.frame_id = "/map"
-	path.header.stamp = rospy.Time.now()
-	path.header.frame_id = "/map"
+	# start_pose.header.stamp = rospy.Time.now()
+	# start_pose.header.frame_id = "/map"
+	# goal_pose.header.stamp = rospy.Time.now()
+	# goal_pose.header.frame_id = "/map"
+	# path.header.stamp = rospy.Time.now()
+	# path.header.frame_id = "/map"
 
-	# bag = rosbag.Bag('../rosbags/20210509-181116.bag')
-	bag = rosbag.Bag('../rosbags/20210515-004933.bag')
-	# bag = rosbag.Bag('../rosbags/hospital_04/hospital_env_monte_carlo_results/hospital_env_monte_carlo_results.bag')
-	# bag = rosbag.Bag('../rosbags/iteration_limits_bag_voronoi.bag')
+	now = datetime.now()
+	dt_string = now.strftime("%Y%m%d-%H%M%S")
+
+	bag = rosbag.Bag('../rosbags/' + dt_string + '.bag', 'w')
+
+	read_bag = rosbag.Bag('../rosbags/dubins_hybrid_astar_voronoi/dubins_hybrid_astar_voronoi.bag')
 	
 	i = 0
-	for topic, msg, t in bag.read_messages(topics=['tests']):
+	for topic, msg, t in read_bag.read_messages(topics=['tests']):
 		i = i + 1
-		# if(not msg.solution_found):
 		if(True):
 			print("Test", i)
-			print([msg.sx, msg.sy, msg.syaw, msg.syaw_t, msg.gx, msg.gy, msg.gyaw, msg.solution_found, msg.iterations, msg.nodes, msg.execution_time])
-			sleep(0.5)
+			# print([msg.sx, msg.sy, msg.syaw, msg.syaw_t, msg.gx, msg.gy, msg.gyaw, msg.solution_found, msg.iterations, msg.nodes, msg.execution_time])
+			# sleep(0.5)
 			
-			start_pose.pose.position.x = msg.sx
-			start_pose.pose.position.y = msg.sy
-			quat = tf.transformations.quaternion_from_euler(0, 0, msg.syaw)
-			start_pose.pose.orientation.x = quat[0]
-			start_pose.pose.orientation.y = quat[1]
-			start_pose.pose.orientation.z = quat[2]
-			start_pose.pose.orientation.w = quat[3]
-			start_pose_pub.publish(start_pose)
+			# start_pose.pose.position.x = msg.sx
+			# start_pose.pose.position.y = msg.sy
+			# quat = tf.transformations.quaternion_from_euler(0, 0, msg.syaw)
+			# start_pose.pose.orientation.x = quat[0]
+			# start_pose.pose.orientation.y = quat[1]
+			# start_pose.pose.orientation.z = quat[2]
+			# start_pose.pose.orientation.w = quat[3]
+			# start_pose_pub.publish(start_pose)
 
-			goal_pose.pose.position.x = msg.gx
-			goal_pose.pose.position.y = msg.gy
-			quat = tf.transformations.quaternion_from_euler(0, 0, msg.gyaw)
-			goal_pose.pose.orientation.x = quat[0]
-			goal_pose.pose.orientation.y = quat[1]
-			goal_pose.pose.orientation.z = quat[2]
-			goal_pose.pose.orientation.w = quat[3]
-			goal_pose_pub.publish(goal_pose)
+			# goal_pose.pose.position.x = msg.gx
+			# goal_pose.pose.position.y = msg.gy
+			# quat = tf.transformations.quaternion_from_euler(0, 0, msg.gyaw)
+			# goal_pose.pose.orientation.x = quat[0]
+			# goal_pose.pose.orientation.y = quat[1]
+			# goal_pose.pose.orientation.z = quat[2]
+			# goal_pose.pose.orientation.w = quat[3]
+			# goal_pose_pub.publish(goal_pose)
 
-			path_pub.publish(msg.path)
+			# path_pub.publish(msg.path)
 
-			x = raw_input("Press Enter to visualize...")
-			if(x == 'q'):
-				break
-			if(x == 'y'):
-				test_response = test_call(msg.sx, msg.sy, msg.syaw, msg.syaw_t, msg.gx, msg.gy, msg.gyaw)
-			raw_input("Press Enter to continue...")
+			length = 0.0
 
-	rate.sleep()
+			for i in range(len(msg.path.poses) - 1):
+				length = length + hypot(msg.path.poses[i].pose.position.x - msg.path.poses[i+1].pose.position.x, msg.path.poses[i].pose.position.y - msg.path.poses[i + 1].pose.position.y)
+
+			# print(length)
+
+			test = Test()
+			test.sx = msg.sx
+			test.sy = msg.sy
+			test.syaw = msg.syaw
+			test.syaw_t = msg.syaw_t
+			test.gx = msg.gx
+			test.gy = msg.gy
+			test.gyaw = msg.gyaw
+			test.solution_found = msg.solution_found
+			test.iterations = msg.iterations
+			test.nodes = msg.nodes
+			test.execution_time = msg.execution_time
+			test.path_length = length
+			test.path = msg.path
+			bag.write('tests', test)
+
+			# test_response = test_call(msg.sx, msg.sy, msg.syaw, msg.syaw_t, msg.gx, msg.gy, msg.gyaw)
+			# x = raw_input("Press Enter to visualize...")
+			# if(x == 'q'):
+				# break
+			# if(x == 'y'):
+			# raw_input("Press Enter to continue...")
+
+	bag.close()
+	# rate.sleep()
 
 def graphs():
 
-	bag = rosbag.Bag('../rosbags/hospital_04/hospital_env_monte_carlo_results/hospital_env_monte_carlo_results.bag')
+	dubins_bag = rosbag.Bag('../rosbags/dubins_hybrid_astar_voronoi/dubins_hybrid_astar_voronoi.bag')
+	hybrid_astar_bag = rosbag.Bag('../rosbags/hybrid_astar/hybrid_astar.bag')
 
 	iterations = []
 	nodes = []
 	lengths = []
 	execution_times = []
 
+	dubins_solution_score = 0
+	hybrid_astar_solution_score = 0
+	dubins_iteration_score = 0
+	hybrid_astar_iteration_score = 0
+	dubins_node_score = 0
+	hybrid_astar_node_score = 0
+	dubins_execution_time_score = 0
+	hybrid_astar_execution_time_score = 0
+	dubins_length_score = 0
+	hybrid_astar_length_score = 0
+
 	i = 0
-	for topic, msg, t in bag.read_messages(topics=['tests']):
+	for topic, msg, t in dubins_bag.read_messages(topics=['tests']):
 		i = i + 1
 		if(msg.solution_found):
 			# print("Test", i)
 			# print([msg.sx, msg.sy, msg.syaw, msg.syaw_t, msg.gx, msg.gy, msg.gyaw, msg.solution_found, msg.iterations, msg.nodes, msg.execution_time])
 			iterations.append(msg.iterations)
-			nodes.append(msg.nodes * 0.000001)
-			lengths.append(len(msg.path.poses) * 0.1)
-			execution_times.append(msg.execution_time/1000)
+			nodes.append(msg.nodes)
+			lengths.append(msg.path_length)
+			execution_times.append(msg.execution_time)
+	print(i)
+	dubins_solution_score = i
 
-	# nodes = list(map(float, nodes))
+	i = 0
+	for topic, msg, t in hybrid_astar_bag.read_messages(topics=['tests']):
+		
+		if(msg.solution_found):
+			hybrid_astar_solution_score = hybrid_astar_solution_score + 1
+		
+		print(iterations[i], msg.iterations)
+		if(iterations[i] <= msg.iterations):
+			dubins_iteration_score = dubins_iteration_score + 1
+		else:
+			hybrid_astar_iteration_score = hybrid_astar_iteration_score + 1
 
-	plt.subplot(1,1,1)
-	# counts, edges, plot = plt.hist(np.array(iterations), bins=[0, 25000, 50000, 75000, 100000, 125000, 150000, 175000, 200000, 225000, 250000, 300000, 350000], alpha=0.5, color='r', label='Iterations')
-	counts, edges, plot = plt.hist(np.array(iterations), bins=[0, 25000], alpha=0.5, color='r', label='Iterations')
-	plt.xlabel('Iterations')
-	plt.ylabel('Count')
-	print(counts)
-	print(sum(counts))
-	print(statistics.median(iterations))
-	print(edges)
+		print(nodes[i], msg.nodes)
+		if(nodes[i] <= msg.nodes):
+			dubins_node_score = dubins_node_score + 1
+		else:
+			hybrid_astar_node_score = hybrid_astar_node_score + 1
 
-	plt.subplot(1,1,1)
-	# counts, edges, plot = plt.hist(np.array(iterations), bins=[0, 0.5, 1.5, 2, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5, 6.0, 6.5, 7.0, 7.5], alpha=0.5, color='r', label='Iterations')
-	counts, edges, plot = plt.hist(np.array(nodes), bins=[0, 0.197197], alpha=0.5, color='g', label='Nodes')
-	plt.xlabel('Nodes [10^6]')
-	plt.ylabel('Count')
-	print(counts)
-	print(sum(counts))
-	print(statistics.median(nodes))
-	print(edges)
+		print(execution_times[i], msg.execution_time)
+		if(execution_times[i] <= msg.execution_time):
+			dubins_execution_time_score = dubins_execution_time_score + 1
+		else:
+			hybrid_astar_execution_time_score = hybrid_astar_execution_time_score + 1
+
+		print(lengths[i], msg.path_length)
+		if(lengths[i] <= msg.path_length):
+			dubins_length_score = dubins_length_score + 1
+		else:
+			hybrid_astar_length_score = hybrid_astar_length_score + 1
+
+		# raw_input()
+		print("Solution", dubins_solution_score, hybrid_astar_solution_score)
+		print("Iterations", dubins_iteration_score, hybrid_astar_iteration_score)
+		print("Nodes", dubins_node_score, hybrid_astar_node_score)
+		print("Execution Time", dubins_execution_time_score, hybrid_astar_execution_time_score)
+		print("Path Length", dubins_length_score, hybrid_astar_length_score)
+		i = i + 1
+	# # nodes = list(map(float, nodes))
+
+	# plt.subplot(1,1,1)
+	# # counts, edges, plot = plt.hist(np.array(iterations), bins=[0, 25000, 50000, 75000, 100000, 125000, 150000, 175000, 200000, 225000, 250000, 300000, 350000], alpha=0.5, color='r', label='Iterations')
+	# counts, edges, plot = plt.hist(np.array(iterations), bins=[0, statistics.median(iterations)], alpha=0.5, color='r', label='Iterations')
+	# plt.xlabel('Iterations')
+	# plt.ylabel('Count')
+	# print("Iterations")
+	# print("Counts", counts)
+	# print("Total Counts", sum(counts))
+	# print("Median", statistics.median(iterations))
+	# print("Edges" , edges)
+
+	# plt.subplot(1,1,1)
+	# # counts, edges, plot = plt.hist(np.array(iterations), bins=[0, 0.5, 1.5, 2, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5, 6.0, 6.5, 7.0, 7.5], alpha=0.5, color='r', label='Iterations')
+	# counts, edges, plot = plt.hist(np.array(nodes), bins=[0, statistics.median(nodes)], alpha=0.5, color='g', label='Nodes')
+	# plt.xlabel('Nodes [10^6]')
+	# plt.ylabel('Count')
+	# print("Nodes")
+	# print("Counts", counts)
+	# print("Total Counts", sum(counts))
+	# print("Median", statistics.median(nodes))
+	# print("Edges" , edges)
+
+	# plt.subplot(1,1,1)
+	# # plt.hist(np.array(execution_times), bins=20, alpha=0.5, color='black', label='Execution Times')
+	# counts, edges, plot = plt.hist(np.array(execution_times), bins=[0, statistics.median(execution_times)], alpha=0.5, color='b', label='Execution Times')
+	# plt.xlabel('Execution Time [s]')
+	# plt.ylabel('Count')
+	# print("Execution Time")
+	# print("Counts", counts)
+	# print("Total Counts", sum(counts))
+	# print("Median", statistics.median(execution_times))
+	# print("Edges" , edges)
 
 	# plt.subplot(1,1,1)
 	# # plt.hist(np.array(lengths), bins=20, alpha=0.5, color='b', label='Lengths')
 	# counts, edges, plot = plt.hist(np.array(lengths), alpha=0.5, color='black', label='Length')
 	# plt.xlabel('Length [m]')
 	# plt.ylabel('Count')
-	# print(counts)
-	# print(sum(counts))
-	# print(statistics.median(lengths))
-	# print(edges)
-
-	plt.subplot(1,1,1)
-	# plt.hist(np.array(execution_times), bins=20, alpha=0.5, color='black', label='Execution Times')
-	counts, edges, plot = plt.hist(np.array(execution_times), bins=[0, 109], alpha=0.5, color='b', label='Execution Times')
-	plt.xlabel('Execution Time [s]')
-	plt.ylabel('Count')
-	print(counts)
-	print(sum(counts))
-	print(statistics.median(execution_times))
-	print(edges)
+	# print("Path Length")
+	# print("Counts", counts)
+	# print("Total Counts", sum(counts))
+	# print("Median", statistics.median(lengths))
+	# print("Edges" , edges)
 
 	# sns.set_style('darkgrid')
 	# sns.distplot(a)
@@ -359,6 +403,6 @@ def graphs():
 
 
 if __name__ == '__main__':
-	# monte_carlo_sim()
-	review()
+	monte_carlo_sim()
+	# review()
 	# graphs()

@@ -5,6 +5,7 @@ float32 syaw_t
 float32 gx
 float32 gy
 float32 gyaw
+float32 gyaw_t
 ---
 bool valid_start
 bool valid_goal

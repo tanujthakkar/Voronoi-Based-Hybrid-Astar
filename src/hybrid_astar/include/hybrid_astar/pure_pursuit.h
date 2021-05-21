@@ -12,6 +12,7 @@
 #include <geometry_msgs/PoseStamped.h>
 #include <geometry_msgs/Quaternion.h>
 #include "std_msgs/Int32.h"
+#include <sensor_msgs/JointState.h>
 
 #include "constants.h"
 #include "helper.h"

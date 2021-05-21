@@ -43,7 +43,8 @@ void voronoi_map() {
 }
 
 float calc_node_cost(float x, float y, float gx, float gy, float cost_so_far) {
-	return cost_so_far + (hypot(x - gx, y - gy));
+	return cost_so_far + sqrt(pow(x - gx, 2) + pow(y - gy, 2) + pow(abs(abs(abs(calc_yaw(x, y, sx, sy) - syaw) - 3.14) - 3.14), 2));
+	// (hypot(x - gx, y - gy)) + (abs(abs(abs(calc_yaw(x, y, sx, sy) - syaw) - 3.14) - 3.14));
 }
 
 float calc_yaw(float x_1, float y_1, float x_2, float y_2) {
@@ -269,10 +270,10 @@ std::vector<std::vector<float>> voronoi_path() {
 
 	// voronoi_path_points.points.push_back(voronoi_graph.vertices[current_id.second].path[0]);
 	while(current_node.get_pind() != NULL) {
-		if(voronoi_graph.vertices[current_node.get_pind()].predecessors.size() < 2) {
-			current_node = closed_list[current_node.get_pind()];
-			continue;
-		}
+		// if(voronoi_graph.vertices[current_node.get_pind()].predecessors.size() < 2) {
+		// 	current_node = closed_list[current_node.get_pind()];
+		// 	continue;
+		// }
 		if(count(redundunt_nodes.begin(), redundunt_nodes.end(), voronoi_graph.vertices[current_node.get_pind()].path[0])) {
 			current_node = closed_list[current_node.get_pind()];
 			continue;
@@ -293,11 +294,11 @@ std::vector<std::vector<float>> voronoi_path() {
 		current_node = closed_list[current_node.get_pind()];
 		voronoi_path_pub.publish(voronoi_path_points);
 	}
-	// voronoi_path_points.points.erase(voronoi_path_points.points.begin());
+	voronoi_path_points.points.erase(voronoi_path_points.points.begin());
 	voronoi_sub_goals_pub.publish(voronoi_sub_goals);
 	voronoi_path_pub.publish(voronoi_path_points);
 
-	// sub_goals.erase(sub_goals.begin());
+	sub_goals.erase(sub_goals.begin());
 	reverse(sub_goals.begin(), sub_goals.end());
 	sub_goals.push_back({gx, gy, gyaw});
 

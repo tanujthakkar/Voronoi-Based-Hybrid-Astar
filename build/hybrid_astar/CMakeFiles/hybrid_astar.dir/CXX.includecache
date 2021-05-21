@@ -333,6 +333,8 @@ geometry_msgs/Quaternion.h
 -
 std_msgs/Int32.h
 /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/std_msgs/Int32.h
+sensor_msgs/JointState.h
+-
 constants.h
 /home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/include/hybrid_astar/constants.h
 helper.h
@@ -1522,6 +1524,24 @@ ros/serialization.h
 ros/builtin_message_traits.h
 -
 ros/message_operations.h
+-
+
+/opt/ros/melodic/include/sensor_msgs/JointState.h
+string
+-
+vector
+-
+map
+-
+ros/types.h
+-
+ros/serialization.h
+-
+ros/builtin_message_traits.h
+-
+ros/message_operations.h
+-
+std_msgs/Header.h
 -
 
 /opt/ros/melodic/include/sensor_msgs/PointCloud.h

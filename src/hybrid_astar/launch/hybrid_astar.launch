@@ -1,7 +1,7 @@
 <launch>
 
 	<!-- <arg name="debug" default="false"/>
-	<arg name="gui" default="true"/>
+	<arg name="gui" default="false"/>
 	<arg name="pause" default="false"/>
 	<arg name="world" value="$(find hybrid_astar)/world/hospital_04.world"/>
 

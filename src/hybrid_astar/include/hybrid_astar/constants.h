@@ -14,7 +14,7 @@ static const int STEER_STEP = 16;
 
 // Path accuracy
 static const float XY_TOLERANCE = 0.8; // [m] Tolerance of error in goal position
-static const float YAW_TOLERANCE = (10 * (M_PI / 180));
+static const float YAW_TOLERANCE = (5 * (M_PI / 180));
 
 // Vehicle Configuration Constants
 // Tractor/Robot Configuration
