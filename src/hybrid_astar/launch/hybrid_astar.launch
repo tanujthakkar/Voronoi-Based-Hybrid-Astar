@@ -1,6 +1,6 @@
 <launch>
 
-	<!-- <arg name="debug" default="false"/>
+	<arg name="debug" default="false"/>
 	<arg name="gui" default="false"/>
 	<arg name="pause" default="false"/>
 	<arg name="world" value="$(find hybrid_astar)/world/hospital_04.world"/>
@@ -15,23 +15,27 @@
 
 	<include file="$(find ridgeback_gazebo)/launch/spawn_ridgeback.launch">
 		<arg name="config" default="dual_hokuyo_lasers" />
-	    <arg name="x" default="-17.0"/>
-	    <arg name="y" default="0.0"/>
+		<!-- <arg name="x" default="-17.000000"/>
+	    <arg name="y" default="0"/>
 	    <arg name="z" default="0.025893"/>
-	    <arg name="yaw" default="0.0"/>
-	</include> -->
+	    <arg name="yaw" default="0.000000"/> -->
+
+	    <!-- <arg name="x" default="-9.190936"/>
+	    <arg name="y" default="9.864006"/>
+	    <arg name="z" default="0.025893"/>
+	    <arg name="yaw" default="1.363078"/> -->
+
+	    <arg name="x" default="-16.516881"/>
+	    <arg name="y" default="-4.730785"/>
+	    <arg name="z" default="0.025893"/>
+	    <arg name="yaw" default="3.1400000"/>
+	</include>
 
 	<!-- AMCL -->
-	<!-- <arg name="scan_topic" default="front/scan" />
-    <arg name="initial_pose_x" default="4.63" />
-    <arg name="initial_pose_y" default="12.60" />
-    <arg name="initial_pose_a" default="0.0" />
+	<arg name="scan_topic" default="front/scan" />
     <include file="$(find ridgeback_navigation)/launch/include/amcl.launch" >
 	    <arg name="scan_topic"     value="$(arg scan_topic)" />
-	    <arg name="initial_pose_x" value="$(arg initial_pose_x)" />
-	    <arg name="initial_pose_y" value="$(arg initial_pose_y)" />
-	    <arg name="initial_pose_a" value="$(arg initial_pose_a)" />
-    </include> -->
+    </include>
 
 	<!--- Move Base -->
   	<!-- <include file="$(find ridgeback_navigation)/launch/include/move_base.launch" /> -->
@@ -40,7 +44,7 @@
 
     <!-- Hospital -->
     <!-- <node pkg="map_server" name="map_server" type="map_server" args="$(find hybrid_astar)/maps/test.yaml"/> -->
-    <node pkg="map_server" name="map_server" type="map_server" args="$(find hybrid_astar)/maps/hospital_04.yaml"/>
+    <node pkg="map_server" name="map_server" type="map_server" args="$(find hybrid_astar)/maps/hospital_restricted.yaml"/>
 
     <!-- Hybrid A* -->
     <node pkg="hybrid_astar" type="hybrid_astar" name="hybrid_astar" output="screen" />
@@ -57,5 +61,6 @@
 
     <arg name="config" default="visualization" />
     <node name="rviz" pkg="rviz" type="rviz" args="-d $(find hybrid_astar)/rviz/$(arg config).rviz" />
+    <!-- <node name="rviz" pkg="rviz" type="rviz"/> -->
 
 </launch>

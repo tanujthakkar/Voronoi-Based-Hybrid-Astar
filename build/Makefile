@@ -4991,19 +4991,6 @@ tuw_multi_robot_rviz_autogen/fast:
 .PHONY : tuw_multi_robot_rviz_autogen/fast
 
 #=============================================================================
-# Target rules for targets named pure_pursuit
-
-# Build rule for target.
-pure_pursuit: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 pure_pursuit
-.PHONY : pure_pursuit
-
-# fast build rule for target.
-pure_pursuit/fast:
-	$(MAKE) -f hybrid_astar/CMakeFiles/pure_pursuit.dir/build.make hybrid_astar/CMakeFiles/pure_pursuit.dir/build
-.PHONY : pure_pursuit/fast
-
-#=============================================================================
 # Target rules for targets named hybrid_astar
 
 # Build rule for target.
@@ -5056,6 +5043,19 @@ hybrid_astar_gennodejs/fast:
 .PHONY : hybrid_astar_gennodejs/fast
 
 #=============================================================================
+# Target rules for targets named hybrid_astar_generate_messages_lisp
+
+# Build rule for target.
+hybrid_astar_generate_messages_lisp: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 hybrid_astar_generate_messages_lisp
+.PHONY : hybrid_astar_generate_messages_lisp
+
+# fast build rule for target.
+hybrid_astar_generate_messages_lisp/fast:
+	$(MAKE) -f hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_lisp.dir/build.make hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_lisp.dir/build
+.PHONY : hybrid_astar_generate_messages_lisp/fast
+
+#=============================================================================
 # Target rules for targets named hybrid_astar_generate_messages_nodejs
 
 # Build rule for target.
@@ -5106,6 +5106,19 @@ costmap_2d_generate_messages_nodejs: cmake_check_build_system
 costmap_2d_generate_messages_nodejs/fast:
 	$(MAKE) -f hybrid_astar/CMakeFiles/costmap_2d_generate_messages_nodejs.dir/build.make hybrid_astar/CMakeFiles/costmap_2d_generate_messages_nodejs.dir/build
 .PHONY : costmap_2d_generate_messages_nodejs/fast
+
+#=============================================================================
+# Target rules for targets named _hybrid_astar_generate_messages_check_deps_PathTracking
+
+# Build rule for target.
+_hybrid_astar_generate_messages_check_deps_PathTracking: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 _hybrid_astar_generate_messages_check_deps_PathTracking
+.PHONY : _hybrid_astar_generate_messages_check_deps_PathTracking
+
+# fast build rule for target.
+_hybrid_astar_generate_messages_check_deps_PathTracking/fast:
+	$(MAKE) -f hybrid_astar/CMakeFiles/_hybrid_astar_generate_messages_check_deps_PathTracking.dir/build.make hybrid_astar/CMakeFiles/_hybrid_astar_generate_messages_check_deps_PathTracking.dir/build
+.PHONY : _hybrid_astar_generate_messages_check_deps_PathTracking/fast
 
 #=============================================================================
 # Target rules for targets named costmap_2d_gencfg
@@ -5288,19 +5301,6 @@ hybrid_astar_gencpp: cmake_check_build_system
 hybrid_astar_gencpp/fast:
 	$(MAKE) -f hybrid_astar/CMakeFiles/hybrid_astar_gencpp.dir/build.make hybrid_astar/CMakeFiles/hybrid_astar_gencpp.dir/build
 .PHONY : hybrid_astar_gencpp/fast
-
-#=============================================================================
-# Target rules for targets named hybrid_astar_generate_messages_lisp
-
-# Build rule for target.
-hybrid_astar_generate_messages_lisp: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 hybrid_astar_generate_messages_lisp
-.PHONY : hybrid_astar_generate_messages_lisp
-
-# fast build rule for target.
-hybrid_astar_generate_messages_lisp/fast:
-	$(MAKE) -f hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_lisp.dir/build.make hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_lisp.dir/build
-.PHONY : hybrid_astar_generate_messages_lisp/fast
 
 #=============================================================================
 # Target rules for targets named universal_global_planner_generate_messages_lisp
@@ -6232,15 +6232,16 @@ help:
 	@echo "... map_msgs_generate_messages_py"
 	@echo "... tuw_multi_robot_rviz"
 	@echo "... tuw_multi_robot_rviz_autogen"
-	@echo "... pure_pursuit"
 	@echo "... hybrid_astar"
 	@echo "... hybrid_astar_generate_messages_py"
 	@echo "... hybrid_astar_planner_lib"
 	@echo "... hybrid_astar_gennodejs"
+	@echo "... hybrid_astar_generate_messages_lisp"
 	@echo "... hybrid_astar_generate_messages_nodejs"
 	@echo "... costmap_2d_generate_messages_py"
 	@echo "... costmap_2d_generate_messages_cpp"
 	@echo "... costmap_2d_generate_messages_nodejs"
+	@echo "... _hybrid_astar_generate_messages_check_deps_PathTracking"
 	@echo "... costmap_2d_gencfg"
 	@echo "... hybrid_astar_genpy"
 	@echo "... hybrid_astar_genlisp"
@@ -6255,7 +6256,6 @@ help:
 	@echo "... _hybrid_astar_generate_messages_check_deps_MonteCarloSim"
 	@echo "... _hybrid_astar_generate_messages_check_deps_TestSummary"
 	@echo "... hybrid_astar_gencpp"
-	@echo "... hybrid_astar_generate_messages_lisp"
 	@echo "... universal_global_planner_generate_messages_lisp"
 	@echo "... universal_global_planner_gencpp"
 	@echo "... universal_global_planner_geneus"

@@ -41,6 +41,7 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/hybrid_astar/msg" TYPE FILE FILES
     "/home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/msg/Test.msg"
     "/home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/msg/TestSummary.msg"
+    "/home/tanujthakkar/ROS/catkin_ws/src/hybrid_astar/msg/PathTracking.msg"
     )
 endif()
 

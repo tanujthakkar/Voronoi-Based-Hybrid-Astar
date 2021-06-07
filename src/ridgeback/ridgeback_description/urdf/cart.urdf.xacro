@@ -184,7 +184,7 @@
       <joint name="${prefix}_${side}_wheel_holder_joint" type="${joint_type}">
         <parent link="cargo_cart_bed_link"/>
         <child link="${prefix}_${side}_wheel_holder_link" />
-        <origin xyz="${-(location+0.05)} ${s_location*0.28} -0.0125" rpy="0 0 0" />
+        <origin xyz="${-(location)} ${s_location*0.28} -0.0125" rpy="0 0 0" />
         <axis xyz="0 0 1" />
         <!-- <limit lower="-${PI}" upper="${PI}" velocity="0" effort="0"/> -->
         <!-- <dynamics damping="${damping_coef}" friction="${friction_coef}" /> -->
@@ -223,7 +223,6 @@
         </inertial>
       </link>
 
-
       <joint name="${prefix}_${side}_wheel_holder_mid_joint" type="fixed">
         <parent link="${prefix}_${side}_wheel_holder_link"/>
         <child link="${prefix}_${side}_wheel_holder_mid_link" />
@@ -252,7 +251,6 @@
             izz="${(((1/12)*wheel_holder_mass)*((0.11*0.11) + (0.05*0.05)))}"/>
         </inertial>
       </link>
-
 
       <joint name="${prefix}_${side}_cart_wheel_joint" type="continuous">
         <parent link="${prefix}_${side}_wheel_holder_mid_link"/>

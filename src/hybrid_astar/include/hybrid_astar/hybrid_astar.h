@@ -38,6 +38,7 @@
 #include "astar.h"
 
 #include "hybrid_astar/GlobalPath.h"
+#include "hybrid_astar/PathTracking.h"
 #include "hybrid_astar/MonteCarloSim.h"
 #include "tuw_multi_robot_msgs/Graph.h"
 
@@ -61,6 +62,8 @@ extern ros::Publisher trailer_collision_check_pub;
 extern ros::Publisher voronoi_path_pub;
 extern ros::Publisher voronoi_sub_goals_pub;
 extern ros::Publisher astar_path_pub;
+extern ros::Publisher cmd_pub;
+extern ros::Publisher target_point_pub;
 
 extern int grid_height;
 extern int grid_width;
@@ -69,6 +72,8 @@ extern bool** bin_map; // 2D Binary map of the grid
 extern geometry_msgs::PoseStamped start_pose;
 extern geometry_msgs::PoseStamped goal_pose;
 extern nav_msgs::Path path;
+extern nav_msgs::Path trailer_path;
+extern std::vector<int> dirs;
 extern bool visualization;
 extern jsk_recognition_msgs::PolygonArray robot_polygon_array;
 extern jsk_recognition_msgs::PolygonArray trailer_polygon_array;

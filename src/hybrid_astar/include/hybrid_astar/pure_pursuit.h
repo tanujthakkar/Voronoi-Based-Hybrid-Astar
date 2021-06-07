@@ -16,9 +16,12 @@
 
 #include "constants.h"
 #include "helper.h"
+#include "hybrid_astar.h"
 
 #include "hybrid_astar/GlobalPath.h"
 
 using namespace std;
+
+void pure_pursuit();
 
 #endif

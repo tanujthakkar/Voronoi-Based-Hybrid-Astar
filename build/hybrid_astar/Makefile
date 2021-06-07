@@ -168,21 +168,6 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
-hybrid_astar/CMakeFiles/pure_pursuit.dir/rule:
-	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 hybrid_astar/CMakeFiles/pure_pursuit.dir/rule
-.PHONY : hybrid_astar/CMakeFiles/pure_pursuit.dir/rule
-
-# Convenience name for target.
-pure_pursuit: hybrid_astar/CMakeFiles/pure_pursuit.dir/rule
-
-.PHONY : pure_pursuit
-
-# fast build rule for target.
-pure_pursuit/fast:
-	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/pure_pursuit.dir/build.make hybrid_astar/CMakeFiles/pure_pursuit.dir/build
-.PHONY : pure_pursuit/fast
-
-# Convenience name for target.
 hybrid_astar/CMakeFiles/hybrid_astar.dir/rule:
 	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 hybrid_astar/CMakeFiles/hybrid_astar.dir/rule
 .PHONY : hybrid_astar/CMakeFiles/hybrid_astar.dir/rule
@@ -243,6 +228,21 @@ hybrid_astar_gennodejs/fast:
 .PHONY : hybrid_astar_gennodejs/fast
 
 # Convenience name for target.
+hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_lisp.dir/rule:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_lisp.dir/rule
+.PHONY : hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_lisp.dir/rule
+
+# Convenience name for target.
+hybrid_astar_generate_messages_lisp: hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_lisp.dir/rule
+
+.PHONY : hybrid_astar_generate_messages_lisp
+
+# fast build rule for target.
+hybrid_astar_generate_messages_lisp/fast:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_lisp.dir/build.make hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_lisp.dir/build
+.PHONY : hybrid_astar_generate_messages_lisp/fast
+
+# Convenience name for target.
 hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_nodejs.dir/rule:
 	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_nodejs.dir/rule
 .PHONY : hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_nodejs.dir/rule
@@ -301,6 +301,21 @@ costmap_2d_generate_messages_nodejs: hybrid_astar/CMakeFiles/costmap_2d_generate
 costmap_2d_generate_messages_nodejs/fast:
 	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/costmap_2d_generate_messages_nodejs.dir/build.make hybrid_astar/CMakeFiles/costmap_2d_generate_messages_nodejs.dir/build
 .PHONY : costmap_2d_generate_messages_nodejs/fast
+
+# Convenience name for target.
+hybrid_astar/CMakeFiles/_hybrid_astar_generate_messages_check_deps_PathTracking.dir/rule:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 hybrid_astar/CMakeFiles/_hybrid_astar_generate_messages_check_deps_PathTracking.dir/rule
+.PHONY : hybrid_astar/CMakeFiles/_hybrid_astar_generate_messages_check_deps_PathTracking.dir/rule
+
+# Convenience name for target.
+_hybrid_astar_generate_messages_check_deps_PathTracking: hybrid_astar/CMakeFiles/_hybrid_astar_generate_messages_check_deps_PathTracking.dir/rule
+
+.PHONY : _hybrid_astar_generate_messages_check_deps_PathTracking
+
+# fast build rule for target.
+_hybrid_astar_generate_messages_check_deps_PathTracking/fast:
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/_hybrid_astar_generate_messages_check_deps_PathTracking.dir/build.make hybrid_astar/CMakeFiles/_hybrid_astar_generate_messages_check_deps_PathTracking.dir/build
+.PHONY : _hybrid_astar_generate_messages_check_deps_PathTracking/fast
 
 # Convenience name for target.
 hybrid_astar/CMakeFiles/costmap_2d_gencfg.dir/rule:
@@ -512,21 +527,6 @@ hybrid_astar_gencpp/fast:
 	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/hybrid_astar_gencpp.dir/build.make hybrid_astar/CMakeFiles/hybrid_astar_gencpp.dir/build
 .PHONY : hybrid_astar_gencpp/fast
 
-# Convenience name for target.
-hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_lisp.dir/rule:
-	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_lisp.dir/rule
-.PHONY : hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_lisp.dir/rule
-
-# Convenience name for target.
-hybrid_astar_generate_messages_lisp: hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_lisp.dir/rule
-
-.PHONY : hybrid_astar_generate_messages_lisp
-
-# fast build rule for target.
-hybrid_astar_generate_messages_lisp/fast:
-	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_lisp.dir/build.make hybrid_astar/CMakeFiles/hybrid_astar_generate_messages_lisp.dir/build
-.PHONY : hybrid_astar_generate_messages_lisp/fast
-
 src/astar.o: src/astar.cpp.o
 
 .PHONY : src/astar.o
@@ -695,7 +695,7 @@ src/pure_pursuit.o: src/pure_pursuit.cpp.o
 
 # target to build an object file
 src/pure_pursuit.cpp.o:
-	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/pure_pursuit.dir/build.make hybrid_astar/CMakeFiles/pure_pursuit.dir/src/pure_pursuit.cpp.o
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/hybrid_astar.dir/build.make hybrid_astar/CMakeFiles/hybrid_astar.dir/src/pure_pursuit.cpp.o
 .PHONY : src/pure_pursuit.cpp.o
 
 src/pure_pursuit.i: src/pure_pursuit.cpp.i
@@ -704,7 +704,7 @@ src/pure_pursuit.i: src/pure_pursuit.cpp.i
 
 # target to preprocess a source file
 src/pure_pursuit.cpp.i:
-	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/pure_pursuit.dir/build.make hybrid_astar/CMakeFiles/pure_pursuit.dir/src/pure_pursuit.cpp.i
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/hybrid_astar.dir/build.make hybrid_astar/CMakeFiles/hybrid_astar.dir/src/pure_pursuit.cpp.i
 .PHONY : src/pure_pursuit.cpp.i
 
 src/pure_pursuit.s: src/pure_pursuit.cpp.s
@@ -713,7 +713,7 @@ src/pure_pursuit.s: src/pure_pursuit.cpp.s
 
 # target to generate assembly for a file
 src/pure_pursuit.cpp.s:
-	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/pure_pursuit.dir/build.make hybrid_astar/CMakeFiles/pure_pursuit.dir/src/pure_pursuit.cpp.s
+	cd /home/tanujthakkar/ROS/catkin_ws/build && $(MAKE) -f hybrid_astar/CMakeFiles/hybrid_astar.dir/build.make hybrid_astar/CMakeFiles/hybrid_astar.dir/src/pure_pursuit.cpp.s
 .PHONY : src/pure_pursuit.cpp.s
 
 src/reeds_shepp.o: src/reeds_shepp.cpp.o
@@ -781,17 +781,18 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... test"
-	@echo "... pure_pursuit"
 	@echo "... hybrid_astar"
 	@echo "... hybrid_astar_generate_messages_py"
 	@echo "... hybrid_astar_planner_lib"
 	@echo "... hybrid_astar_gennodejs"
+	@echo "... hybrid_astar_generate_messages_lisp"
 	@echo "... hybrid_astar_generate_messages_nodejs"
 	@echo "... costmap_2d_generate_messages_py"
 	@echo "... list_install_components"
 	@echo "... costmap_2d_generate_messages_cpp"
 	@echo "... install/local"
 	@echo "... costmap_2d_generate_messages_nodejs"
+	@echo "... _hybrid_astar_generate_messages_check_deps_PathTracking"
 	@echo "... costmap_2d_gencfg"
 	@echo "... hybrid_astar_genpy"
 	@echo "... hybrid_astar_genlisp"
@@ -806,7 +807,6 @@ help:
 	@echo "... _hybrid_astar_generate_messages_check_deps_MonteCarloSim"
 	@echo "... _hybrid_astar_generate_messages_check_deps_TestSummary"
 	@echo "... hybrid_astar_gencpp"
-	@echo "... hybrid_astar_generate_messages_lisp"
 	@echo "... src/astar.o"
 	@echo "... src/astar.i"
 	@echo "... src/astar.s"

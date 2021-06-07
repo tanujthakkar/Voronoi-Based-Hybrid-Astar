@@ -63,20 +63,9 @@ def monte_carlo_sim():
 	# bag = rosbag.Bag('../rosbags/hybrid_astar.bag', 'a')
 	iteration_limits_bag = rosbag.Bag('../rosbags/iteration_limits.bag', 'a')
 
-	read_bag = rosbag.Bag('../rosbags/dubins_hybrid_astar_voronoi/dubins_hybrid_astar_voronoi.bag')
-
-	i = 0
-	for topic, msg, t in read_bag.read_messages(topics=['tests']):
-		i = i + 1
-
-		if(i < 11):
-			if(msg.solution_found):
-				test = [msg.sx, msg.sy, msg.syaw, msg.syaw_t, msg.gx, msg.gy, msg.gyaw]
-				tests.append(test)
-
 	try:
-		# while(valid_tests < 1):
-		for sx, sy, syaw, syaw_t, gx, gy, gyaw in tests:
+		while(valid_tests < 1):
+		# for sx, sy, syaw, syaw_t, gx, gy, gyaw in tests:
 
 			total_tests = total_tests + 1
 
@@ -101,7 +90,18 @@ def monte_carlo_sim():
 			# gx = uniform(4.13, 45.71)
 			# gy = uniform(13.13, 36.80)
 			# gyaw = uniform(-3.14, 3.14)
-			gyaw_t = uniform(min(pi_to_pi(gyaw - 1.395), pi_to_pi(gyaw + 1.395)), max(pi_to_pi(gyaw - 1.395), pi_to_pi(gyaw + 1.395)))
+			# gyaw_t = uniform(min(pi_to_pi(gyaw - 1.395), pi_to_pi(gyaw + 1.395)), max(pi_to_pi(gyaw - 1.395), pi_to_pi(gyaw + 1.395)))
+			# gyaw_t = gyaw
+
+			syaw = 1.584515
+			syaw_t = 1.584515
+			sx = 5.350000
+			sy = 14.750000
+
+			gyaw = 2.365891
+			gyaw_t = 2.365891
+			gx = 31.450001
+			gy = 35.099998
 
 			test_response = test_call(sx, sy, syaw, syaw_t, gx, gy, gyaw, gyaw_t)
 
@@ -153,7 +153,8 @@ def monte_carlo_sim():
 				# print("Iterations: ", test_response.iterations)
 				# print("Nodes: ", test_response.nodes + 1)
 				# print("Execution Time: ", test_response.execution_time)
-	except(KeyboardInterrupt, rospy.service.ServiceException):
+	# except(KeyboardInterrupt, rospy.service.ServiceException):
+	except:
 		test_summary = TestSummary()
 		test_summary.successful_tests = successful_tests
 		test_summary.unsuccessful_tests = unsuccessful_tests
@@ -187,96 +188,78 @@ def monte_carlo_sim():
 
 def review():
 
-	# rospy.init_node('test_review')
+	rospy.init_node('test_review')
 
-	# rospy.wait_for_service("monte_carlo_sim_service")
-	# test_call = rospy.ServiceProxy("monte_carlo_sim_service", hybrid_astar.srv.MonteCarloSim)
+	rospy.wait_for_service("monte_carlo_sim_service")
+	test_call = rospy.ServiceProxy("monte_carlo_sim_service", hybrid_astar.srv.MonteCarloSim)
 
-	# start_pose_pub = rospy.Publisher('start_pose', PoseStamped, queue_size = 1)
-	# goal_pose_pub = rospy.Publisher('goal_pose', PoseStamped, queue_size = 1)
-	# path_pub = rospy.Publisher('global_path', Path, queue_size = 1)
+	start_pose_pub = rospy.Publisher('start_pose', PoseStamped, queue_size = 1)
+	goal_pose_pub = rospy.Publisher('goal_pose', PoseStamped, queue_size = 1)
+	
+	hybrid_astar_path_pub = rospy.Publisher('hybrid_astar_path', Path, queue_size = 1)
+	hybrid_astar_voronoi_path_pub = rospy.Publisher('hybrid_astar_voronoi_path', Path, queue_size = 1)
 
-	# rate = rospy.Rate(10)
+	rate = rospy.Rate(10)
 
-	# start_pose = PoseStamped()
-	# goal_pose = PoseStamped()
-	# path = Path()
-	# pose_stamped = PoseStamped()
+	start_pose = PoseStamped()
+	goal_pose = PoseStamped()
 
-	# start_pose.header.stamp = rospy.Time.now()
-	# start_pose.header.frame_id = "/map"
-	# goal_pose.header.stamp = rospy.Time.now()
-	# goal_pose.header.frame_id = "/map"
-	# path.header.stamp = rospy.Time.now()
-	# path.header.frame_id = "/map"
+	start_pose.header.stamp = rospy.Time.now()
+	start_pose.header.frame_id = "/map"
+	goal_pose.header.stamp = rospy.Time.now()
+	goal_pose.header.frame_id = "/map"
 
-	now = datetime.now()
-	dt_string = now.strftime("%Y%m%d-%H%M%S")
+	hybrid_astar_path = Path()
+	hybrid_astar_path.header.stamp = rospy.Time.now()
+	hybrid_astar_path.header.frame_id = "/map"
 
-	bag = rosbag.Bag('../rosbags/' + dt_string + '.bag', 'w')
+	hybrid_astar_voronoi_path = Path()
+	hybrid_astar_voronoi_path.header.stamp = rospy.Time.now()
+	hybrid_astar_voronoi_path.header.frame_id = "/map"
+
+	bag = read_bag = rosbag.Bag('../rosbags/hybrid_astar/hybrid_astar.bag')
+	hybrid_astar_paths = []
 
 	read_bag = rosbag.Bag('../rosbags/dubins_hybrid_astar_voronoi/dubins_hybrid_astar_voronoi.bag')
-	
+	hybrid_astar_voronoi_paths = []
+
+	for topic, msg, t in bag.read_messages(topics=['tests']):
+		hybrid_astar_paths.append(msg.path)
+
+	for topic, msg, t in read_bag.read_messages(topics=['tests']):
+		hybrid_astar_voronoi_paths.append(msg.path)
+
 	i = 0
 	for topic, msg, t in read_bag.read_messages(topics=['tests']):
+		print(i)
+		hybrid_astar_path_pub.publish(hybrid_astar_paths[i])
+		hybrid_astar_voronoi_path_pub.publish(hybrid_astar_voronoi_paths[i])
+		start_pose.pose.position.x = msg.sx
+		start_pose.pose.position.y = msg.sy
+		quat = tf.transformations.quaternion_from_euler(0, 0, msg.syaw)
+		start_pose.pose.orientation.x = quat[0]
+		start_pose.pose.orientation.y = quat[1]
+		start_pose.pose.orientation.z = quat[2]
+		start_pose.pose.orientation.w = quat[3]
+		start_pose_pub.publish(start_pose)
+
+		goal_pose.pose.position.x = msg.gx
+		goal_pose.pose.position.y = msg.gy
+		quat = tf.transformations.quaternion_from_euler(0, 0, msg.gyaw)
+		goal_pose.pose.orientation.x = quat[0]
+		goal_pose.pose.orientation.y = quat[1]
+		goal_pose.pose.orientation.z = quat[2]
+		goal_pose.pose.orientation.w = quat[3]
+		goal_pose_pub.publish(goal_pose)
+
+		test_response = test_call(msg.sx, msg.sy, msg.syaw, msg.syaw_t, msg.gx, msg.gy, msg.gyaw, 0.0)
 		i = i + 1
-		if(True):
-			print("Test", i)
-			# print([msg.sx, msg.sy, msg.syaw, msg.syaw_t, msg.gx, msg.gy, msg.gyaw, msg.solution_found, msg.iterations, msg.nodes, msg.execution_time])
-			# sleep(0.5)
-			
-			# start_pose.pose.position.x = msg.sx
-			# start_pose.pose.position.y = msg.sy
-			# quat = tf.transformations.quaternion_from_euler(0, 0, msg.syaw)
-			# start_pose.pose.orientation.x = quat[0]
-			# start_pose.pose.orientation.y = quat[1]
-			# start_pose.pose.orientation.z = quat[2]
-			# start_pose.pose.orientation.w = quat[3]
-			# start_pose_pub.publish(start_pose)
+		x = raw_input("Press Enter to visualize...")
+		if(x == 'q'):
+			break
+		if(x == 'y'):
+			raw_input("Press Enter to continue...")
 
-			# goal_pose.pose.position.x = msg.gx
-			# goal_pose.pose.position.y = msg.gy
-			# quat = tf.transformations.quaternion_from_euler(0, 0, msg.gyaw)
-			# goal_pose.pose.orientation.x = quat[0]
-			# goal_pose.pose.orientation.y = quat[1]
-			# goal_pose.pose.orientation.z = quat[2]
-			# goal_pose.pose.orientation.w = quat[3]
-			# goal_pose_pub.publish(goal_pose)
-
-			# path_pub.publish(msg.path)
-
-			length = 0.0
-
-			for i in range(len(msg.path.poses) - 1):
-				length = length + hypot(msg.path.poses[i].pose.position.x - msg.path.poses[i+1].pose.position.x, msg.path.poses[i].pose.position.y - msg.path.poses[i + 1].pose.position.y)
-
-			# print(length)
-
-			test = Test()
-			test.sx = msg.sx
-			test.sy = msg.sy
-			test.syaw = msg.syaw
-			test.syaw_t = msg.syaw_t
-			test.gx = msg.gx
-			test.gy = msg.gy
-			test.gyaw = msg.gyaw
-			test.solution_found = msg.solution_found
-			test.iterations = msg.iterations
-			test.nodes = msg.nodes
-			test.execution_time = msg.execution_time
-			test.path_length = length
-			test.path = msg.path
-			bag.write('tests', test)
-
-			# test_response = test_call(msg.sx, msg.sy, msg.syaw, msg.syaw_t, msg.gx, msg.gy, msg.gyaw)
-			# x = raw_input("Press Enter to visualize...")
-			# if(x == 'q'):
-				# break
-			# if(x == 'y'):
-			# raw_input("Press Enter to continue...")
-
-	bag.close()
-	# rate.sleep()
 
 def graphs():
 
@@ -403,6 +386,6 @@ def graphs():
 
 
 if __name__ == '__main__':
-	monte_carlo_sim()
-	# review()
+	# monte_carlo_sim()
+	review()
 	# graphs()

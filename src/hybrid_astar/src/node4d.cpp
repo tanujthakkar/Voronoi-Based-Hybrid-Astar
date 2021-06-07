@@ -5,7 +5,7 @@ using namespace std;
 jsk_recognition_msgs::PolygonArray system_polygons;
 
 /*
-	Function to check path collision
+	Function to check point collision
 
 	bin_map: A 2D binary obstacle map
 
