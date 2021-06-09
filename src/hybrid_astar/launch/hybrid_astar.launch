@@ -5,62 +5,62 @@
 	<arg name="pause" default="false"/>
 	<arg name="world" value="$(find hybrid_astar)/world/hospital_04.world"/>
 
-  	<include file="$(find gazebo_ros)/launch/empty_world.launch">
-  		<arg name="world_name" default="$(arg world)"/>
-	    <arg name="debug" value="$(arg debug)"/>
-	    <arg name="gui" value="$(arg gui)"/>
-	  	<arg name="paused" value="$(arg pause)"/>
-	    <arg name="use_sim_time" value="true"/>
-  	</include>
+	<include file="$(find gazebo_ros)/launch/empty_world.launch">
+		<!-- <arg name="world_name" default="$(arg world)"/> -->
+		<arg name="debug" value="$(arg debug)"/>
+		<arg name="gui" value="$(arg gui)"/>
+		<arg name="paused" value="$(arg pause)"/>
+		<arg name="use_sim_time" value="true"/>
+	</include>
 
 	<include file="$(find ridgeback_gazebo)/launch/spawn_ridgeback.launch">
 		<arg name="config" default="dual_hokuyo_lasers" />
 		<!-- <arg name="x" default="-17.000000"/>
-	    <arg name="y" default="0"/>
-	    <arg name="z" default="0.025893"/>
-	    <arg name="yaw" default="0.000000"/> -->
+		<arg name="y" default="0"/>
+		<arg name="z" default="0.025893"/>
+		<arg name="yaw" default="0.000000"/> -->
 
-	    <!-- <arg name="x" default="-9.190936"/>
-	    <arg name="y" default="9.864006"/>
-	    <arg name="z" default="0.025893"/>
-	    <arg name="yaw" default="1.363078"/> -->
+		<!-- <arg name="x" default="-9.190936"/>
+		<arg name="y" default="9.864006"/>
+		<arg name="z" default="0.025893"/>
+		<arg name="yaw" default="1.363078"/> -->
 
-	    <arg name="x" default="-16.516881"/>
-	    <arg name="y" default="-4.730785"/>
-	    <arg name="z" default="0.025893"/>
-	    <arg name="yaw" default="3.1400000"/>
+		<arg name="x" default="-16.516881"/>
+		<arg name="y" default="-4.730785"/>
+		<arg name="z" default="0.025893"/>
+		<arg name="yaw" default="3.1400000"/>
 	</include>
 
 	<!-- AMCL -->
 	<arg name="scan_topic" default="front/scan" />
-    <include file="$(find ridgeback_navigation)/launch/include/amcl.launch" >
-	    <arg name="scan_topic"     value="$(arg scan_topic)" />
-    </include>
+	<include file="$(find ridgeback_navigation)/launch/include/amcl.launch" >
+		<arg name="scan_topic"     value="$(arg scan_topic)" />
+	</include>
 
 	<!--- Move Base -->
-  	<!-- <include file="$(find ridgeback_navigation)/launch/include/move_base.launch" /> -->
+	<!-- <include file="$(find ridgeback_navigation)/launch/include/move_base.launch" /> -->
 
-    <!-- <node pkg="map_server" name="map_server" type="map_server" args="$(find indoor_nav)/maps/dual_hoyuko_full_map.yaml"/> -->
+	<!-- <node pkg="map_server" name="map_server" type="map_server" args="$(find indoor_nav)/maps/dual_hoyuko_full_map.yaml"/> -->
 
-    <!-- Hospital -->
-    <!-- <node pkg="map_server" name="map_server" type="map_server" args="$(find hybrid_astar)/maps/test.yaml"/> -->
-    <node pkg="map_server" name="map_server" type="map_server" args="$(find hybrid_astar)/maps/hospital_restricted.yaml"/>
+	<!-- Hospital -->
+	<!-- <node pkg="map_server" name="map_server" type="map_server" args="$(find hybrid_astar)/maps/test.yaml"/> -->
+	<node pkg="map_server" name="map_server" type="map_server" args="$(find hybrid_astar)/maps/hospital_restricted.yaml"/>
 
-    <!-- Hybrid A* -->
-    <node pkg="hybrid_astar" type="hybrid_astar" name="hybrid_astar" output="screen" />
+	<!-- Hybrid A* -->
+	<node pkg="hybrid_astar" type="hybrid_astar" name="hybrid_astar" output="screen" />
 
-    <!-- Voronoi Graph -->
-    <node pkg="tuw_voronoi_graph" type="tuw_voronoi_graph_node" name="graph_generator" output="screen">
-        <param name="graph_cache_path" value="$(find hybrid_astar)/maps/voronoi/cache/" />
-        <param name="custom_graph_path" value="" />
-        <rosparam command="load" file="$(find hybrid_astar)/maps/voronoi/graph.yaml"/>
-    </node>
+	<!-- Voronoi Graph -->
+	<node pkg="tuw_voronoi_graph" type="tuw_voronoi_graph_node" name="graph_generator" output="screen">
+		<param name="graph_cache_path" value="$(find hybrid_astar)/maps/voronoi/cache/" />
+		<param name="custom_graph_path" value="" />
+		<rosparam command="load" file="$(find hybrid_astar)/maps/voronoi/graph.yaml"/>
+	</node>
 
-    <!-- Pure Pursuit -->
-    <!-- <node pkg="hybrid_astar" type="pure_pursuit" name="pure_pursuit" output="screen"/> -->
+	<!-- Pure Pursuit -->
+	<!-- <node pkg="hybrid_astar" type="pure_pursuit" name="pure_pursuit" output="screen"/> -->
 
-    <arg name="config" default="visualization" />
-    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find hybrid_astar)/rviz/$(arg config).rviz" />
-    <!-- <node name="rviz" pkg="rviz" type="rviz"/> -->
+	<arg name="config" default="visualization" />
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find hybrid_astar)/rviz/$(arg config).rviz" />
+	<!-- <node name="rviz" pkg="rviz" type="rviz"/> -->
 
 </launch>

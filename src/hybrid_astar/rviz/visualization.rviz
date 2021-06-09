@@ -168,11 +168,6 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        rear_laser:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
         rear_left_cart_wheel_link:
           Alpha: 1
           Show Axes: false
@@ -259,9 +254,9 @@ Visualization Manager:
       Enabled: true
       Invert Rainbow: false
       Max Color: 255; 255; 255
-      Max Intensity: 0
+      Max Intensity: -999999
       Min Color: 0; 0; 0
-      Min Intensity: 0
+      Min Intensity: 999999
       Name: LaserScan
       Position Transformer: XYZ
       Queue Size: 10
@@ -643,16 +638,16 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 10.29514217376709
+      Distance: 8.650489807128906
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 2.5883045196533203
-        Y: 3.2186975479125977
-        Z: 1.3127882480621338
+        X: 0.04925684630870819
+        Y: -1.2390462160110474
+        Z: 1.3102566003799438
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false

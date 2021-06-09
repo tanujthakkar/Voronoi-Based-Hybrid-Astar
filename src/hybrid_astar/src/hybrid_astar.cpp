@@ -5,6 +5,8 @@ using namespace std::chrono;
 
 
 // Global Variables
+
+// Publishers
 ros::Publisher start_pose_pub;
 ros::Publisher goal_pose_pub;
 ros::Publisher hybrid_path_pub;
@@ -26,10 +28,11 @@ ros::Publisher astar_path_pub;
 ros::Publisher cmd_pub;
 ros::Publisher target_point_pub;
 
+// Subscribers
 ros::Subscriber voronoi_graph_sub;
 
 bool visualization = false; // Visualization toggle
-bool visualization_final_node = true; // Final node visualization toggle
+bool visualization_final_node = true; // Final path visualization toggle
 
 geometry_msgs::PoseStamped start_pose; // Start pose msg
 bool valid_start; // Start pose validity check
@@ -42,45 +45,39 @@ int grid_width;
 bool** bin_map; // 2D Binary map of the grid 
 int** acc_obs_map;
 
-bool voronoi_graph_received = false; // Flag to stop computing voronoi graph
+bool voronoi_graph_received = false; // Voronoi graph availability flag
 tuw_multi_robot_msgs::Graph voronoi_graph; // Voronoi graph representing the voronoi nodes
 
-typedef pair<float, int> pi;
+typedef pair<float, int> pi; // Pair definition for maps
 
 nav_msgs::Path path; // Hybrid A* path
+nav_msgs::Path tractor_path; // Hybrid A* path for tractor
 nav_msgs::Path trailer_path; // Hybrid A* path for trailer
-std::vector<int> dirs;
-bool path_found; // Solution found flag
-nav_msgs::Path path_center; // Global Path w.r.t robot center
+std::vector<int> dirs; // Vector of directions for global path
+bool path_found; // Hybrid A* availability flag
 nav_msgs::Path dubins_path; // Dubins Path
-visualization_msgs::Marker nodes; // All created nodes
+visualization_msgs::Marker nodes; // Visualize all nodes
 
-jsk_recognition_msgs::PolygonArray robot_polygon_array;
-jsk_recognition_msgs::PolygonArray trailer_polygon_array;
+jsk_recognition_msgs::PolygonArray robot_polygon_array; // Tractor polygon visualization
+jsk_recognition_msgs::PolygonArray trailer_polygon_array; // Trailer polygon visualization
 
-float sx; // x coordinate of current pose of the rear axle/hitch point of the vehicle
-float sy; // y coordinate of current pose of the rear axle/hitch point of the vehicle
-float syaw; // yaw coordinate of current pose of the rear axle/hitch point of the vehicle
+float sx; // x coordinate of current pose of the rear axle/hitch point of the tractor
+float sy; // y coordinate of current pose of the rear axle/hitch point of the tractor
+float syaw; // yaw coordinate of current pose of the rear axle/hitch point of the tractor
 float syaw_t; // yaw coordinate of current pose of the trailer
-int s_ind;
+int s_ind; // start node index
 
-float gx; // x coordinate of goal pose of the rear axle/hitch point of the vehicle
-float gy; // y coordinate of goal pose of the rear axle/hitch point of the vehicle
-float gyaw; // yaw coordinate of goal pose of the rear axle/hitch point of the vehicle
+float gx; // x coordinate of goal pose of the rear axle/hitch point of the trailer
+float gy; // y coordinate of goal pose of the rear axle/hitch point of the trailer
+float gyaw; // yaw coordinate of goal pose of the rear axle/hitch point of the trailer
 float gyaw_t; // yaw coordinate of goal pose of the trailer
-int g_ind;
-
-float fx;
-float fy;
-float fyaw;
-float fyaw_t;
-int f_ind;
+int g_ind; // goal node index
 
 Node4D* start_node_ptr; // Pointer to the start node
 Node4D* goal_node_ptr; // Pointer to the goal node
 
 unsigned int iterations; // total iterations of hybrid a* planning
-bool iteration_limit_flag;
+bool iteration_limit_flag; // iteration limit flag
 unsigned int total_nodes; // total nodes of hybrid a* planning
 unsigned int execution_time; // execution time of hybrid a* planning
 
@@ -95,7 +92,7 @@ std::vector<int> direction = {-1, 1}; // Direction inputs for which the nodes ha
 	steer: steering input of the new node
 	dir: direction of the new node
 
-	Returns a pointer to the new node
+	Returns: new node object
 */
 Node4D create_successor(Node4D &node, float steer,int dir) {
 
@@ -162,7 +159,7 @@ Node4D create_successor(Node4D &node, float steer,int dir) {
 	start: start node to start planning from
 	goal: goal node
 
-	Returns a pointer to the new node
+	Returns: dubins node object
 */
 Node4D create_dubins_node(Node4D &start, Node4D &goal) {
 
@@ -198,14 +195,6 @@ Node4D create_dubins_node(Node4D &start, Node4D &goal) {
 	// dubins_yawlist.push_back(pi_2_pi(q[2]));
 	dubins_yawtlist.push_back(pi_2_pi(start.get_yawt(n-1) + (dir * MOVE_STEP / RTR) * sin(start.get_yaw(n-1) - start.get_yawt(n-1))));
 	dubins_yawt.push_back(pi_2_pi(start.get_yaw_t(n-1) + (dir * MOVE_STEP / RTR) * sin(start.get_yaw(0) - start.get_yaw_t(0))));
-
-	// pose_stamped.header.stamp = ros::Time::now();
-	// pose_stamped.header.frame_id = "map";
-	// pose_stamped.pose.position.x = q[0];
-	// pose_stamped.pose.position.y = q[1];
-	// pose_stamped.pose.position.z = 0;
-	// pose_stamped.pose.orientation.w = pi_2_pi(q[2]);
-	// dubins_path.poses.push_back(pose_stamped);
 
 	while (x <  length) {
 		dubins_path_sample(&path, x, q);
@@ -277,8 +266,9 @@ Node4D create_dubins_node(Node4D &start, Node4D &goal) {
 
 	start: start node to start planning from
 	goal: goal node
+	steer: minimum steering radius of the system
 
-	Returns a pointer to the new node
+	Returns: reed-shepp node object
 */
 Node4D create_reeds_shepp_node(Node4D &start, Node4D &goal, float steer) {
 
@@ -307,7 +297,6 @@ Node4D create_reeds_shepp_node(Node4D &start, Node4D &goal, float steer) {
 	reeds_shepp_path.header.stamp = ros::Time::now();
 	pose_stamped.header = reeds_shepp_path.header;
 
-
 	// reeds_shepp_xlist.push_back(start.get_x(n-1));
 	// reeds_shepp_ylist.push_back(start.get_y(n-1));
 	// reeds_shepp_yawlist.push_back(start.get_yaw(n-1));
@@ -319,7 +308,6 @@ Node4D create_reeds_shepp_node(Node4D &start, Node4D &goal, float steer) {
 		reeds_shepp_xlist.push_back(point_itr[0]);
 		reeds_shepp_ylist.push_back(point_itr[1]);
 		reeds_shepp_yawlist.push_back(point_itr[2]);
-		// printf("%d ", directions[i]);
 		reeds_shepp_yawtlist.push_back(pi_2_pi(reeds_shepp_yawtlist[i-1] + (directions[i] * MOVE_STEP / RTR) * sin(reeds_shepp_yawlist[i-1] - reeds_shepp_yawtlist[i-1])));
 		reeds_shepp_yawt.push_back(pi_2_pi(reeds_shepp_yawt[i-1] + (directions[i] * MOVE_STEP / RTR) * sin(reeds_shepp_yawlist[i-1] - reeds_shepp_yawt[i-1])));
 		i++;
@@ -333,7 +321,6 @@ Node4D create_reeds_shepp_node(Node4D &start, Node4D &goal, float steer) {
 	reeds_shepp_yawtlist.erase(reeds_shepp_yawtlist.begin());
 	reeds_shepp_yawt.erase(reeds_shepp_yawt.begin());
 
-	// printf("%d\n", i);
 	reeds_shepp_path_pub.publish(reeds_shepp_path);
 
 	int nlist = reeds_shepp_xlist.capacity();
@@ -417,7 +404,10 @@ void display_pq(priority_queue<pi, vector<pi>, greater<pi>> gq)
 
 
 /*
-	Publishes the hybrid a* path using the current_node pointer
+	Publishes the hybrid a* path
+
+	current_node: address of current node of the Hybrid A* search
+	closed_list: address of closed list of the Hybrid A* search
 */
 void visualize_final_path(Node4D &current_node, std::map<int, Node4D> &closed_list) {
 
@@ -1079,9 +1069,9 @@ void callback_goal_pose(const geometry_msgs::PoseStamped::ConstPtr& pose) {
 	
 	path.poses.clear();
 
-	hybrid_astar_plan();
+	// hybrid_astar_plan();
 
-	// pure_pursuit();
+	pure_pursuit();
 
 	// hybrid_astar_voronoi();
 
@@ -1158,7 +1148,7 @@ bool callback_planner(hybrid_astar::GlobalPath::Request &req, hybrid_astar::Glob
 
 	while(!path_found) {
 	}
-	res.plan = path_center;
+	res.plan = tractor_path;
 
 	return true;
 }

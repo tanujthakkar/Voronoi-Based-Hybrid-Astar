@@ -28,6 +28,7 @@ class Node4D {
 
 public:
 
+	// Default Constructor
 	Node4D() {};
 
 	// Constructor for start and goal nodes
@@ -118,16 +119,16 @@ private:
 	std::vector<float> xlist; // x coords of path points
 	std::vector<float> ylist; // y coords of path points
 	std::vector<float> yawlist; // yaw of path points
-	std::vector<float> yawtlist; // yawt of path points
+	std::vector<float> yawtlist; // hitch-angle of path points
 	std::vector<float> yawt; // Trailer yaw for collision check
 	int direction; // Direction of motion
 	float steer; // Node steering angle
 	float cost; // Node cost
 	Node4D* parent; // Pointer to the parent node
 	Node4D* child; // Pointer to the next/child node in the final path
-	int ind;
-	int parent_ind;
-	int child_ind;
+	int ind; // Node index
+	int parent_ind; // Parent node index
+	int child_ind; // Child node index
 };
 
 // Function to create a polygon for the robot and the trailer

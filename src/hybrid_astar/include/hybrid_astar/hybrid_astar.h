@@ -44,6 +44,7 @@
 
 using namespace std;
 
+// Library wide variables
 extern ros::Publisher start_pose_pub;
 extern ros::Publisher goal_pose_pub;
 extern ros::Publisher hybrid_path_pub;
@@ -67,7 +68,7 @@ extern ros::Publisher target_point_pub;
 
 extern int grid_height;
 extern int grid_width;
-extern bool** bin_map; // 2D Binary map of the grid 
+extern bool** bin_map;
 
 extern geometry_msgs::PoseStamped start_pose;
 extern geometry_msgs::PoseStamped goal_pose;

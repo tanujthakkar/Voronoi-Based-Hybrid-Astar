@@ -30,9 +30,8 @@ bool Node4D::check_path_collision(bool** bin_map) {
 	
 	grid: Pointer to the occupancy grid msg
 	bin_map: A 2D binary obstacle map
-	acc_obs_map:
 
-	Returns a boolean, true for collision, false otherwise
+	Returns: boolean, true for collision, false otherwise
 */
 bool Node4D::check_collision(nav_msgs::OccupancyGrid::Ptr grid, bool** bin_map, int** acc_obs_map) {
 
@@ -92,14 +91,17 @@ bool Node4D::check_collision(nav_msgs::OccupancyGrid::Ptr grid, bool** bin_map, 
 		// cout << "Press ENTER for collision check " << i << endl;
 		// cin.get();
 
+		// Checking for jackknifing
 		if(abs(abs(yawlist[i] - yawt[i]) - 3.14) <= 1.744) {
 			// ROS_INFO("SELF-COLLISION - JACKNIFE");
 			return true;
 		}
 		
+		// Computing center of tractor from hitch position
 		cx = xlist[i] + deltar * cos(yawlist[i]);
 		cy = ylist[i] + deltar * sin(yawlist[i]);
 
+		// Visualize robot center
 		if(visualization) {	
 			geometry_msgs::PointStamped robot_center;
 			robot_center.header.stamp = ros::Time::now();
@@ -110,6 +112,7 @@ bool Node4D::check_collision(nav_msgs::OccupancyGrid::Ptr grid, bool** bin_map, 
 			robot_polygon_pub.publish(create_polygon(RL, RW, cx, cy, yawlist[i]));
 		}
 
+		// Checking for out of bounds robot state
 		if(xlist[i] >= grid->info.width || xlist[i]<0 || ylist[i] >= grid->info.height || ylist[i] < 0) {
 			// ROS_INFO("ROBOT OUT OF BOUNDS");
 			return true; // OUT OF BOUNDS
@@ -126,18 +129,7 @@ bool Node4D::check_collision(nav_msgs::OccupancyGrid::Ptr grid, bool** bin_map, 
 			return true; // OUT OF BOUNDS
 		}
 
-		// Converting coordinates to indices
-		max_x /= XY_RESOLUTION;
-		max_y /= XY_RESOLUTION;
-		min_y /= XY_RESOLUTION;
-		min_x /= XY_RESOLUTION;
-
-		// if(acc_obs_map[max_x][max_y] + acc_obs_map[min_x][min_y] == acc_obs_map[max_x][min_y] + acc_obs_map[min_x][max_y]) {
-		// 	ROS_INFO("ROBOT ACC SAFE");
-		// 	return false; // NO COLLISION
-		// }
-
-		// Checking the robot polygon/rectangle
+		// Checking the robot polygon for collision
 		for(float k = -RL/2; k <= RL/2 + MIN_SAFE_DIST; k += RL/4) {
 			for(float j = -RW/2 - MIN_SAFE_DIST; j <= RW/2 + MIN_SAFE_DIST; j += RW/4) {
 
@@ -208,9 +200,12 @@ bool Node4D::check_collision(nav_msgs::OccupancyGrid::Ptr grid, bool** bin_map, 
 		}
 
 		// ROS_INFO("Trailer Collision check for X : %f || Y : %f ", xlist[i], ylist[i]);
+
+		// Computing trailer center from hitch position
 		ctx = xlist[i] + deltat * cos(yawt[i]);
 		cty = ylist[i] + deltat * sin(yawt[i]);
 
+		// Visualize trailer center
 		if(visualization) {
 			geometry_msgs::PointStamped trailer_center;
 			trailer_center.header.stamp = ros::Time::now();
@@ -231,17 +226,6 @@ bool Node4D::check_collision(nav_msgs::OccupancyGrid::Ptr grid, bool** bin_map, 
 			// ROS_INFO("TRAILER OUT OF BOUNDS");
 			return true; // OUT OF BOUNDS
 		}
-
-		// Converting coordinates to indices
-		max_x /= XY_RESOLUTION;
-		max_y /= XY_RESOLUTION;
-		min_y /= XY_RESOLUTION;
-		min_x /= XY_RESOLUTION;
-
-		// if(acc_obs_map[max_x][max_y] + acc_obs_map[min_x][min_y] == acc_obs_map[max_x][min_y] + acc_obs_map[min_x][max_y]) {
-		// 	ROS_INFO("TRAILER ACC SAFE");
-		// 	return false; // NO COLLISION
-		// }
 
 		// Checking the trailer polygon/rectangle
 		for(float k = -TL/2 - MIN_SAFE_DIST; k <= TL/2 + MIN_SAFE_DIST; k += TL/4) {
@@ -319,6 +303,14 @@ bool Node4D::check_collision(nav_msgs::OccupancyGrid::Ptr grid, bool** bin_map, 
 }
 
 
+/*
+	Function to visualize robot/trailer polygons
+	
+	grid: Pointer to the occupancy grid msg
+	bin_map: A 2D binary obstacle map
+
+	Returns: geometry_msgs:PolygonStamped
+*/
 geometry_msgs::PolygonStamped create_polygon(float l, float w, float cx, float cy, float yaw) {
 
 	geometry_msgs::PolygonStamped polygon;

@@ -4,15 +4,6 @@
 #include <cmath>
 #include <geometry_msgs/PolygonStamped.h>
 
-// Helper function to normalize heading to [0, 360]
-static inline float normalize_heading_rad(float t) {
-	if (t < 0.0) {
-		t = t - 2.f * M_PI * (int)(t / (2.f * M_PI));
-		return 2.f * M_PI + t;
-	}
-
-	return t - 2.f * M_PI * (int)(t / (2.f * M_PI));
-}
 
 // Helper function to normalize heading to [-3.14, 3.14]
 static inline float pi_2_pi(float h) {
