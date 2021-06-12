@@ -1,8 +1,0 @@
-prefix=/home/tanujthakkar/ROS/catkin_ws/install
-
-Name: ridgeback_msgs
-Description: Description of ridgeback_msgs
-Version: 0.3.0
-Cflags: -I${prefix}/include
-Libs: -L${prefix}/lib 
-Requires: std_msgs message_runtime

@@ -1,8 +1,0 @@
-prefix=/home/tanujthakkar/ROS/catkin_ws/devel
-
-Name: indoor_nav
-Description: Description of indoor_nav
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 

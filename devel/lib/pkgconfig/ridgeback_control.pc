@@ -1,8 +1,0 @@
-prefix=/home/tanujthakkar/ROS/catkin_ws/devel
-
-Name: ridgeback_control
-Description: Description of ridgeback_control
-Version: 0.3.0
-Cflags: -I/home/tanujthakkar/ROS/catkin_ws/src/ridgeback/ridgeback_control/include
-Libs: -L${prefix}/lib -lmecanum_drive_controller
-Requires: controller_interface realtime_tools

@@ -1,8 +1,0 @@
-prefix=/home/tanujthakkar/ROS/catkin_ws/install
-
-Name: ira_laser_tools
-Description: Description of ira_laser_tools
-Version: 1.0.4
-Cflags: -I${prefix}/include
-Libs: -L${prefix}/lib 
-Requires: 
