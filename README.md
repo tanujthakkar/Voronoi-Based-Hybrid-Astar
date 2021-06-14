@@ -19,6 +19,11 @@ to other tractor-trailer systems easily.
 <li>Ubuntu 18.04</li>
 <li>ROS Melodic</li>
 <li><a href="http://ompl.kavrakilab.org/">Open Motion Planning Library (OMPL)</a></li>
+ 
+```
+sudo apt install libompl-dev
+```
+  
 <li><a href="http://wiki.ros.org/jsk_recognition_msgs">jsk_reconition_msgs</a></li>
 
 ```
@@ -26,7 +31,7 @@ sudo apt-get install ros-melodic-jsk-recognition-msgs
 ```
 
 <li><a href="https://github.com/tuw-robotics/tuw_multi_robot">tuw_multi_robot</a></li>
-Follow INSTALL.md given in the repository. Refer to this <a href="https://github.com/tuw-robotics/tuw_multi_robot/issues/29">issue</a> if compilation error exists.
+Follow INSTALL.md given in the repository. Refer to this <a href="https://github.com/tuw-robotics/tuw_multi_robot/issues/29">issue</a> if compilation error exists. Install it in the same catkin workspace as Voronoi based Hybrid A*.
 </ul>
 
 <h4>Setup</h4>
