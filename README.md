@@ -9,7 +9,7 @@ heuristic search to suit the tractor-trailer model and then present a modified a
 the goal faster.
 
 The code in this repository is specifically tested on <b>Ubuntu 18.04</b> and <b>ROS Melodic</b>. The implementation is based on a 
-[Clearpath Robotics Ridgeback](https://clearpathrobotics.com/ridgeback-indoor-robot-platform/) robot towing a custom designed cart, however it can be adapted
+[Clearpath Robotics Ridgeback](https://clearpathrobotics.com/ridgeback-indoor-robot-platform/) robot towing a custom designed trailer, however it can be tuned
 to other tractor-trailer systems easily.
 
 <h3>Installation</h3>
