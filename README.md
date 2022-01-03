@@ -53,7 +53,7 @@ Wait for the voronoi graph to be computed and visualized in RViz. After that, 2D
 positions respectively for the planner.
 
 <h3>Citation</h3>
-We are currently working on a paper which will soon be added here to cite.
+Our paper on Voronoi based Hybrid A* was accepted at the <a href="https://controlsociety.org/icc/">Indian Control Conference (ICC) 2021</a>. The citation details for our work will be added soon.
 
 <h3>References</h3>
 <ul>
