@@ -53,7 +53,19 @@ Wait for the voronoi graph to be computed and visualized in RViz. After that, 2D
 positions respectively for the planner.
 
 <h3>Citation</h3>
-Our paper on Voronoi based Hybrid A* was accepted at the <a href="https://controlsociety.org/icc/">Indian Control Conference (ICC) 2021</a>. The citation details for our work will be added soon.
+Our paper on Voronoi based Hybrid A* was presented at the <a href="https://controlsociety.org/icc/">Indian Control Conference (ICC) 2021</a> and is available on <a href="https://ieeexplore.ieee.org/document/9703119">IEEE Explore</a>. Please cite the paper if you find the work useful.
+
+```
+@INPROCEEDINGS{9703119,
+  author={Thakkar, Tanuj and Sinha, Arpita},  
+  booktitle={2021 Seventh Indian Control Conference (ICC)},   
+  title={Motion Planning for Tractor-Trailer System},   
+  year={2021},  
+  volume={},  
+  number={},  
+  pages={93-98},  
+  doi={10.1109/ICC54714.2021.9703119}}
+```
 
 <h3>References</h3>
 <ul>
